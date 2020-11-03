@@ -1,0 +1,683 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!--Setting-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta name="apple-mobile-web-app-capable" content="哲锄">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no,email=no,adress=no">
+    <meta name="browsermode" content="application">
+    <meta name="screen-orientation" content="portrait">
+    <link rel="dns-prefetch" href="http://www.zhechu.top">
+    <!--SEO-->
+
+    <meta name="keywords" content="Docker,">
+
+
+    <meta name="description" content="环境说明
+
+
+
+环境
+说明
+
+
+
+
+CentOS7
+操作系统
+
+
+Docker-1.12.6
+应用容器引擎
+
+
+
+官方文档
+https://docs.docker.com/v1.12/engine/getstarted/
+
+1 查看帮助简便帮助1$ docker --help
+详细帮助1$ m...">
+
+
+<meta name="robots" content="all">
+<meta name="google" content="all">
+<meta name="googlebot" content="all">
+<meta name="verify" content="all">
+    <!--Title-->
+
+
+<title>Docker常用命令 | 哲锄</title>
+
+
+    <link rel="alternate" href="/atom.xml" title="哲锄" type="application/atom+xml">
+
+
+    <link rel="icon" href="/favicon.ico">
+
+    
+
+
+    <link rel="stylesheet" href="//imsun.github.io/gitment/style/default.css">
+
+
+<link rel="stylesheet" href="/css/bootstrap.min.css?rev=3.3.7">
+<link rel="stylesheet" href="/css/font-awesome.min.css?rev=4.5.0">
+<link rel="stylesheet" href="/css/style.css?rev=@@hash">
+
+
+
+
+    
+
+
+
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?13766878cde148282622871dd245a973";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    
+
+</head>
+
+</html>
+<!--[if lte IE 8]>
+<style>
+    html{ font-size: 1em }
+</style>
+<![endif]-->
+<!--[if lte IE 9]>
+<div style="ie">你使用的浏览器版本过低，为了你更好的阅读体验，请更新浏览器的版本或者使用其他现代浏览器，比如Chrome、Firefox、Safari等。</div>
+<![endif]-->
+
+<body>
+    
+    <nav class="main-navigation">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="navbar-header"><span class="nav-toggle-button collapsed pull-right" data-toggle="collapse" data-target="#main-menu" id="mnav">
+                    <span class="sr-only"></span>
+                        <i class="fa fa-bars"></i>
+                    </span>
+                    <a class="navbar-brand" href="http://www.zhechu.top">哲锄</a>
+                </div>
+                <div class="collapse navbar-collapse" id="main-menu">
+                    <ul class="menu">
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/"><i class="fa fa-home"></i>Spring Cloud|周立</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/categories"><i class="fa fa-list"></i>分类</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/about"><i class="fa fa-user"></i>关于我</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/archives"><i class="fa fa-archive"></i>归档</a>
+                            </li>
+                        
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<a href="http://github.com/eacdy">
+    <img style="position: absolute; top: 0; right: 0; border: 0;"
+        src="/img/forkme.png"
+        alt="Fork me on GitHub">
+</a>
+
+    <section class="content-wrap">
+        <div class="container">
+            <div class="row">
+                <main class="col-md-8 main-content m-post">
+                    <p id="process"></p>
+<article class="post">
+    <div class="post-head">
+        <h1 id="Docker常用命令">
+            
+                Docker常用命令
+            
+        </h1>
+        <div class="post-meta">
+    
+    
+    <span class="categories-meta fa-wrap">
+        <i class="fa fa-folder-open-o"></i>
+        <a href="/categories/Linux">
+            Linux
+        </a>
+    </span>
+    
+
+    
+    <span class="fa-wrap">
+        <i class="fa fa-tags"></i>
+        <span class="tags-meta">
+            
+                
+                    <a href="/tags/Docker" title='Docker'>
+                        Docker
+                    </a>
+                
+            
+        </span>
+    </span>
+    
+
+    
+        
+        <span class="fa-wrap">
+            <i class="fa fa-clock-o"></i>
+            <span class="date-meta">2019/04/12</span>
+        </span>
+        
+            <span class="fa-wrap">
+                <i class="fa fa-eye"></i>
+                <span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    
+</div>
+
+        
+        
+    </div>
+    
+    <div class="post-body post-content">
+        <p>环境说明</p>
+<table>
+<thead>
+<tr>
+<th>环境</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CentOS7</td>
+<td>操作系统</td>
+</tr>
+<tr>
+<td>Docker-1.12.6</td>
+<td>应用容器引擎</td>
+</tr>
+</tbody>
+</table>
+<p>官方文档</p>
+<p><a href="https://docs.docker.com/v1.12/engine/getstarted/" target="_blank" rel="noopener">https://docs.docker.com/v1.12/engine/getstarted/</a></p>
+<hr>
+<h2 id="1-查看帮助"><a href="#1-查看帮助" class="headerlink" title="1 查看帮助"></a>1 查看帮助</h2><p>简便帮助<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker --help</span><br></pre></td></tr></table></figure></p>
+<p>详细帮助<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> man docker</span><br></pre></td></tr></table></figure></p>
+<h2 id="2-登录仓库"><a href="#2-登录仓库" class="headerlink" title="2 登录仓库"></a>2 登录仓库</h2><p>docker 登录镜像仓库语法<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker login [-e|-email=""] [-p|--password=""] [-u|--username=""] [SERVER]</span><br></pre></td></tr></table></figure></p>
+<p>查看登录参数帮助<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker login –help</span><br><span class="line"><span class="meta">$</span> man docker login</span><br></pre></td></tr></table></figure></p>
+<p>示例：登录私有镜像仓库<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker login 192.168.163.41:5000 -u user -p password</span><br></pre></td></tr></table></figure></p>
+<h2 id="3-登出仓库"><a href="#3-登出仓库" class="headerlink" title="3 登出仓库"></a>3 登出仓库</h2><p>docker 登出镜像仓库语法<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker logout [SERVER]</span><br></pre></td></tr></table></figure></p>
+<p>查看登录参数帮助<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker logout –help</span><br><span class="line"><span class="meta">$</span> man docker logout</span><br></pre></td></tr></table></figure></p>
+<p>示例：登出联奕镜像仓库<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker logout 192.168.163.41:5000</span><br></pre></td></tr></table></figure></p>
+<h2 id="4-镜像"><a href="#4-镜像" class="headerlink" title="4 镜像"></a>4 镜像</h2><p>官方镜像库镜像搜索</p>
+<p><a href="https://hub.docker.com/explore/" target="_blank" rel="noopener">https://hub.docker.com/explore/</a></p>
+<h3 id="4-1-检索"><a href="#4-1-检索" class="headerlink" title="4.1 检索"></a>4.1 检索</h3><p>检索镜像语法<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker search [OPTIONS] TERM</span><br></pre></td></tr></table></figure></p>
+<p>查看帮助<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker search –help</span><br><span class="line"><span class="meta">$</span> man docker search</span><br></pre></td></tr></table></figure></p>
+<p>应用场景</p>
+<ol>
+<li>检索官方镜像库相关镜像，选择适合的镜像下载</li>
+<li>检索私有镜像库相关镜像，下载适合的镜像或删除过期镜像</li>
+</ol>
+<p>示例：检索官方镜像仓库 nginx 镜像<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker search nginx</span><br></pre></td></tr></table></figure></p>
+<p>私有镜像库检索可以使用 registry api</p>
+<p><a href="https://docs.docker.com/registry/spec/api/#overview" target="_blank" rel="noopener">https://docs.docker.com/registry/spec/api/#overview</a></p>
+<h3 id="4-2-历史"><a href="#4-2-历史" class="headerlink" title="4.2 历史"></a>4.2 历史</h3><p>查看镜像历史信息语法<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker history [OPTIONS] IMAGE</span><br></pre></td></tr></table></figure></p>
+<p>查看帮助<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker history –help</span><br><span class="line"><span class="meta">$</span> man docker history</span><br></pre></td></tr></table></figure></p>
+<p>应用场景</p>
+<ol>
+<li>查看镜像构建过程，排除故障或优化镜像</li>
+</ol>
+<p>示例：查看 nginx 镜像历史信息，可以简单查看镜像构建过程<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker history nginx</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/04/12/Docker常用命令/docker_history_nginx.png" alt></p>
+<h3 id="4-3-拉取"><a href="#4-3-拉取" class="headerlink" title="4.3 拉取"></a>4.3 拉取</h3><p>拉取镜像语法<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker pull [OPTIONS] NAME[:TAG|@DIGEST]</span><br></pre></td></tr></table></figure></p>
+<p>查看帮助<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker pull –help</span><br><span class="line"><span class="meta">$</span> man docker pull</span><br></pre></td></tr></table></figure></p>
+<p>应用场景</p>
+<ol>
+<li>拉取官方、远程或私有镜像库镜像</li>
+</ol>
+<h4 id="4-3-1-示例：拉取官方-nginx-镜像"><a href="#4-3-1-示例：拉取官方-nginx-镜像" class="headerlink" title="4.3.1 示例：拉取官方 nginx 镜像"></a>4.3.1 示例：拉取官方 nginx 镜像</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker pull nginx</span><br></pre></td></tr></table></figure>
+<h4 id="4-3-2-示例：拉取私有仓库的-nginx-镜像"><a href="#4-3-2-示例：拉取私有仓库的-nginx-镜像" class="headerlink" title="4.3.2 示例：拉取私有仓库的 nginx 镜像"></a>4.3.2 示例：拉取私有仓库的 nginx 镜像</h4><p>1.配置安全策略<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> vi /etc/docker/daemon.json</span><br><span class="line">&#123;</span><br><span class="line">	"insecure-registries": [</span><br><span class="line">		"192.168.163.41:5000"</span><br><span class="line">	]</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">$</span> systemctl restart docker</span><br></pre></td></tr></table></figure></p>
+<p>2.登录镜像仓库<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker login 192.168.163.41:5000 -u user -p password</span><br></pre></td></tr></table></figure></p>
+<p>3.拉取 library/nginx:latest 镜像【默认 tag 是 latest】<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker pull 192.168.163.41:5000/library/nginx</span><br></pre></td></tr></table></figure></p>
+<h3 id="4-4-推送"><a href="#4-4-推送" class="headerlink" title="4.4 推送"></a>4.4 推送</h3><p>推送镜像语法<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker push [OPTIONS] NAME[:TAG]</span><br></pre></td></tr></table></figure></p>
+<p>查看帮助<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker push –help</span><br><span class="line"><span class="meta">$</span> man docker push</span><br></pre></td></tr></table></figure></p>
+<p>应用场景</p>
+<ol>
+<li>分享镜像或镜像发布或迁移</li>
+</ol>
+<p>示例：将 nginx 推送到私有镜像仓库<br>1.查看本地nginx镜像<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker images | grep nginx</span><br></pre></td></tr></table></figure></p>
+<p>2.打目的 tag<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker tag nginx:latest 192.168.163.41:5000/library/nginx-test:v1</span><br></pre></td></tr></table></figure></p>
+<p>3.配置安全策略<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> vi /etc/docker/daemon.json</span><br><span class="line">&#123;</span><br><span class="line">	"insecure-registries": [</span><br><span class="line">		"192.168.163.41:5000"</span><br><span class="line">	]</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">$</span> systemctl restart docker</span><br></pre></td></tr></table></figure></p>
+<p>4.登录镜像仓库<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker login 192.168.163.41:5000 -u user -p password</span><br></pre></td></tr></table></figure></p>
+<p>5.推送到联奕镜像仓库<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker push 192.168.163.41:5000/library/nginx-test:v1</span><br></pre></td></tr></table></figure></p>
+<h3 id="4-5-查看"><a href="#4-5-查看" class="headerlink" title="4.5 查看"></a>4.5 查看</h3><p>查看镜像语法<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker images [OPTIONS] [REPOSITORY[:TAG]]</span><br></pre></td></tr></table></figure></p>
+<p>示例：列出所有镜像<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker images</span><br></pre></td></tr></table></figure></p>
+<p>应用场景</p>
+<ol>
+<li>查看本地镜像，可删除过期镜像</li>
+<li>查看镜像详情，排除故障或修改镜像挂载目录</li>
+</ol>
+<p>示例：列出所有 nginx 镜像<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker images | grep nginx</span><br></pre></td></tr></table></figure></p>
+<p>查看镜像详细信息语法<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker inspect [OPTIONS] CONTAINER|IMAGE|TASK [CONTAINER|IMAGE|TASK...]</span><br></pre></td></tr></table></figure></p>
+<p>查看帮助<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker inspect –help</span><br><span class="line"><span class="meta">$</span> man docker inspect</span><br></pre></td></tr></table></figure></p>
+<p>示例：查看 nginx 镜像详细信息<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker inspect nginx</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/04/12/Docker常用命令/docker_inspect_nginx.png" alt></p>
+<h3 id="4-6-构建"><a href="#4-6-构建" class="headerlink" title="4.6 构建"></a>4.6 构建</h3><p>Docker 镜像构建有三种方式：</p>
+<ol>
+<li>基于已有镜像的容器创建</li>
+<li>基于本地模板导入</li>
+<li>基于 Dockerfile 创建</li>
+</ol>
+<blockquote>
+<p>TIPS：由于前两种较少使用，此文档只展示 Dockerfile 方式构建镜像。</p>
+</blockquote>
+<h4 id="4-6-1-Dockerfile"><a href="#4-6-1-Dockerfile" class="headerlink" title="4.6.1 Dockerfile"></a>4.6.1 Dockerfile</h4><p>官方文档【注意版本】</p>
+<p><a href="https://docs.docker.com/engine/reference/builder/#dockerfile-examples" target="_blank" rel="noopener">https://docs.docker.com/engine/reference/builder/#dockerfile-examples</a></p>
+<h5 id="4-6-1-1-构建-RabbitMQ-镜像"><a href="#4-6-1-1-构建-RabbitMQ-镜像" class="headerlink" title="4.6.1.1 构建 RabbitMQ 镜像"></a>4.6.1.1 构建 RabbitMQ 镜像</h5><p>问题描述：官方 RabbitMQ 镜像启动的容器默认用户为 guest/guest，不支持远程连接。只能手工添加用户远程连接权限。而容器重启后，配置的信息又会丢失。</p>
+<p>解决方案：自写启动脚本，重新构建镜像，在 RabbitMQ 重启后，添加用户及其相应的权限。可通过环境变量传递用户名和密码。</p>
+<p>官方镜像地址<br><a href="https://hub.docker.com/_/rabbitmq/" target="_blank" rel="noopener">https://hub.docker.com/_/rabbitmq/</a></p>
+<p>进入工作目录（按个人习惯）<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> mkdir -p /usr/local/src/rabbitmq &amp;&amp; cd /usr/local/src/rabbitmq</span><br></pre></td></tr></table></figure></p>
+<p>新建 run.sh，用作 Dockerfile 启动命令<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> vi run.sh</span><br><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line">docker-entrypoint.sh rabbitmq-server</span><br><span class="line">sleep 20s</span><br><span class="line">user=guest</span><br><span class="line">pass=guest</span><br><span class="line">if [ $RABBITMQ_DEFAULT_USER ];</span><br><span class="line">then</span><br><span class="line">  user="$RABBITMQ_DEFAULT_USER"</span><br><span class="line">fi</span><br><span class="line">if [ $RABBITMQ_DEFAULT_PASS ];</span><br><span class="line">then</span><br><span class="line">  pass="$RABBITMQ_DEFAULT_PASS"</span><br><span class="line">fi</span><br><span class="line">rabbitmqctl add_user "$user" "$pass"</span><br><span class="line">rabbitmqctl set_permissions -p / "$user" ".*" ".*" ".*"</span><br><span class="line">rabbitmqctl set_user_tags "$user" administrator</span><br></pre></td></tr></table></figure></p>
+<p>新建 Dockerfile<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> vi Dockerfile</span><br><span class="line">FROM 192.168.163.41:5000/rabbitmq:latest</span><br><span class="line">MAINTAINER lingyuwang &lt;a href="mailto:lingyuwang@wise.com"&gt;lingyuwang@wise.com&lt;/a&gt;</span><br><span class="line">ADD run.sh /root/run.sh</span><br><span class="line">RUN chmod 755 /root/run.sh</span><br><span class="line">ENTRYPOINT ["/root/run.sh"]</span><br><span class="line">CMD [""]</span><br></pre></td></tr></table></figure></p>
+<p>构建 docker 镜像<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker build -t rabbitmq .</span><br></pre></td></tr></table></figure></p>
+<p>运行容器，RABBITMQ_DEFAULT_USER 是用户名，RABBITMQ_DEFAULT_PASS 是密码，若没有传环境变量，则会用默认用户和账号 guest/guest，可远程访问，支持 web 控制台，如：访问 <a href="http://192.168.163.41:15672" target="_blank" rel="noopener">http://192.168.163.41:15672</a> 进行管理<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker run -e RABBITMQ_DEFAULT_USER=admin -e RABBITMQ_DEFAULT_PASS=123456 -p 5672:5672 -p 15672:15672 rabbitmq</span><br></pre></td></tr></table></figure></p>
+<h5 id="4-6-1-2-构建-UI-镜像"><a href="#4-6-1-2-构建-UI-镜像" class="headerlink" title="4.6.1.2 构建 UI 镜像"></a>4.6.1.2 构建 UI 镜像</h5><p>静态页面打包<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> tar -zcvf wise-manage.tar.gz ./wise-manage</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/04/12/Docker常用命令/tar_zcvf_wise_manage.png" alt></p>
+<p>新建Dockerfile<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> vi Dockerfile</span><br><span class="line"><span class="meta">#</span>基础镜像</span><br><span class="line">FROM 192.168.163.41:5000/nginx:latest</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span>维护人信息</span><br><span class="line">MAINTAINER lingyuwang lingyuwang@wise.com</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span>将静态页面复制到nginx的html目录下</span><br><span class="line">ADD wise-manage.tar.gz /usr/share/nginx/html</span><br><span class="line">COPY nginx.conf /etc/nginx/</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span>暴露端口</span><br><span class="line">EXPOSE 80</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span>连接时执行的命令</span><br><span class="line">CMD ["nginx", "-g", "daemon off; load_module /etc/nginx/modules/ngx_http_perl_module.so;"]</span><br></pre></td></tr></table></figure></p>
+<p>构建 docker 镜像<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker build -t wise-ui .</span><br></pre></td></tr></table></figure></p>
+<p>运行容器<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker run -p 80:80 wise-ui</span><br></pre></td></tr></table></figure></p>
+<h5 id="4-6-1-3-构建后端镜像"><a href="#4-6-1-3-构建后端镜像" class="headerlink" title="4.6.1.3 构建后端镜像"></a>4.6.1.3 构建后端镜像</h5><p>服务构建<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> mvn clean package -U</span><br></pre></td></tr></table></figure></p>
+<p>新建 Dockerfile<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> vi Dockerfile</span><br><span class="line"><span class="meta">#</span>基础镜像</span><br><span class="line">FROM 192.168.163.41:5000/library/centos-jdk:1.8.25</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span>作者</span><br><span class="line">MAINTAINER lingyuwang lingyuwang@wise.com</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span>添加文件</span><br><span class="line">ADD student/student-server/target/student-server.jar /usr/local</span><br><span class="line">RUN chmod u+x /usr/local/student-server.jar</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span>开放端口</span><br><span class="line">EXPOSE 9093</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span>启动时执行的命令</span><br><span class="line">CMD ["/bin/bash"]</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span>启动时执行的命令</span><br><span class="line">ENTRYPOINT ["java","-jar","/usr/local/student-server.jar"]</span><br></pre></td></tr></table></figure></p>
+<p>构建 docker 镜像<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker build -t student-server .</span><br></pre></td></tr></table></figure></p>
+<p>运行容器<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker run -p 19093:9093 student-server</span><br></pre></td></tr></table></figure></p>
+<h3 id="4-7-存出"><a href="#4-7-存出" class="headerlink" title="4.7 存出"></a>4.7 存出</h3><p>存出镜像语法<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker save [OPTIONS] IMAGE [IMAGE...]</span><br></pre></td></tr></table></figure></p>
+<p>查看帮助<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker save –help</span><br><span class="line"><span class="meta">$</span> man docker save</span><br></pre></td></tr></table></figure></p>
+<p>应用场景</p>
+<ol>
+<li>在网络有限的情况下，分享镜像或镜像发布或迁移</li>
+</ol>
+<p>示例：存出 nginx 镜像<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker save -o nginx_latest.tar nginx:latest</span><br><span class="line"><span class="meta">$</span> ls</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/04/12/Docker常用命令/docker_save_nginx.png" alt></p>
+<h3 id="4-8-存入"><a href="#4-8-存入" class="headerlink" title="4.8 存入"></a>4.8 存入</h3><p>存入镜像语法<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker load [OPTIONS]</span><br></pre></td></tr></table></figure></p>
+<p>查看帮助<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker load –help</span><br><span class="line"><span class="meta">$</span> man docker load</span><br></pre></td></tr></table></figure></p>
+<p>应用场景</p>
+<ol>
+<li>在网络有限的情况下，根据存出镜像的压缩包存入镜像</li>
+</ol>
+<p>示例：存入 nginx 镜像<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker load -i nginx_latest.tar</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/04/12/Docker常用命令/docker_load_nginx.png" alt></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker images</span><br></pre></td></tr></table></figure>
+<p><img src="/2019/04/12/Docker常用命令/docker_images_nginx.png" alt></p>
+<h3 id="4-9-删除"><a href="#4-9-删除" class="headerlink" title="4.9 删除"></a>4.9 删除</h3><p>删除镜像语法<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker rmi [OPTIONS] IMAGE [IMAGE...]</span><br></pre></td></tr></table></figure></p>
+<p>查看帮助<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker rmi –help</span><br><span class="line"><span class="meta">$</span> man docker rmi</span><br></pre></td></tr></table></figure></p>
+<h4 id="4-9-1-示例：根据镜像名删除-nginx-镜像"><a href="#4-9-1-示例：根据镜像名删除-nginx-镜像" class="headerlink" title="4.9.1 示例：根据镜像名删除 nginx 镜像"></a>4.9.1 示例：根据镜像名删除 nginx 镜像</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker rmi nginx</span><br></pre></td></tr></table></figure>
+<p><img src="/2019/04/12/Docker常用命令/docker_rmi_nginx.png" alt></p>
+<h4 id="4-9-2-示例：根据镜像-id-删除-logstash-镜像"><a href="#4-9-2-示例：根据镜像-id-删除-logstash-镜像" class="headerlink" title="4.9.2 示例：根据镜像 id 删除 logstash 镜像"></a>4.9.2 示例：根据镜像 id 删除 logstash 镜像</h4><p>1.查询 logstash 镜像信息<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker images | grep logstash</span><br></pre></td></tr></table></figure></p>
+<p>2.删除 logstash 镜像<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker rmi d4ba882d4867</span><br></pre></td></tr></table></figure></p>
+<h4 id="4-9-3-示例：强制删除虚悬镜像"><a href="#4-9-3-示例：强制删除虚悬镜像" class="headerlink" title="4.9.3 示例：强制删除虚悬镜像"></a>4.9.3 示例：强制删除虚悬镜像</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker rmi -f $(docker images | grep "&lt;none&gt;" | awk '&#123;print $3&#125;')</span><br></pre></td></tr></table></figure>
+<h4 id="4-9-4-示例：强制删除所有镜像"><a href="#4-9-4-示例：强制删除所有镜像" class="headerlink" title="4.9.4 示例：强制删除所有镜像"></a>4.9.4 示例：强制删除所有镜像</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker rmi -f $(docker images | awk '&#123;print $3&#125;')</span><br></pre></td></tr></table></figure>
+<h2 id="5-容器"><a href="#5-容器" class="headerlink" title="5 容器"></a>5 容器</h2><h3 id="5-1-新建"><a href="#5-1-新建" class="headerlink" title="5.1 新建"></a>5.1 新建</h3><p>新建容器语法<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker create [OPTIONS] IMAGE [COMMAND] [ARG...]</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>TIPS：若 image 包含了 CMD 指令，那么在启动 container 时，不需指定 COMMAND，否则会使用指定的COMMAND 覆盖 image 中的 CMD。默认的 container 是在前台运行，会绑定 COMMAND 进程的 STDIN，STDOUT，STDERR 到 console 上。</p>
+</blockquote>
+<p>查看帮助<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker create –help</span><br><span class="line"><span class="meta">$</span> man docker create</span><br></pre></td></tr></table></figure></p>
+<p>应用场景</p>
+<ol>
+<li>新建容器，待启动</li>
+</ol>
+<p>例如：新建 nginx 容器<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker create --name nginx -it nginx:latest</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/04/12/Docker常用命令/docker_create_nginx.png" alt></p>
+<h3 id="5-2-启动"><a href="#5-2-启动" class="headerlink" title="5.2 启动"></a>5.2 启动</h3><p>启动容器语法<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker start [OPTIONS] CONTAINER [CONTAINER...]</span><br></pre></td></tr></table></figure></p>
+<p>查看帮助<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker start –help</span><br><span class="line"><span class="meta">$</span> man docker start</span><br></pre></td></tr></table></figure></p>
+<p>应用场景</p>
+<ol>
+<li>启动状态为 Exite d的容器</li>
+</ol>
+<p>示例：启动 nginx 容器<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker ps -a</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/04/12/Docker常用命令/docker_ps_a.png" alt></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker start nginx</span><br><span class="line"><span class="meta">$</span> docker ps</span><br></pre></td></tr></table></figure>
+<p><img src="/2019/04/12/Docker常用命令/docker_ps.png" alt></p>
+<h3 id="5-3-新建-amp-启动"><a href="#5-3-新建-amp-启动" class="headerlink" title="5.3 新建&amp;启动"></a>5.3 新建&amp;启动</h3><p>新建&amp;启动容器语法<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker run [OPTIONS] IMAGE [COMMAND] [ARG...]</span><br></pre></td></tr></table></figure></p>
+<p>查看帮助<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker run –help</span><br><span class="line"><span class="meta">$</span> man docker run</span><br></pre></td></tr></table></figure></p>
+<p>应用场景</p>
+<ol>
+<li>一步新建和启动容器</li>
+</ol>
+<p>示例：新建和启动 nginx 容器，浏览器访问 <a href="http://127.0.0.1" target="_blank" rel="noopener">http://127.0.0.1</a> 可看效果<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker run -it --name nginx -p 80:80 nginx:latest</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/04/12/Docker常用命令/docker_run_nginx.png" alt></p>
+<p>示例：新建和启动 ngin x容器【守护进程启动】<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker run -dit --name nginx -p 80:80 nginx:latest</span><br></pre></td></tr></table></figure></p>
+<p>查看 nginx 容器日志<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker logs nginx</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/04/12/Docker常用命令/docker_logs_nginx.png" alt></p>
+<h3 id="5-4-查看详情"><a href="#5-4-查看详情" class="headerlink" title="5.4 查看详情"></a>5.4 查看详情</h3><p>查看容器详情语法<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker inspect [OPTIONS] CONTAINER|IMAGE|TASK [CONTAINER|IMAGE|TASK...]</span><br></pre></td></tr></table></figure></p>
+<p>查看帮助<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker inspect –help</span><br><span class="line"><span class="meta">$</span> man docker inspect</span><br></pre></td></tr></table></figure></p>
+<p>应用场景</p>
+<ol>
+<li>查看容器具体配置</li>
+</ol>
+<p>示例：查看 nginx 容器详细信息<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker inspect nginx</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/04/12/Docker常用命令/docker_inspect_nginx_check.png" alt></p>
+<h3 id="5-5-查看进程"><a href="#5-5-查看进程" class="headerlink" title="5.5 查看进程"></a>5.5 查看进程</h3><p>查看容器运行进程信息语法<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker top CONTAINER [ps OPTIONS]</span><br></pre></td></tr></table></figure></p>
+<p>查看帮助<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker top –help</span><br><span class="line"><span class="meta">$</span> man docker top</span><br></pre></td></tr></table></figure></p>
+<p>应用场景</p>
+<ol>
+<li>查看容器运行进程信息，排除故障</li>
+</ol>
+<p>示例：查看 nginx 容器运行进程信息<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker top nginx</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/04/12/Docker常用命令/docker_top_nginx.png" alt></p>
+<h3 id="5-6-查看日志"><a href="#5-6-查看日志" class="headerlink" title="5.6 查看日志"></a>5.6 查看日志</h3><p>查看容器运行日志语法<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker logs [OPTIONS] CONTAINER</span><br></pre></td></tr></table></figure></p>
+<p>查看帮助<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker logs –help</span><br><span class="line"><span class="meta">$</span> man docker logs</span><br></pre></td></tr></table></figure></p>
+<p>应用场景</p>
+<ol>
+<li>查看容器运行日志信息，排除故障</li>
+</ol>
+<h4 id="5-6-1-示例：查看-nginx-容器运行日志"><a href="#5-6-1-示例：查看-nginx-容器运行日志" class="headerlink" title="5.6.1 示例：查看 nginx 容器运行日志"></a>5.6.1 示例：查看 nginx 容器运行日志</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker logs nginx</span><br></pre></td></tr></table></figure>
+<p><img src="/2019/04/12/Docker常用命令/docker_logs_nginx.png" alt></p>
+<h4 id="5-6-2-示例：实时查看-nginx-容器运行日志，并显示时间戳"><a href="#5-6-2-示例：实时查看-nginx-容器运行日志，并显示时间戳" class="headerlink" title="5.6.2 示例：实时查看 nginx 容器运行日志，并显示时间戳"></a>5.6.2 示例：实时查看 nginx 容器运行日志，并显示时间戳</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker logs -tf nginx</span><br></pre></td></tr></table></figure>
+<p><img src="/2019/04/12/Docker常用命令/docker_logs_tf_nginx.png" alt></p>
+<h3 id="5-7-进入容器"><a href="#5-7-进入容器" class="headerlink" title="5.7 进入容器"></a>5.7 进入容器</h3><p>进入容器语法<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker exec [OPTIONS] CONTAINER COMMAND [ARG...]</span><br></pre></td></tr></table></figure></p>
+<p>查看帮助<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker exec –help</span><br><span class="line"><span class="meta">$</span> man docker exec</span><br></pre></td></tr></table></figure></p>
+<p>应用场景</p>
+<ol>
+<li>进入容器，调试或排除故障</li>
+<li>进入容器，执行命令</li>
+</ol>
+<h4 id="5-7-1-示例：进入-nginx-容器"><a href="#5-7-1-示例：进入-nginx-容器" class="headerlink" title="5.7.1 示例：进入 nginx 容器"></a>5.7.1 示例：进入 nginx 容器</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker exec -it nginx /bin/bash</span><br></pre></td></tr></table></figure>
+<p><img src="/2019/04/12/Docker常用命令/docker_exec_it_nginx.png" alt></p>
+<h4 id="5-7-2-示例：进入-registry-容器并执行垃圾收集命令"><a href="#5-7-2-示例：进入-registry-容器并执行垃圾收集命令" class="headerlink" title="5.7.2 示例：进入 registry 容器并执行垃圾收集命令"></a>5.7.2 示例：进入 registry 容器并执行垃圾收集命令</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker exec registry registry garbage-collect /etc/docker/registry/config.yml</span><br></pre></td></tr></table></figure>
+<h3 id="5-8-终止容器"><a href="#5-8-终止容器" class="headerlink" title="5.8 终止容器"></a>5.8 终止容器</h3><p>终止容器语法<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker stop [OPTIONS] CONTAINER [CONTAINER...]</span><br></pre></td></tr></table></figure></p>
+<p>查看帮助<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker stop –help</span><br><span class="line"><span class="meta">$</span> man docker stop</span><br></pre></td></tr></table></figure></p>
+<p>应用场景</p>
+<ol>
+<li>终止容器，待启动</li>
+</ol>
+<h4 id="5-8-1-示例：终止-nginx-容器"><a href="#5-8-1-示例：终止-nginx-容器" class="headerlink" title="5.8.1 示例：终止 nginx 容器"></a>5.8.1 示例：终止 nginx 容器</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker stop nginx</span><br></pre></td></tr></table></figure>
+<h4 id="5-8-2-示例：终止所有容器"><a href="#5-8-2-示例：终止所有容器" class="headerlink" title="5.8.2 示例：终止所有容器"></a>5.8.2 示例：终止所有容器</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker ps -a -q | xargs docker stop</span><br></pre></td></tr></table></figure>
+<p><img src="/2019/04/12/Docker常用命令/docker_ps_a_q.png" alt></p>
+<h3 id="5-9-删除容器"><a href="#5-9-删除容器" class="headerlink" title="5.9 删除容器"></a>5.9 删除容器</h3><p>删除容器语法<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker rm [OPTIONS] CONTAINER [CONTAINER...]</span><br></pre></td></tr></table></figure></p>
+<p>查看帮助<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker rm –help</span><br><span class="line"><span class="meta">$</span> man docker rm</span><br></pre></td></tr></table></figure></p>
+<p>应用场景</p>
+<ol>
+<li>删除无用容器，释放磁盘空间</li>
+</ol>
+<p>示例：删除 nginx 容器<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker rm nginx</span><br></pre></td></tr></table></figure></p>
+<h4 id="5-9-1-示例：强制删除正在运行的-nginx-容器"><a href="#5-9-1-示例：强制删除正在运行的-nginx-容器" class="headerlink" title="5.9.1 示例：强制删除正在运行的 nginx 容器"></a>5.9.1 示例：强制删除正在运行的 nginx 容器</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker rm -f nginx</span><br></pre></td></tr></table></figure>
+<h4 id="5-9-2-示例：删除停止运行的所有容器"><a href="#5-9-2-示例：删除停止运行的所有容器" class="headerlink" title="5.9.2 示例：删除停止运行的所有容器"></a>5.9.2 示例：删除停止运行的所有容器</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker container prune</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>TIPS：Docker 1.13 版本以后才可使用。</p>
+</blockquote>
+<h4 id="5-9-3-示例：强制删除所有容器"><a href="#5-9-3-示例：强制删除所有容器" class="headerlink" title="5.9.3 示例：强制删除所有容器"></a>5.9.3 示例：强制删除所有容器</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker ps -a -q | xargs docker rm -f</span><br></pre></td></tr></table></figure>
+<h3 id="5-10-导出"><a href="#5-10-导出" class="headerlink" title="5.10 导出"></a>5.10 导出</h3><p>导出容器语法<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker export [OPTIONS] CONTAINER</span><br></pre></td></tr></table></figure></p>
+<p>查看帮助<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker export –help</span><br><span class="line"><span class="meta">$</span> man docker export</span><br></pre></td></tr></table></figure></p>
+<p>应用场景</p>
+<ol>
+<li>导出容器，跟存出镜像类似。在网络有限的情况下，分享容器或容器发布或迁移</li>
+</ol>
+<p>示例：导出 nginx 容器<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker export -o nginx_latest.tar nginx</span><br><span class="line"><span class="meta">$</span> ls</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/04/12/Docker常用命令/docker_export_nginx.png" alt></p>
+<h3 id="5-11-导入"><a href="#5-11-导入" class="headerlink" title="5.11 导入"></a>5.11 导入</h3><p>导入容器语法<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker import [OPTIONS] file|URL|- [REPOSITORY[:TAG]]</span><br></pre></td></tr></table></figure></p>
+<p>查看帮助<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker import –help</span><br><span class="line"><span class="meta">$</span> man docker import</span><br></pre></td></tr></table></figure></p>
+<p>应用场景</p>
+<ol>
+<li>容器迁移</li>
+</ol>
+<p>示例：导入 nginx 容器【运行容器需加上命令，原因未知】<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker import nginx_latest.tar nginx:latest</span><br><span class="line"><span class="meta">$</span> docker images</span><br><span class="line"><span class="meta">$</span> docker run -dit --name nginx -p 80:80 nginx:latest /bin/bash</span><br></pre></td></tr></table></figure></p>
+<h3 id="5-12-挂载目录"><a href="#5-12-挂载目录" class="headerlink" title="5.12 挂载目录"></a>5.12 挂载目录</h3><p>示例：私有仓库数据目录挂载【/opt/data/registry为主机目录】<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker run --name registry -d -p 5000:5000 -v /opt/data/registry:/var/lib/registry registry:2.4.1</span><br></pre></td></tr></table></figure></p>
+
+    </div>
+    
+    <div class="post-footer">
+        <div class="col-sm-10">
+            <div>
+                <b>本文链接</b>：<a href="/2019/04/12/Docker常用命令/">Docker常用命令</a>
+            </div>
+            <div>
+                
+                    转载声明：本博客由周立创作，采用 <a href="https://creativecommons.org/licenses/by-nc-nd/3.0/" target="_blank"> CC BY 3.0 CN </a> 许可协议。可自由转载、引用，但需署名作者且注明文章出处。如转载至微信公众号，请在文末添加作者公众号二维码。
+                
+            </div>
+            <div>
+                
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <img src="/icons/wx.jpg" width=100%/>
+        </div>
+    </div>
+</article>
+
+<div class="article-nav prev-next-wrap clearfix">
+    
+        <a href="/2019/04/13/Redis常用命令/" class="pre-post btn btn-default" title='Redis常用命令'>
+            <i class="fa fa-angle-left fa-fw"></i><span class="hidden-lg">上一篇</span>
+            <span class="hidden-xs">Redis常用命令</span>
+        </a>
+    
+    
+        <a href="/2019/04/11/Java指令重排/" class="next-post btn btn-default" title='Java指令重排'>
+            <span class="hidden-lg">下一篇</span>
+            <span class="hidden-xs">Java指令重排</span><i class="fa fa-angle-right fa-fw"></i>
+        </a>
+    
+</div>
+
+
+
+
+
+
+                </main>
+                
+                    
+    <aside class="col-md-4 sidebar">
+        
+        
+    <div class="widget">
+        <h3 class="title">搜索</h3>
+        <div id="search-form">
+            <div id="result-mask" class="hide"></div>
+            <div class="search-area">
+                
+                    <input id="search-key" type="search" autocomplete="off" placeholder="搜点什么呢？">
+                    <button type="button" class="search-form-submit" id="search-local">站内搜索</button>
+                
+                
+            </div>
+            <div id="result-wrap" class="hide">
+                <div id="search-result"></div>
+            </div>
+            <div class="hide">
+                <template id="search-tpl">
+                    <div class="item">
+                        <a href="/{path}" title="{title}">
+                            <div class="title">{title}</div>
+                            <div class="content">{content}</div>
+                        </a>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>
+
+        
+        
+    <div class="widget">
+        <h3 class="title">网站公告</h3>
+        <div class="notification">
+            <p>
+  <b>笔者微信</b>：jumping_me，欢迎加我<br/>
+  <b>公众号</b>：请扫描我的头像<br/>
+</p>
+        </div>
+    </div>
+
+        
+        
+        <div class="widget">
+            <div class="about-me">
+                <img src="/icons/wx.jpg" alt="哲锄">
+                <h2>周立</h2>
+                <p>《Spring Cloud与Docker微服务架构实战》作者<br/></p>
+            </div>
+        </div>
+
+
+
+
+        
+        
+    <div class="widget">
+      <h3 class="title">社交</h3> 
+        <div class="content social">
+            
+	            <a href="//github.com/eacdy" rel="external nofollow" title="GitHub" target="_blank">
+			    	<i class="github fa fa-github"></i>
+			    </a>
+            
+	            <a href="//gitee.com/itmuch" rel="external nofollow" title="Git@OSC" target="_blank">
+			    	<i class="git fa fa-git"></i>
+			    </a>
+            
+	            <a href="mailto:eacdy0000@126.com" rel="external nofollow" title="邮箱" target="_blank">
+			    	<i class="envelope-o fa fa-envelope-o"></i>
+			    </a>
+            
+	            <a href="/atom.xml" rel="external nofollow" title="RSS" target="_blank">
+			    	<i class="feed fa fa-feed"></i>
+			    </a>
+            
+        </div>
+    </div>
+
+
+        
+        
+    <div class="widget">
+        <h3 class="title">分类</h3>
+        <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/ELK/"><i class="fa" aria-hidden="true">ELK</i></a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Git/"><i class="fa" aria-hidden="true">Git</i></a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/"><i class="fa" aria-hidden="true">Java</i></a><span class="category-list-count">116</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/"><i class="fa" aria-hidden="true">Linux</i></a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/"><i class="fa" aria-hidden="true">Mysql</i></a><span class="category-list-count">26</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Nginx/"><i class="fa" aria-hidden="true">Nginx</i></a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/NodeJS/"><i class="fa" aria-hidden="true">NodeJS</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Others/"><i class="fa" aria-hidden="true">Others</i></a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/"><i class="fa" aria-hidden="true">Redis</i></a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Test/"><i class="fa" aria-hidden="true">Test</i></a><span class="category-list-count">2</span></li></ul>
+    </div>
+
+
+        
+        
+  <div class="widget">
+    <h3 class="title">标签云</h3>
+    <div class="content tag-cloud">
+        
+            <a href="/tags/CentOS7/" style="font-size: 17.5px;">CentOS7</a> <a href="/tags/Docker/" style="font-size: 17.5px;">Docker</a> <a href="/tags/Gradle/" style="font-size: 10px;">Gradle</a> <a href="/tags/IDEA/" style="font-size: 10px;">IDEA</a> <a href="/tags/IO/" style="font-size: 15.83px;">IO</a> <a href="/tags/JMeter/" style="font-size: 10.83px;">JMeter</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Maven/" style="font-size: 10.83px;">Maven</a> <a href="/tags/Netty/" style="font-size: 10.83px;">Netty</a> <a href="/tags/OAuth2/" style="font-size: 10.83px;">OAuth2</a> <a href="/tags/Spring/" style="font-size: 19.17px;">Spring</a> <a href="/tags/SpringCloud/" style="font-size: 15px;">SpringCloud</a> <a href="/tags/SpringSecurity/" style="font-size: 11.67px;">SpringSecurity</a> <a href="/tags/VM/" style="font-size: 10px;">VM</a> <a href="/tags/k8s/" style="font-size: 12.5px;">k8s</a> <a href="/tags/lombok/" style="font-size: 10px;">lombok</a> <a href="/tags/代码生成/" style="font-size: 10px;">代码生成</a> <a href="/tags/分布式事务/" style="font-size: 10.83px;">分布式事务</a> <a href="/tags/加速器/" style="font-size: 10px;">加速器</a> <a href="/tags/升级回滚/" style="font-size: 10px;">升级回滚</a> <a href="/tags/反射/" style="font-size: 10px;">反射</a> <a href="/tags/图/" style="font-size: 10px;">图</a> <a href="/tags/多线程/" style="font-size: 18.33px;">多线程</a> <a href="/tags/工具/" style="font-size: 11.67px;">工具</a> <a href="/tags/序列化/" style="font-size: 10.83px;">序列化</a> <a href="/tags/异常处理/" style="font-size: 10px;">异常处理</a> <a href="/tags/异步/" style="font-size: 10px;">异步</a> <a href="/tags/微服务/" style="font-size: 16.67px;">微服务</a> <a href="/tags/性能优化/" style="font-size: 18.33px;">性能优化</a> <a href="/tags/性能测试/" style="font-size: 10.83px;">性能测试</a> <a href="/tags/搜索/" style="font-size: 12.5px;">搜索</a> <a href="/tags/数据结构/" style="font-size: 13.33px;">数据结构</a> <a href="/tags/日志/" style="font-size: 10px;">日志</a> <a href="/tags/架构/" style="font-size: 10.83px;">架构</a> <a href="/tags/池化技术/" style="font-size: 10px;">池化技术</a> <a href="/tags/注册中心/" style="font-size: 10.83px;">注册中心</a> <a href="/tags/算法/" style="font-size: 20px;">算法</a> <a href="/tags/缓存/" style="font-size: 13.33px;">缓存</a> <a href="/tags/规范/" style="font-size: 14.17px;">规范</a> <a href="/tags/设计模式/" style="font-size: 15px;">设计模式</a> <a href="/tags/资料库/" style="font-size: 10px;">资料库</a> <a href="/tags/配置中心/" style="font-size: 11.67px;">配置中心</a> <a href="/tags/锁/" style="font-size: 12.5px;">锁</a> <a href="/tags/队列/" style="font-size: 12.5px;">队列</a> <a href="/tags/集合/" style="font-size: 10.83px;">集合</a>
+        
+    </div>
+  </div>
+
+
+        
+        
+    <div class="widget">
+        <h3 class="title">友链</h3>
+        <div class="content friends-link">
+        
+            <a href="http://blog.didispace.com/" class="fa" target="_blank">程序猿DD|翟永超</a>
+        
+            <a href="http://www.bysocket.com/" class="fa" target="_blank">泥瓦匠的博客</a>
+        
+            <a href="http://edisonxu.org/" class="fa" target="_blank">EdisonXu&#39;s Blog</a>
+        
+            <a href="http://blog.720ui.com/" class="fa" target="_blank">梁桂钊的博客</a>
+        
+            <a href="http://cxytiandi.com/" class="fa" target="_blank">猿天地</a>
+        
+        </div>
+    </div>
+
+
+        
+    </aside>
+
+                
+            </div>
+        </div>
+    </section>
+    <footer class="main-footer">
+    <div class="container">
+        <div class="row">
+        </div>
+    </div>
+</footer>
+
+<a id="back-to-top" class="icon-btn hide">
+	<i class="fa fa-chevron-up"></i>
+</a>
+
+
+
+
+    <div class="copyright">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="busuanzi">
+    
+        访问量:
+        <strong id="busuanzi_value_site_pv">
+            <i class="fa fa-spinner fa-spin"></i>
+        </strong>
+        &nbsp; | &nbsp;
+        访客数:
+        <strong id="busuanzi_value_site_uv">
+            <i class="fa fa-spinner fa-spin"></i>
+        </strong>
+    
+</div>
+
+            </div>
+            <div class="col-sm-12">
+                <span>Copyright &copy; 2016
+                </span> |
+                <span>
+                    Powered by <a href="//hexo.io" class="copyright-links" target="_blank" rel="nofollow">Hexo</a>
+                </span> |
+                <span>
+                    Theme by <a href="//github.com/itmuch/hexo-theme-itmuch.git" class="copyright-links" target="_blank" rel="nofollow">ITMuch</a>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script src="/js/app.js?rev=@@hash"></script>
+
+</body>
+</html>

@@ -1,0 +1,559 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!--Setting-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta name="apple-mobile-web-app-capable" content="哲锄">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no,email=no,adress=no">
+    <meta name="browsermode" content="application">
+    <meta name="screen-orientation" content="portrait">
+    <link rel="dns-prefetch" href="http://www.zhechu.top">
+    <!--SEO-->
+
+    <meta name="keywords" content="性能优化,">
+
+
+    <meta name="description" content="环境说明
+
+
+
+环境
+说明
+
+
+
+
+Mysql-5.7
+关系型数据库
+
+
+
+官方文档
+https://dev.mysql.com/doc/refman/5.7/en/mysql-indexes.html
+1 索引类型1.1 B 树索引mysql 默认选择的索引类型。
+使用场景
+
+全值匹配的查询...">
+
+
+<meta name="robots" content="all">
+<meta name="google" content="all">
+<meta name="googlebot" content="all">
+<meta name="verify" content="all">
+    <!--Title-->
+
+
+<title>Mysql索引的使用 | 哲锄</title>
+
+
+    <link rel="alternate" href="/atom.xml" title="哲锄" type="application/atom+xml">
+
+
+    <link rel="icon" href="/favicon.ico">
+
+    
+
+
+    <link rel="stylesheet" href="//imsun.github.io/gitment/style/default.css">
+
+
+<link rel="stylesheet" href="/css/bootstrap.min.css?rev=3.3.7">
+<link rel="stylesheet" href="/css/font-awesome.min.css?rev=4.5.0">
+<link rel="stylesheet" href="/css/style.css?rev=@@hash">
+
+
+
+
+    
+
+
+
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?13766878cde148282622871dd245a973";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    
+
+</head>
+
+</html>
+<!--[if lte IE 8]>
+<style>
+    html{ font-size: 1em }
+</style>
+<![endif]-->
+<!--[if lte IE 9]>
+<div style="ie">你使用的浏览器版本过低，为了你更好的阅读体验，请更新浏览器的版本或者使用其他现代浏览器，比如Chrome、Firefox、Safari等。</div>
+<![endif]-->
+
+<body>
+    
+    <nav class="main-navigation">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="navbar-header"><span class="nav-toggle-button collapsed pull-right" data-toggle="collapse" data-target="#main-menu" id="mnav">
+                    <span class="sr-only"></span>
+                        <i class="fa fa-bars"></i>
+                    </span>
+                    <a class="navbar-brand" href="http://www.zhechu.top">哲锄</a>
+                </div>
+                <div class="collapse navbar-collapse" id="main-menu">
+                    <ul class="menu">
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/"><i class="fa fa-home"></i>Spring Cloud|周立</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/categories"><i class="fa fa-list"></i>分类</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/about"><i class="fa fa-user"></i>关于我</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/archives"><i class="fa fa-archive"></i>归档</a>
+                            </li>
+                        
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<a href="http://github.com/eacdy">
+    <img style="position: absolute; top: 0; right: 0; border: 0;"
+        src="/img/forkme.png"
+        alt="Fork me on GitHub">
+</a>
+
+    <section class="content-wrap">
+        <div class="container">
+            <div class="row">
+                <main class="col-md-8 main-content m-post">
+                    <p id="process"></p>
+<article class="post">
+    <div class="post-head">
+        <h1 id="Mysql索引的使用">
+            
+                Mysql索引的使用
+            
+        </h1>
+        <div class="post-meta">
+    
+    
+    <span class="categories-meta fa-wrap">
+        <i class="fa fa-folder-open-o"></i>
+        <a href="/categories/Mysql">
+            Mysql
+        </a>
+    </span>
+    
+
+    
+    <span class="fa-wrap">
+        <i class="fa fa-tags"></i>
+        <span class="tags-meta">
+            
+                
+                    <a href="/tags/性能优化" title='性能优化'>
+                        性能优化
+                    </a>
+                
+            
+        </span>
+    </span>
+    
+
+    
+        
+        <span class="fa-wrap">
+            <i class="fa fa-clock-o"></i>
+            <span class="date-meta">2019/05/25</span>
+        </span>
+        
+            <span class="fa-wrap">
+                <i class="fa fa-eye"></i>
+                <span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    
+</div>
+
+        
+        
+    </div>
+    
+    <div class="post-body post-content">
+        <p>环境说明</p>
+<table>
+<thead>
+<tr>
+<th>环境</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mysql-5.7</td>
+<td>关系型数据库</td>
+</tr>
+</tbody>
+</table>
+<p>官方文档</p>
+<p><a href="https://dev.mysql.com/doc/refman/5.7/en/mysql-indexes.html" target="_blank" rel="noopener">https://dev.mysql.com/doc/refman/5.7/en/mysql-indexes.html</a></p>
+<h2 id="1-索引类型"><a href="#1-索引类型" class="headerlink" title="1 索引类型"></a>1 索引类型</h2><h3 id="1-1-B-树索引"><a href="#1-1-B-树索引" class="headerlink" title="1.1 B 树索引"></a>1.1 B 树索引</h3><p>mysql 默认选择的索引类型。</p>
+<p>使用场景</p>
+<ol>
+<li>全值匹配的查询，如：id = ‘xxx’ 的查询</li>
+<li>匹配最左前缀的查询，如：联合索引的最左前缀匹配规则</li>
+<li>匹配列前缀索引的查询，如：name like ‘xxx%’ 的查询</li>
+<li>匹配范围值的查询，如：age &gt;= 20 and age =&lt; 30 的查询</li>
+<li>精确匹配左前列并范围匹配另外一列</li>
+<li>只访问索引的查询</li>
+</ol>
+<p>使用限制</p>
+<ol>
+<li>若不是按照索引最左列开始查找，则无法使用索引</li>
+<li>使用索引时不能跳过索引中的列</li>
+<li>not in 和 &lt;&gt; 操作无法使用索引</li>
+<li>若查询中有某个列的范围查询，则其右边所有列都无法使用索引</li>
+</ol>
+<h3 id="1-2-Hash-索引"><a href="#1-2-Hash-索引" class="headerlink" title="1.2 Hash 索引"></a>1.2 Hash 索引</h3><p>使用场景</p>
+<ol>
+<li>Hash 索引是基于 Hash 表实现的，只有查询条件精确匹配 Hash 索引中的所有列时，才会使用到 Hash 索引。</li>
+</ol>
+<p>使用限制</p>
+<ol>
+<li>必须进行二次查找</li>
+<li>无法用于排序</li>
+<li>Hash 码的计算可能存在 Hash 冲突</li>
+</ol>
+<h2 id="2-索引优化"><a href="#2-索引优化" class="headerlink" title="2 索引优化"></a>2 索引优化</h2><p>策略</p>
+<ol>
+<li>索引列上不能使用表达式或函数</li>
+<li>mysql 对索引的长度有限制。对于比较长的字符串字段值，建议使用列前缀索引</li>
+<li>区分度越高的列，越适合建立索引。当然前提是有查询的需求</li>
+<li>正确选择联合索引的索引列的顺序</li>
+<li>尽量使用覆盖索引</li>
+</ol>
+<h3 id="2-1-使用索引优化排序"><a href="#2-1-使用索引优化排序" class="headerlink" title="2.1 使用索引优化排序"></a>2.1 使用索引优化排序</h3><p>排序有两种情况</p>
+<ol>
+<li>使用索引进行排序 index</li>
+<li>使用文件进行排序 filesort</li>
+</ol>
+<p>优化限制</p>
+<ol>
+<li>索引的列顺序和 ORDER BY 子句的顺序完全一致</li>
+<li>索引中所有列的方向（升序和降序）和 ORDER BY 子句完全一致</li>
+<li>ORDER BY 中的字段全部在关联表中的第一张表</li>
+</ol>
+<h4 id="2-1-1-测试数据准备"><a href="#2-1-1-测试数据准备" class="headerlink" title="2.1.1 测试数据准备"></a>2.1.1 测试数据准备</h4><p>测试表<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">DROP TABLE IF EXISTS `rental`;</span><br><span class="line">CREATE TABLE `rental` (</span><br><span class="line">  `rental_id` int(11) NOT NULL AUTO_INCREMENT,</span><br><span class="line">  `rental_date` datetime NOT NULL,</span><br><span class="line">  `inventory_id` mediumint(8) unsigned NOT NULL,</span><br><span class="line">  `customer_id` smallint(5) unsigned NOT NULL,</span><br><span class="line">  `return_date` datetime DEFAULT NULL,</span><br><span class="line">  `staff_id` tinyint(3) unsigned NOT NULL,</span><br><span class="line">  `last_update` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,</span><br><span class="line">  PRIMARY KEY (`rental_id`),</span><br><span class="line">  UNIQUE KEY `rental_date` (`rental_date`,`inventory_id`,`customer_id`),</span><br><span class="line">  KEY `idx_fk_inventory_id` (`inventory_id`),</span><br><span class="line">  KEY `idx_fk_customer_id` (`customer_id`),</span><br><span class="line">  KEY `idx_fk_staff_id` (`staff_id`),</span><br><span class="line">  CONSTRAINT `fk_rental_customer` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`) ON UPDATE CASCADE,</span><br><span class="line">  CONSTRAINT `fk_rental_inventory` FOREIGN KEY (`inventory_id`) REFERENCES `inventory` (`inventory_id`) ON UPDATE CASCADE,</span><br><span class="line">  CONSTRAINT `fk_rental_staff` FOREIGN KEY (`staff_id`) REFERENCES `staff` (`staff_id`) ON UPDATE CASCADE</span><br><span class="line">) ENGINE=InnoDB AUTO_INCREMENT=16050 DEFAULT CHARSET=utf8;</span><br></pre></td></tr></table></figure></p>
+<p>示例数据<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">INSERT INTO `rental` VALUES (&apos;1&apos;, &apos;2005-05-24 22:53:30&apos;, &apos;367&apos;, &apos;130&apos;, &apos;2005-05-26 22:04:30&apos;, &apos;1&apos;, &apos;2006-02-15 21:30:53&apos;);</span><br><span class="line">INSERT INTO `rental` VALUES (&apos;2&apos;, &apos;2005-05-24 22:54:33&apos;, &apos;1525&apos;, &apos;459&apos;, &apos;2005-05-28 19:40:33&apos;, &apos;1&apos;, &apos;2006-02-15 21:30:53&apos;);</span><br><span class="line">INSERT INTO `rental` VALUES (&apos;3&apos;, &apos;2005-05-24 23:03:39&apos;, &apos;1711&apos;, &apos;408&apos;, &apos;2005-06-01 22:12:39&apos;, &apos;1&apos;, &apos;2006-02-15 21:30:53&apos;);</span><br><span class="line">INSERT INTO `rental` VALUES (&apos;4&apos;, &apos;2005-05-24 23:04:41&apos;, &apos;2452&apos;, &apos;333&apos;, &apos;2005-06-03 01:43:41&apos;, &apos;2&apos;, &apos;2006-02-15 21:30:53&apos;);</span><br><span class="line">INSERT INTO `rental` VALUES (&apos;5&apos;, &apos;2005-05-24 23:05:21&apos;, &apos;2079&apos;, &apos;222&apos;, &apos;2005-06-02 04:33:21&apos;, &apos;1&apos;, &apos;2006-02-15 21:30:53&apos;);</span><br><span class="line">INSERT INTO `rental` VALUES (&apos;6&apos;, &apos;2005-05-24 23:08:07&apos;, &apos;2792&apos;, &apos;549&apos;, &apos;2005-05-27 01:32:07&apos;, &apos;1&apos;, &apos;2006-02-15 21:30:53&apos;);</span><br><span class="line">INSERT INTO `rental` VALUES (&apos;7&apos;, &apos;2005-05-24 23:11:53&apos;, &apos;3995&apos;, &apos;269&apos;, &apos;2005-05-29 20:34:53&apos;, &apos;2&apos;, &apos;2006-02-15 21:30:53&apos;);</span><br><span class="line">INSERT INTO `rental` VALUES (&apos;8&apos;, &apos;2005-05-24 23:31:46&apos;, &apos;2346&apos;, &apos;239&apos;, &apos;2005-05-27 23:33:46&apos;, &apos;2&apos;, &apos;2006-02-15 21:30:53&apos;);</span><br><span class="line">INSERT INTO `rental` VALUES (&apos;9&apos;, &apos;2005-05-25 00:00:40&apos;, &apos;2580&apos;, &apos;126&apos;, &apos;2005-05-28 00:22:40&apos;, &apos;1&apos;, &apos;2006-02-15 21:30:53&apos;);</span><br><span class="line">INSERT INTO `rental` VALUES (&apos;10&apos;, &apos;2005-05-25 00:02:21&apos;, &apos;1824&apos;, &apos;399&apos;, &apos;2005-05-31 22:44:21&apos;, &apos;2&apos;, &apos;2006-02-15 21:30:53&apos;);</span><br></pre></td></tr></table></figure></p>
+<h4 id="2-1-2-优化示例"><a href="#2-1-2-优化示例" class="headerlink" title="2.1.2 优化示例"></a>2.1.2 优化示例</h4><h5 id="2-1-2-1-优化反例"><a href="#2-1-2-1-优化反例" class="headerlink" title="2.1.2.1 优化反例"></a>2.1.2.1 优化反例</h5><p>使用普通字段进行排序，将会使用文件排序<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from rental where rental_date &gt; &apos;2005-01-01&apos; order by last_update;</span><br></pre></td></tr></table></figure></p>
+<p>执行计划</p>
+<p><img src="/2019/05/25/Mysql索引的使用/normal_field_order_1.png" alt></p>
+<p>执行计划可视化</p>
+<p><img src="/2019/05/25/Mysql索引的使用/normal_field_order_2.png" alt></p>
+<h5 id="2-1-2-2-主键排序"><a href="#2-1-2-2-主键排序" class="headerlink" title="2.1.2.2 主键排序"></a>2.1.2.2 主键排序</h5><p>使用主键进行排序，将会使用索引排序，不需文件排序<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from rental where rental_date &gt; &apos;2005-01-01&apos; order by rental_id;</span><br></pre></td></tr></table></figure></p>
+<p>执行计划</p>
+<p><img src="/2019/05/25/Mysql索引的使用/primary_key_order_1.png" alt></p>
+<p>执行计划可视化</p>
+<p><img src="/2019/05/25/Mysql索引的使用/primary_key_order_2.png" alt></p>
+<h5 id="2-1-2-3-联合索引排序"><a href="#2-1-2-3-联合索引排序" class="headerlink" title="2.1.2.3 联合索引排序"></a>2.1.2.3 联合索引排序</h5><p>使用 rental_date,inventory_id,customer_id 组合的联合索引进行排序，将会使用索引排序，不需文件排序<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">select * from rental where rental_date = &apos;2005-01-01&apos; order by inventory_id,customer_id;</span><br><span class="line">-- 等价于</span><br><span class="line">select * from rental where rental_date = &apos;2005-01-01&apos; order by inventory_id;</span><br><span class="line">-- 等价于</span><br><span class="line">select * from rental where rental_date = &apos;2005-01-01&apos; order by rental_date;</span><br><span class="line">-- 等价于</span><br><span class="line">select * from rental where rental_date = &apos;2005-01-01&apos; order by rental_date,inventory_id,customer_id;</span><br></pre></td></tr></table></figure></p>
+<p>执行计划</p>
+<p><img src="/2019/05/25/Mysql索引的使用/join_index_order_1.png" alt></p>
+<p>执行计划可视化</p>
+<p><img src="/2019/05/25/Mysql索引的使用/join_index_order_2.png" alt></p>
+<h3 id="2-2-查看索引使用情况"><a href="#2-2-查看索引使用情况" class="headerlink" title="2.2 查看索引使用情况"></a>2.2 查看索引使用情况</h3><p>查看索引使用次数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">SELECT</span><br><span class="line">	OBJECT_SCHEMA,</span><br><span class="line">	OBJECT_NAME,</span><br><span class="line">	INDEX_NAME,</span><br><span class="line">  COUNT_STAR</span><br><span class="line">FROM</span><br><span class="line">	PERFORMANCE_SCHEMA .table_io_waits_summary_by_index_usage</span><br><span class="line">WHERE</span><br><span class="line">	INDEX_NAME IS NOT NULL</span><br><span class="line">AND OBJECT_SCHEMA &lt;&gt; &apos;mysql&apos;</span><br><span class="line">ORDER BY</span><br><span class="line">	OBJECT_SCHEMA,</span><br><span class="line">	OBJECT_NAME;</span><br></pre></td></tr></table></figure></p>
+<p>查看表中索引的基数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show index from t;</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/05/25/Mysql索引的使用/search_index_count_star.png" alt></p>
+<h3 id="2-3-删除多余索引"><a href="#2-3-删除多余索引" class="headerlink" title="2.3 删除多余索引"></a>2.3 删除多余索引</h3><p>测试表<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE `t` (</span><br><span class="line">  `a` int(11) NOT NULL,</span><br><span class="line">  `b` int(11) NOT NULL,</span><br><span class="line">  `c` int(11) NOT NULL,</span><br><span class="line">  `d` int(11) NOT NULL,</span><br><span class="line">  PRIMARY KEY (`a`,`b`),</span><br><span class="line">  KEY `c` (`c`),</span><br><span class="line">  KEY `ca` (`c`,`a`),</span><br><span class="line">  KEY `cb` (`c`,`b`)</span><br><span class="line">) ENGINE=InnoDB;</span><br></pre></td></tr></table></figure></p>
+<p>示例数据<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">INSERT INTO t (a, b, c, d)</span><br><span class="line">VALUES</span><br><span class="line">	(1, 2, 3, 0),</span><br><span class="line">	(1, 4, 3, 0),</span><br><span class="line">	(2, 1, 3, 0),</span><br><span class="line">	(2, 2, 2, 0),</span><br><span class="line">	(2, 3, 4, 0);</span><br></pre></td></tr></table></figure></p>
+<p>需求：a、b 在业务上必须做联合主键，针对如下查询语句，是否可优化<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">select * from t where c=N order by a limit 1;</span><br><span class="line">select * from t where c=N order by b limit 1;</span><br></pre></td></tr></table></figure></p>
+<p>分析</p>
+<ol>
+<li>主键 a，b 的聚簇索引组织顺序相当于 order by a,b ，也就是先按 a 排序，再按 b 排序，c 无序</li>
+<li>索引 ca 的组织是先按 c 排序，再按 a 排序，同时记录主键（主键部分只记录 b）</li>
+<li>索引 cb 的组织是先按 c 排序，在按 b 排序，同时记录主键（主键部分只记录 a）</li>
+</ol>
+<p>结论：ca 可以去掉，cb 需保留</p>
+<p>以如下语句查看执行计划验证<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">select * from t where c=3 order by a limit 1;</span><br><span class="line">select * from t where c=3 order by b limit 1;</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/05/25/Mysql索引的使用/delete_surplus_index_1.png" alt></p>
+<p><img src="/2019/05/25/Mysql索引的使用/delete_surplus_index_2.png" alt></p>
+<h3 id="2-4-重建索引"><a href="#2-4-重建索引" class="headerlink" title="2.4 重建索引"></a>2.4 重建索引</h3><p>重建索引可以整理碎片，释放磁盘空间，提高索引使用效率</p>
+<p>重建表<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ALTER TABLE T ENGINE = INNODB;</span><br></pre></td></tr></table></figure></p>
+<h3 id="2-5-强制使用索引"><a href="#2-5-强制使用索引" class="headerlink" title="2.5 强制使用索引"></a>2.5 强制使用索引</h3><p>测试表<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE `t` (</span><br><span class="line">  `id` int(11) NOT NULL,</span><br><span class="line">  `a` int(11) DEFAULT NULL,</span><br><span class="line">  `b` int(11) DEFAULT NULL,</span><br><span class="line">  PRIMARY KEY (`id`),</span><br><span class="line">  KEY `a` (`a`),</span><br><span class="line">  KEY `b` (`b`)</span><br><span class="line">) ENGINE=InnoDB;</span><br></pre></td></tr></table></figure></p>
+<p>示例数据<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">delimiter ;;</span><br><span class="line">create procedure idata()</span><br><span class="line">begin</span><br><span class="line">  declare i int;</span><br><span class="line">  set i=1;</span><br><span class="line">  while(i&lt;=2000)do</span><br><span class="line">    insert into t values(i, i, i);</span><br><span class="line">    set i=i+1;</span><br><span class="line">  end while;</span><br><span class="line">end;;</span><br><span class="line">delimiter ;</span><br><span class="line">call idata();</span><br></pre></td></tr></table></figure></p>
+<p>查看执行计划<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">explain select * from t where a between 100 and 200;</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/05/25/Mysql索引的使用/t_explain_1.png" alt></p>
+<p>强制使用索引查看执行计划<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">explain select * from t  force index(a) where a between 100 and 200;</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/05/25/Mysql索引的使用/t_explain_2.png" alt></p>
+<h3 id="2-6-使用索引优化被驱动表"><a href="#2-6-使用索引优化被驱动表" class="headerlink" title="2.6 使用索引优化被驱动表"></a>2.6 使用索引优化被驱动表</h3><p>测试表<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE `trade_log` (</span><br><span class="line">  `id` int(11) NOT NULL,</span><br><span class="line">  `tradeid` varchar(32) DEFAULT NULL,</span><br><span class="line">  `operator` int(11) DEFAULT NULL,</span><br><span class="line">  `t_modified` datetime DEFAULT NULL,</span><br><span class="line">  PRIMARY KEY (`id`),</span><br><span class="line">  KEY `t_modified` (`t_modified`)</span><br><span class="line">) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;</span><br><span class="line"></span><br><span class="line">CREATE TABLE `trade_detail` (</span><br><span class="line">  `id` int(11) NOT NULL,</span><br><span class="line">  `tradeid` varchar(32) DEFAULT NULL,</span><br><span class="line">  `trade_step` int(11) DEFAULT NULL,</span><br><span class="line">  `step_info` varchar(32) DEFAULT NULL,</span><br><span class="line">  PRIMARY KEY (`id`)</span><br><span class="line">) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;</span><br></pre></td></tr></table></figure></p>
+<p>示例数据<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">insert into trade_log values(1, &apos;aaaaaaaa&apos;, 1000, now());</span><br><span class="line">insert into trade_log values(2, &apos;aaaaaaab&apos;, 1000, now());</span><br><span class="line">insert into trade_log values(3, &apos;aaaaaaac&apos;, 1000, now());</span><br><span class="line"></span><br><span class="line">insert into trade_detail values(1, &apos;aaaaaaaa&apos;, 1, &apos;add&apos;);</span><br><span class="line">insert into trade_detail values(2, &apos;aaaaaaaa&apos;, 2, &apos;update&apos;);</span><br><span class="line">insert into trade_detail values(3, &apos;aaaaaaaa&apos;, 3, &apos;commit&apos;);</span><br><span class="line">insert into trade_detail values(4, &apos;aaaaaaab&apos;, 1, &apos;add&apos;);</span><br><span class="line">insert into trade_detail values(5, &apos;aaaaaaab&apos;, 2, &apos;update&apos;);</span><br><span class="line">insert into trade_detail values(6, &apos;aaaaaaab&apos;, 3, &apos;update again&apos;);</span><br><span class="line">insert into trade_detail values(7, &apos;aaaaaaab&apos;, 4, &apos;commit&apos;);</span><br><span class="line">insert into trade_detail values(8, &apos;aaaaaaac&apos;, 1, &apos;add&apos;);</span><br><span class="line">insert into trade_detail values(9, &apos;aaaaaaac&apos;, 2, &apos;update&apos;);</span><br><span class="line">insert into trade_detail values(10, &apos;aaaaaaac&apos;, 3, &apos;update again&apos;);</span><br><span class="line">insert into trade_detail values(11, &apos;aaaaaaac&apos;, 4, &apos;commit&apos;);</span><br></pre></td></tr></table></figure></p>
+<p>关联查询<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">explain select d.* from trade_log l, trade_detail d where d.tradeid = l.tradeid and l.id = 2;</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/05/25/Mysql索引的使用/driver_explain_1.png" alt></p>
+<p>trade_detail 表（被驱动表）加上索引后关联查询<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">alter table trade_detail add index(tradeid);</span><br><span class="line">explain select d.* from trade_log l, trade_detail d where d.tradeid = l.tradeid and l.id = 2;</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/05/25/Mysql索引的使用/driver_explain_2.png" alt></p>
+<blockquote>
+<p>TIPS：trade_log 表数据较少，被选为驱动表，其读入内存后，再通过 tradeid 查找 trade_detail 表（被驱动表）匹配的数据，因此 trade_log 的 tradeid 不需加上索引</p>
+</blockquote>
+<h3 id="2-7-优化字符集隐式转换"><a href="#2-7-优化字符集隐式转换" class="headerlink" title="2.7 优化字符集隐式转换"></a>2.7 优化字符集隐式转换</h3><p>测试表<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE `trade_log` (</span><br><span class="line">  `id` int(11) NOT NULL,</span><br><span class="line">  `tradeid` varchar(32) DEFAULT NULL,</span><br><span class="line">  `operator` int(11) DEFAULT NULL,</span><br><span class="line">  `t_modified` datetime DEFAULT NULL,</span><br><span class="line">  PRIMARY KEY (`id`),</span><br><span class="line">  KEY `t_modified` (`t_modified`)</span><br><span class="line">) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;</span><br><span class="line"></span><br><span class="line">CREATE TABLE `trade_detail` (</span><br><span class="line">  `id` int(11) NOT NULL,</span><br><span class="line">  `tradeid` varchar(32) DEFAULT NULL,</span><br><span class="line">  `trade_step` int(11) DEFAULT NULL,</span><br><span class="line">  `step_info` varchar(32) DEFAULT NULL,</span><br><span class="line">  PRIMARY KEY (`id`),</span><br><span class="line">  KEY `tradeid` (`tradeid`)</span><br><span class="line">) ENGINE=InnoDB DEFAULT CHARSET=utf8;</span><br></pre></td></tr></table></figure></p>
+<p>示例数据<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">insert into trade_log values(1, &apos;aaaaaaaa&apos;, 1000, now());</span><br><span class="line">insert into trade_log values(2, &apos;aaaaaaab&apos;, 1000, now());</span><br><span class="line">insert into trade_log values(3, &apos;aaaaaaac&apos;, 1000, now());</span><br><span class="line"></span><br><span class="line">insert into trade_detail values(1, &apos;aaaaaaaa&apos;, 1, &apos;add&apos;);</span><br><span class="line">insert into trade_detail values(2, &apos;aaaaaaaa&apos;, 2, &apos;update&apos;);</span><br><span class="line">insert into trade_detail values(3, &apos;aaaaaaaa&apos;, 3, &apos;commit&apos;);</span><br><span class="line">insert into trade_detail values(4, &apos;aaaaaaab&apos;, 1, &apos;add&apos;);</span><br><span class="line">insert into trade_detail values(5, &apos;aaaaaaab&apos;, 2, &apos;update&apos;);</span><br><span class="line">insert into trade_detail values(6, &apos;aaaaaaab&apos;, 3, &apos;update again&apos;);</span><br><span class="line">insert into trade_detail values(7, &apos;aaaaaaab&apos;, 4, &apos;commit&apos;);</span><br><span class="line">insert into trade_detail values(8, &apos;aaaaaaac&apos;, 1, &apos;add&apos;);</span><br><span class="line">insert into trade_detail values(9, &apos;aaaaaaac&apos;, 2, &apos;update&apos;);</span><br><span class="line">insert into trade_detail values(10, &apos;aaaaaaac&apos;, 3, &apos;update again&apos;);</span><br><span class="line">insert into trade_detail values(11, &apos;aaaaaaac&apos;, 4, &apos;commit&apos;);</span><br></pre></td></tr></table></figure></p>
+<p>关联查询<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">explain select d.* from trade_log l, trade_detail d where d.tradeid = l.tradeid and l.id = 2;</span><br><span class="line"></span><br><span class="line">-- 等价于</span><br><span class="line"></span><br><span class="line">explain select d.* from trade_log l, trade_detail d where CONVERT(d.tradeid USING utf8mb4) = l.tradeid and l.id = 2;</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/05/25/Mysql索引的使用/driver_explain_1.png" alt><br><img src="/2019/05/25/Mysql索引的使用/driver_explain_3.png" alt></p>
+<p>关联查询显式转换<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">explain select d.* from trade_log l, trade_detail d where d.tradeid = CONVERT(l.tradeid USING utf8) and l.id = 2;</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/05/25/Mysql索引的使用/driver_explain_4.png" alt></p>
+<blockquote>
+<p>TIPS：避免索引字段被隐式函数操作是关键</p>
+</blockquote>
+
+    </div>
+    
+    <div class="post-footer">
+        <div class="col-sm-10">
+            <div>
+                <b>本文链接</b>：<a href="/2019/05/25/Mysql索引的使用/">Mysql索引的使用</a>
+            </div>
+            <div>
+                
+                    转载声明：本博客由周立创作，采用 <a href="https://creativecommons.org/licenses/by-nc-nd/3.0/" target="_blank"> CC BY 3.0 CN </a> 许可协议。可自由转载、引用，但需署名作者且注明文章出处。如转载至微信公众号，请在文末添加作者公众号二维码。
+                
+            </div>
+            <div>
+                
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <img src="/icons/wx.jpg" width=100%/>
+        </div>
+    </div>
+</article>
+
+<div class="article-nav prev-next-wrap clearfix">
+    
+        <a href="/2019/05/26/Mysql定位查询耗时阶段/" class="pre-post btn btn-default" title='Mysql定位查询耗时阶段'>
+            <i class="fa fa-angle-left fa-fw"></i><span class="hidden-lg">上一篇</span>
+            <span class="hidden-xs">Mysql定位查询耗时阶段</span>
+        </a>
+    
+    
+        <a href="/2019/05/24/Mysql正确选择数据类型/" class="next-post btn btn-default" title='Mysql正确选择数据类型'>
+            <span class="hidden-lg">下一篇</span>
+            <span class="hidden-xs">Mysql正确选择数据类型</span><i class="fa fa-angle-right fa-fw"></i>
+        </a>
+    
+</div>
+
+
+
+
+
+
+                </main>
+                
+                    
+    <aside class="col-md-4 sidebar">
+        
+        
+    <div class="widget">
+        <h3 class="title">搜索</h3>
+        <div id="search-form">
+            <div id="result-mask" class="hide"></div>
+            <div class="search-area">
+                
+                    <input id="search-key" type="search" autocomplete="off" placeholder="搜点什么呢？">
+                    <button type="button" class="search-form-submit" id="search-local">站内搜索</button>
+                
+                
+            </div>
+            <div id="result-wrap" class="hide">
+                <div id="search-result"></div>
+            </div>
+            <div class="hide">
+                <template id="search-tpl">
+                    <div class="item">
+                        <a href="/{path}" title="{title}">
+                            <div class="title">{title}</div>
+                            <div class="content">{content}</div>
+                        </a>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>
+
+        
+        
+    <div class="widget">
+        <h3 class="title">网站公告</h3>
+        <div class="notification">
+            <p>
+  <b>笔者微信</b>：jumping_me，欢迎加我<br/>
+  <b>公众号</b>：请扫描我的头像<br/>
+</p>
+        </div>
+    </div>
+
+        
+        
+        <div class="widget">
+            <div class="about-me">
+                <img src="/icons/wx.jpg" alt="哲锄">
+                <h2>周立</h2>
+                <p>《Spring Cloud与Docker微服务架构实战》作者<br/></p>
+            </div>
+        </div>
+
+
+
+
+        
+        
+    <div class="widget">
+      <h3 class="title">社交</h3> 
+        <div class="content social">
+            
+	            <a href="//github.com/eacdy" rel="external nofollow" title="GitHub" target="_blank">
+			    	<i class="github fa fa-github"></i>
+			    </a>
+            
+	            <a href="//gitee.com/itmuch" rel="external nofollow" title="Git@OSC" target="_blank">
+			    	<i class="git fa fa-git"></i>
+			    </a>
+            
+	            <a href="mailto:eacdy0000@126.com" rel="external nofollow" title="邮箱" target="_blank">
+			    	<i class="envelope-o fa fa-envelope-o"></i>
+			    </a>
+            
+	            <a href="/atom.xml" rel="external nofollow" title="RSS" target="_blank">
+			    	<i class="feed fa fa-feed"></i>
+			    </a>
+            
+        </div>
+    </div>
+
+
+        
+        
+    <div class="widget">
+        <h3 class="title">分类</h3>
+        <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/ELK/"><i class="fa" aria-hidden="true">ELK</i></a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Git/"><i class="fa" aria-hidden="true">Git</i></a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/"><i class="fa" aria-hidden="true">Java</i></a><span class="category-list-count">116</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/"><i class="fa" aria-hidden="true">Linux</i></a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/"><i class="fa" aria-hidden="true">Mysql</i></a><span class="category-list-count">26</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Nginx/"><i class="fa" aria-hidden="true">Nginx</i></a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/NodeJS/"><i class="fa" aria-hidden="true">NodeJS</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Others/"><i class="fa" aria-hidden="true">Others</i></a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/"><i class="fa" aria-hidden="true">Redis</i></a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Test/"><i class="fa" aria-hidden="true">Test</i></a><span class="category-list-count">2</span></li></ul>
+    </div>
+
+
+        
+        
+  <div class="widget">
+    <h3 class="title">标签云</h3>
+    <div class="content tag-cloud">
+        
+            <a href="/tags/CentOS7/" style="font-size: 17.5px;">CentOS7</a> <a href="/tags/Docker/" style="font-size: 17.5px;">Docker</a> <a href="/tags/Gradle/" style="font-size: 10px;">Gradle</a> <a href="/tags/IDEA/" style="font-size: 10px;">IDEA</a> <a href="/tags/IO/" style="font-size: 15.83px;">IO</a> <a href="/tags/JMeter/" style="font-size: 10.83px;">JMeter</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Maven/" style="font-size: 10.83px;">Maven</a> <a href="/tags/Netty/" style="font-size: 10.83px;">Netty</a> <a href="/tags/OAuth2/" style="font-size: 10.83px;">OAuth2</a> <a href="/tags/Spring/" style="font-size: 19.17px;">Spring</a> <a href="/tags/SpringCloud/" style="font-size: 15px;">SpringCloud</a> <a href="/tags/SpringSecurity/" style="font-size: 11.67px;">SpringSecurity</a> <a href="/tags/VM/" style="font-size: 10px;">VM</a> <a href="/tags/k8s/" style="font-size: 12.5px;">k8s</a> <a href="/tags/lombok/" style="font-size: 10px;">lombok</a> <a href="/tags/代码生成/" style="font-size: 10px;">代码生成</a> <a href="/tags/分布式事务/" style="font-size: 10.83px;">分布式事务</a> <a href="/tags/加速器/" style="font-size: 10px;">加速器</a> <a href="/tags/升级回滚/" style="font-size: 10px;">升级回滚</a> <a href="/tags/反射/" style="font-size: 10px;">反射</a> <a href="/tags/图/" style="font-size: 10px;">图</a> <a href="/tags/多线程/" style="font-size: 18.33px;">多线程</a> <a href="/tags/工具/" style="font-size: 11.67px;">工具</a> <a href="/tags/序列化/" style="font-size: 10.83px;">序列化</a> <a href="/tags/异常处理/" style="font-size: 10px;">异常处理</a> <a href="/tags/异步/" style="font-size: 10px;">异步</a> <a href="/tags/微服务/" style="font-size: 16.67px;">微服务</a> <a href="/tags/性能优化/" style="font-size: 18.33px;">性能优化</a> <a href="/tags/性能测试/" style="font-size: 10.83px;">性能测试</a> <a href="/tags/搜索/" style="font-size: 12.5px;">搜索</a> <a href="/tags/数据结构/" style="font-size: 13.33px;">数据结构</a> <a href="/tags/日志/" style="font-size: 10px;">日志</a> <a href="/tags/架构/" style="font-size: 10.83px;">架构</a> <a href="/tags/池化技术/" style="font-size: 10px;">池化技术</a> <a href="/tags/注册中心/" style="font-size: 10.83px;">注册中心</a> <a href="/tags/算法/" style="font-size: 20px;">算法</a> <a href="/tags/缓存/" style="font-size: 13.33px;">缓存</a> <a href="/tags/规范/" style="font-size: 14.17px;">规范</a> <a href="/tags/设计模式/" style="font-size: 15px;">设计模式</a> <a href="/tags/资料库/" style="font-size: 10px;">资料库</a> <a href="/tags/配置中心/" style="font-size: 11.67px;">配置中心</a> <a href="/tags/锁/" style="font-size: 12.5px;">锁</a> <a href="/tags/队列/" style="font-size: 12.5px;">队列</a> <a href="/tags/集合/" style="font-size: 10.83px;">集合</a>
+        
+    </div>
+  </div>
+
+
+        
+        
+    <div class="widget">
+        <h3 class="title">友链</h3>
+        <div class="content friends-link">
+        
+            <a href="http://blog.didispace.com/" class="fa" target="_blank">程序猿DD|翟永超</a>
+        
+            <a href="http://www.bysocket.com/" class="fa" target="_blank">泥瓦匠的博客</a>
+        
+            <a href="http://edisonxu.org/" class="fa" target="_blank">EdisonXu&#39;s Blog</a>
+        
+            <a href="http://blog.720ui.com/" class="fa" target="_blank">梁桂钊的博客</a>
+        
+            <a href="http://cxytiandi.com/" class="fa" target="_blank">猿天地</a>
+        
+        </div>
+    </div>
+
+
+        
+    </aside>
+
+                
+            </div>
+        </div>
+    </section>
+    <footer class="main-footer">
+    <div class="container">
+        <div class="row">
+        </div>
+    </div>
+</footer>
+
+<a id="back-to-top" class="icon-btn hide">
+	<i class="fa fa-chevron-up"></i>
+</a>
+
+
+
+
+    <div class="copyright">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="busuanzi">
+    
+        访问量:
+        <strong id="busuanzi_value_site_pv">
+            <i class="fa fa-spinner fa-spin"></i>
+        </strong>
+        &nbsp; | &nbsp;
+        访客数:
+        <strong id="busuanzi_value_site_uv">
+            <i class="fa fa-spinner fa-spin"></i>
+        </strong>
+    
+</div>
+
+            </div>
+            <div class="col-sm-12">
+                <span>Copyright &copy; 2016
+                </span> |
+                <span>
+                    Powered by <a href="//hexo.io" class="copyright-links" target="_blank" rel="nofollow">Hexo</a>
+                </span> |
+                <span>
+                    Theme by <a href="//github.com/itmuch/hexo-theme-itmuch.git" class="copyright-links" target="_blank" rel="nofollow">ITMuch</a>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script src="/js/app.js?rev=@@hash"></script>
+
+</body>
+</html>

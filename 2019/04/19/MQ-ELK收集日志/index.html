@@ -1,0 +1,567 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!--Setting-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta name="apple-mobile-web-app-capable" content="哲锄">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no,email=no,adress=no">
+    <meta name="browsermode" content="application">
+    <meta name="screen-orientation" content="portrait">
+    <link rel="dns-prefetch" href="http://www.zhechu.top">
+    <!--SEO-->
+
+    <meta name="keywords" content="Docker,队列,日志,">
+
+
+    <meta name="description" content="环境说明
+
+
+
+环境
+说明
+
+
+
+
+rabbitmq-3.7-management
+消息中间件
+
+
+elasticsearch-5.6.9
+搜索服务器
+
+
+logstash-5.6.9
+数据处理工具
+
+
+kibana-5.6.9
+分析数据和可视化平台
+
+
+
+1 RabbitMQ + ELK1....">
+
+
+<meta name="robots" content="all">
+<meta name="google" content="all">
+<meta name="googlebot" content="all">
+<meta name="verify" content="all">
+    <!--Title-->
+
+
+<title>MQ&amp;ELK收集日志 | 哲锄</title>
+
+
+    <link rel="alternate" href="/atom.xml" title="哲锄" type="application/atom+xml">
+
+
+    <link rel="icon" href="/favicon.ico">
+
+    
+
+
+    <link rel="stylesheet" href="//imsun.github.io/gitment/style/default.css">
+
+
+<link rel="stylesheet" href="/css/bootstrap.min.css?rev=3.3.7">
+<link rel="stylesheet" href="/css/font-awesome.min.css?rev=4.5.0">
+<link rel="stylesheet" href="/css/style.css?rev=@@hash">
+
+
+
+
+    
+
+
+
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?13766878cde148282622871dd245a973";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    
+
+</head>
+
+</html>
+<!--[if lte IE 8]>
+<style>
+    html{ font-size: 1em }
+</style>
+<![endif]-->
+<!--[if lte IE 9]>
+<div style="ie">你使用的浏览器版本过低，为了你更好的阅读体验，请更新浏览器的版本或者使用其他现代浏览器，比如Chrome、Firefox、Safari等。</div>
+<![endif]-->
+
+<body>
+    
+    <nav class="main-navigation">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="navbar-header"><span class="nav-toggle-button collapsed pull-right" data-toggle="collapse" data-target="#main-menu" id="mnav">
+                    <span class="sr-only"></span>
+                        <i class="fa fa-bars"></i>
+                    </span>
+                    <a class="navbar-brand" href="http://www.zhechu.top">哲锄</a>
+                </div>
+                <div class="collapse navbar-collapse" id="main-menu">
+                    <ul class="menu">
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/"><i class="fa fa-home"></i>Spring Cloud|周立</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/categories"><i class="fa fa-list"></i>分类</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/about"><i class="fa fa-user"></i>关于我</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/archives"><i class="fa fa-archive"></i>归档</a>
+                            </li>
+                        
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<a href="http://github.com/eacdy">
+    <img style="position: absolute; top: 0; right: 0; border: 0;"
+        src="/img/forkme.png"
+        alt="Fork me on GitHub">
+</a>
+
+    <section class="content-wrap">
+        <div class="container">
+            <div class="row">
+                <main class="col-md-8 main-content m-post">
+                    <p id="process"></p>
+<article class="post">
+    <div class="post-head">
+        <h1 id="MQ&amp;ELK收集日志">
+            
+                MQ&amp;ELK收集日志
+            
+        </h1>
+        <div class="post-meta">
+    
+    
+    <span class="categories-meta fa-wrap">
+        <i class="fa fa-folder-open-o"></i>
+        <a href="/categories/ELK">
+            ELK
+        </a>
+    </span>
+    
+
+    
+    <span class="fa-wrap">
+        <i class="fa fa-tags"></i>
+        <span class="tags-meta">
+            
+                
+                    <a href="/tags/Docker" title='Docker'>
+                        Docker
+                    </a>
+                
+                    <a href="/tags/队列" title='队列'>
+                        队列
+                    </a>
+                
+                    <a href="/tags/日志" title='日志'>
+                        日志
+                    </a>
+                
+            
+        </span>
+    </span>
+    
+
+    
+        
+        <span class="fa-wrap">
+            <i class="fa fa-clock-o"></i>
+            <span class="date-meta">2019/04/19</span>
+        </span>
+        
+            <span class="fa-wrap">
+                <i class="fa fa-eye"></i>
+                <span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    
+</div>
+
+        
+        
+    </div>
+    
+    <div class="post-body post-content">
+        <p>环境说明</p>
+<table>
+<thead>
+<tr>
+<th>环境</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>rabbitmq-3.7-management</td>
+<td>消息中间件</td>
+</tr>
+<tr>
+<td>elasticsearch-5.6.9</td>
+<td>搜索服务器</td>
+</tr>
+<tr>
+<td>logstash-5.6.9</td>
+<td>数据处理工具</td>
+</tr>
+<tr>
+<td>kibana-5.6.9</td>
+<td>分析数据和可视化平台</td>
+</tr>
+</tbody>
+</table>
+<h2 id="1-RabbitMQ-ELK"><a href="#1-RabbitMQ-ELK" class="headerlink" title="1 RabbitMQ + ELK"></a>1 RabbitMQ + ELK</h2><h3 id="1-1-选型理由"><a href="#1-1-选型理由" class="headerlink" title="1.1 选型理由"></a>1.1 选型理由</h3><p>由于服务较多，使用 <strong>ELK</strong> 单独接收日志并将其可视化，可提高排查故障的效率。若只使用 ELK，可能会发现日志有丢失的情况。因此将日志发送至 <strong>RabbitMQ</strong>，作为缓冲，可缓解日志丢失的问题。<strong>RabbitMQ</strong> 稳定性比较高，也可以做集群，因此选择它。</p>
+<h3 id="1-2-日志流"><a href="#1-2-日志流" class="headerlink" title="1.2 日志流"></a>1.2 日志流</h3><p><img src="/2019/04/19/MQ-ELK收集日志/rabbitmq_elk_log_stream.png" alt></p>
+<h3 id="1-3-部署-RabbitMQ"><a href="#1-3-部署-RabbitMQ" class="headerlink" title="1.3 部署 RabbitMQ"></a>1.3 部署 RabbitMQ</h3><p>RabbitMQ 官方镜像文档</p>
+<p><a href="https://hub.docker.com/_/rabbitmq/" target="_blank" rel="noopener">https://hub.docker.com/_/rabbitmq/</a></p>
+<blockquote>
+<p>由于官方镜像默认的账号不支持远程访问控，因此此处进行薄层封装。</p>
+</blockquote>
+<p>新建 Dockerfile<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> vi Dockerfile</span><br><span class="line">FROM rabbitmq:3.7-management</span><br><span class="line">MAINTAINER lingyuwang ling-yu-wang@qq.com</span><br><span class="line">ADD run.sh /root/run.sh</span><br><span class="line">RUN chmod 755 /root/run.sh</span><br><span class="line">ENTRYPOINT ["/root/run.sh"]</span><br><span class="line">CMD [""]</span><br></pre></td></tr></table></figure></p>
+<p>新建 run.sh 作为镜像启动脚本<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> vi run.sh</span><br><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line">docker-entrypoint.sh rabbitmq-server</span><br><span class="line">sleep 5s</span><br><span class="line">user=guest</span><br><span class="line">pass=guest</span><br><span class="line">if [ $RABBITMQ_DEFAULT_USER ];</span><br><span class="line">then</span><br><span class="line">  user="$RABBITMQ_DEFAULT_USER"</span><br><span class="line">fi</span><br><span class="line">if [ $RABBITMQ_DEFAULT_PASS ];</span><br><span class="line">then</span><br><span class="line">  pass="$RABBITMQ_DEFAULT_PASS"</span><br><span class="line">fi</span><br><span class="line"><span class="meta">#</span> 新建用户</span><br><span class="line">rabbitmqctl add_user "$user" "$pass"</span><br><span class="line"><span class="meta">#</span> 用户授权</span><br><span class="line">rabbitmqctl set_permissions -p / "$user" ".*" ".*" ".*"</span><br><span class="line">rabbitmqctl set_user_tags "$user" administrator</span><br></pre></td></tr></table></figure></p>
+<p>构建镜像 rabbitmq:3.7-management-plus<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker build -t rabbitmq:3.7-management-plus .</span><br></pre></td></tr></table></figure></p>
+<p>启动容器<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker run -d --name rabbitmq -v /var/lib/rabbitmq:/data/rabbitmq -p 5672:5672 -p 15672:15672 -e RABBITMQ_DEFAULT_USER=admin -e RABBITMQ_DEFAULT_PASS=123456 rabbitmq:3.7-management-plus</span><br></pre></td></tr></table></figure></p>
+<p>浏览器进入 web 控制台 <a href="http://192.168.163.41:15672" target="_blank" rel="noopener">http://192.168.163.41:15672</a> admin/123456</p>
+<p><img src="/2019/04/19/MQ-ELK收集日志/rabbit_admin_ui.png" alt></p>
+<h3 id="1-4-与-spring-boot-集成"><a href="#1-4-与-spring-boot-集成" class="headerlink" title="1.4 与 spring-boot 集成"></a>1.4 与 spring-boot 集成</h3><p>示例代码</p>
+<p><a href="https://github.com/zhechu/spring-boot-rabbitmq-elk-demo" target="_blank" rel="noopener">https://github.com/zhechu/spring-boot-rabbitmq-elk-demo</a></p>
+<h4 id="1-4-1-pom-xml-添加依赖"><a href="#1-4-1-pom-xml-添加依赖" class="headerlink" title="1.4.1 pom.xml 添加依赖"></a>1.4.1 pom.xml 添加依赖</h4><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependencies&gt;</span><br><span class="line">        &lt;!-- logback --&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;ch.qos.logback&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;logback-core&lt;/artifactId&gt;</span><br><span class="line">			&lt;version&gt;1.2.3&lt;/version&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;ch.qos.logback&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;logback-access&lt;/artifactId&gt;</span><br><span class="line">			&lt;version&gt;1.2.3&lt;/version&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;ch.qos.logback&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;logback-classic&lt;/artifactId&gt;</span><br><span class="line">			&lt;version&gt;1.2.3&lt;/version&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;net.logstash.logback&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;logstash-logback-encoder&lt;/artifactId&gt;</span><br><span class="line">			&lt;version&gt;4.9&lt;/version&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">        &lt;!-- logback 日志JSON --&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;org.codehaus.janino&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;janino&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;2.7.8&lt;/version&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line"></span><br><span class="line">        &lt;!-- rabbitmq --&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;spring-boot-starter-amqp&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;1.5.3.RELEASE&lt;/version&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">&lt;/dependencies&gt;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>TIPS：logback 和 logstash-logback-encoder 的版本不要随便改（版本兼容性不好）。</p>
+</blockquote>
+<h4 id="1-4-2-application-yml"><a href="#1-4-2-application-yml" class="headerlink" title="1.4.2 application.yml"></a>1.4.2 application.yml</h4><p>支持日志打印在控制台、文件和发送到 RabbitMQ<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">############################################################################################</span><br><span class="line">########################################## 日志 ##############################################</span><br><span class="line">############################################################################################</span><br><span class="line">log:</span><br><span class="line">  level: INFO</span><br><span class="line">  console:</span><br><span class="line">    enable: <span class="keyword">true</span></span><br><span class="line">  file:</span><br><span class="line">    enable: <span class="keyword">true</span></span><br><span class="line">    destination: ./logs</span><br><span class="line">  rabbitmq:</span><br><span class="line">    enable: <span class="keyword">true</span></span><br><span class="line">    host: <span class="number">192.168</span><span class="number">.163</span><span class="number">.41</span></span><br><span class="line">    port: <span class="number">5672</span></span><br><span class="line">    username: admin</span><br><span class="line">    password: <span class="number">123456</span></span><br><span class="line">    exchange: ex_logstash</span><br><span class="line">    routingKey: runtime.logging</span><br></pre></td></tr></table></figure></p>
+<p>jasypt-spring-boot 官方文档</p>
+<p><a href="https://github.com/ulisesbocchio/jasypt-spring-boot" target="_blank" rel="noopener">https://github.com/ulisesbocchio/jasypt-spring-boot</a></p>
+<p>参考文档</p>
+<p><a href="https://www.cnblogs.com/zz0412/p/jasypt-001.html" target="_blank" rel="noopener">https://www.cnblogs.com/zz0412/p/jasypt-001.html</a></p>
+<blockquote>
+<p>TIPS：RabbitMQ 的密码可以用 jasypt 加密。本地开发建议将 log.rabbitmq.enable 设置为 false，表示不发日志到 MQ。</p>
+</blockquote>
+<h4 id="1-4-3-修复-JSON-解析-BUG"><a href="#1-4-3-修复-JSON-解析-BUG" class="headerlink" title="1.4.3 修复 JSON 解析 BUG"></a>1.4.3 修复 JSON 解析 BUG</h4><p>新建 AmqpLogbackAppender.java 类<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.wise.demo.log;</span><br><span class="line"><span class="keyword">import</span> org.springframework.amqp.core.Message;</span><br><span class="line"><span class="keyword">import</span> org.springframework.amqp.rabbit.logback.AmqpAppender;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> ch.qos.logback.classic.spi.ILoggingEvent;</span><br><span class="line"><span class="keyword">import</span> ch.qos.logback.core.encoder.Encoder;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 修复 json 解析 BUG</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> lingyuwang</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AmqpLogbackAppender</span> <span class="keyword">extends</span> <span class="title">AmqpAppender</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Encoder&lt;ILoggingEvent&gt; encoder;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * We remove the default message layout and replace with the JSON &#123;<span class="doctag">@link</span> Encoder&#125;</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Message <span class="title">postProcessMessageBeforeSend</span><span class="params">(Message message, Event event)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Message(<span class="keyword">this</span>.encoder.encode(event.getEvent()), message.getMessageProperties());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">start</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.start();</span><br><span class="line">        encoder.setContext(getContext());</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (!encoder.isStarted()) &#123;</span><br><span class="line">            encoder.start();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.stop();</span><br><span class="line">        encoder.stop();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> Encoder&lt;ILoggingEvent&gt; <span class="title">getEncoder</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> encoder;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setEncoder</span><span class="params">(Encoder&lt;ILoggingEvent&gt; encoder)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.encoder = encoder;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="1-4-4-logback-spring-xml"><a href="#1-4-4-logback-spring-xml" class="headerlink" title="1.4.4 logback-spring.xml"></a>1.4.4 logback-spring.xml</h4><p>新建 src/main/resources/logback-spring.xml<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span>?&gt;</span><br><span class="line">&lt;configuration&gt;</span><br><span class="line"></span><br><span class="line">    &lt;!-- level --&gt;</span><br><span class="line">    &lt;springProperty name=<span class="string">"logLevel"</span> source=<span class="string">"log.level"</span> /&gt;</span><br><span class="line"></span><br><span class="line">    &lt;!-- console --&gt;</span><br><span class="line">    &lt;springProperty name=<span class="string">"logConsoleEnable"</span> source=<span class="string">"log.console.enable"</span> /&gt;</span><br><span class="line"></span><br><span class="line">    &lt;!-- file --&gt;</span><br><span class="line">    &lt;springProperty name=<span class="string">"logFileEnable"</span> source=<span class="string">"log.file.enable"</span> /&gt;</span><br><span class="line">    &lt;springProperty name=<span class="string">"logFileDestination"</span> source=<span class="string">"log.file.destination"</span> /&gt;</span><br><span class="line"></span><br><span class="line">    &lt;!-- rabbitmq --&gt;</span><br><span class="line">    &lt;springProperty name=<span class="string">"logRabbitmqEnable"</span> source=<span class="string">"log.rabbitmq.enable"</span> /&gt;</span><br><span class="line">    &lt;springProperty name=<span class="string">"logRabbitmqHost"</span> source=<span class="string">"log.rabbitmq.host"</span> /&gt;</span><br><span class="line">    &lt;springProperty name=<span class="string">"logRabbitmqPort"</span> source=<span class="string">"log.rabbitmq.port"</span> /&gt;</span><br><span class="line">    &lt;springProperty name=<span class="string">"logRabbitmqUsername"</span> source=<span class="string">"log.rabbitmq.username"</span> /&gt;</span><br><span class="line">    &lt;springProperty name=<span class="string">"logRabbitmqPassword"</span> source=<span class="string">"log.rabbitmq.password"</span> /&gt;</span><br><span class="line">    &lt;springProperty name=<span class="string">"logRabbitmqExchange"</span> source=<span class="string">"log.rabbitmq.exchange"</span> /&gt;</span><br><span class="line">    &lt;springProperty name=<span class="string">"logRabbitmqRoutingKey"</span> source=<span class="string">"log.rabbitmq.routingKey"</span> /&gt;</span><br><span class="line"></span><br><span class="line">    &lt;!-- app --&gt;</span><br><span class="line">    &lt;springProperty scope=<span class="string">"context"</span> name=<span class="string">"appname"</span> source=<span class="string">"spring.application.name"</span> /&gt;</span><br><span class="line"></span><br><span class="line">    &lt;include resource=<span class="string">"org/springframework/boot/logging/logback/defaults.xml"</span> /&gt;</span><br><span class="line">    &lt;include resource=<span class="string">"org/springframework/boot/logging/logback/console-appender.xml"</span> /&gt;</span><br><span class="line"></span><br><span class="line">    &lt;contextName&gt;$&#123;appname&#125;&lt;/contextName&gt;</span><br><span class="line"></span><br><span class="line">    &lt;!-- 文件输出 --&gt;</span><br><span class="line">    &lt;<span class="keyword">if</span> condition=<span class="string">'property("logFileEnable").equalsIgnoreCase("true")'</span>&gt;</span><br><span class="line">	    &lt;then&gt;</span><br><span class="line">	       &lt;appender name=<span class="string">"FILE"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"ch.qos.logback.core.rolling.RollingFileAppender"</span>&gt;</span><br><span class="line">		        &lt;!-- 输出格式 --&gt;</span><br><span class="line">		        &lt;encoder&gt;</span><br><span class="line">		            &lt;pattern&gt;$&#123;FILE_LOG_PATTERN&#125;&lt;/pattern&gt;</span><br><span class="line">		        &lt;/encoder&gt;</span><br><span class="line">		        &lt;rollingPolicy <span class="class"><span class="keyword">class</span></span>=<span class="string">"ch.qos.logback.core.rolling.TimeBasedRollingPolicy"</span>&gt;</span><br><span class="line">		            &lt;!--日志文件输出的文件名--&gt;</span><br><span class="line">		            &lt;FileNamePattern&gt;$&#123;logFileDestination&#125;/$&#123;appname&#125;-%d&#123;yyyy-MM-dd&#125;.log&lt;/FileNamePattern&gt;</span><br><span class="line">		            &lt;!--日志文件保留天数--&gt;</span><br><span class="line">		            &lt;MaxHistory&gt;30&lt;/MaxHistory&gt;</span><br><span class="line">		        &lt;/rollingPolicy&gt;</span><br><span class="line">		        &lt;!--日志文件最大的大小--&gt;</span><br><span class="line">		        &lt;triggeringPolicy <span class="class"><span class="keyword">class</span></span>=<span class="string">"ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy"</span>&gt;</span><br><span class="line">		            &lt;MaxFileSize&gt;10MB&lt;/MaxFileSize&gt;</span><br><span class="line">		        &lt;/triggeringPolicy&gt;</span><br><span class="line">		    &lt;/appender&gt;</span><br><span class="line">	    &lt;/then&gt;</span><br><span class="line">    &lt;/if&gt;</span><br><span class="line"></span><br><span class="line">    &lt;!-- RabbitMQ 输出 --&gt;</span><br><span class="line">    &lt;<span class="keyword">if</span> condition=<span class="string">'property("logRabbitmqEnable").equalsIgnoreCase("true")'</span>&gt;</span><br><span class="line">        &lt;then&gt;</span><br><span class="line">            &lt;appender name=<span class="string">"AMQP"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"com.wise.demo.log.AmqpLogbackAppender"</span>&gt;</span><br><span class="line">		        &lt;!-- layout is required but ignored as using the encoder <span class="keyword">for</span> the AMQP message body --&gt;</span><br><span class="line">		        &lt;layout&gt;&lt;pattern&gt;&lt;![CDATA[ %level ]]&gt;&lt;/pattern&gt;&lt;/layout&gt;</span><br><span class="line"></span><br><span class="line">				&lt;!-- 将 appname 作为自定义域加入日志，方便日志搜索 --&gt;</span><br><span class="line">		        &lt;encoder <span class="class"><span class="keyword">class</span></span>=<span class="string">"net.logstash.logback.encoder.LogstashEncoder"</span>&gt;</span><br><span class="line">		            &lt;customFields&gt;&#123;"appname": "$&#123;appname&#125;"&#125;&lt;/customFields&gt;</span><br><span class="line">		        &lt;/encoder&gt;</span><br><span class="line"></span><br><span class="line">		        &lt;host&gt;$&#123;logRabbitmqHost&#125;&lt;/host&gt;</span><br><span class="line">		        &lt;port&gt;$&#123;logRabbitmqPort&#125;&lt;/port&gt;</span><br><span class="line">		        &lt;username&gt;$&#123;logRabbitmqUsername&#125;&lt;/username&gt;</span><br><span class="line">		        &lt;password&gt;$&#123;logRabbitmqPassword&#125;&lt;/password&gt;</span><br><span class="line">		        &lt;exchangeName&gt;$&#123;logRabbitmqExchange&#125;&lt;/exchangeName&gt;</span><br><span class="line">		        &lt;routingKeyPattern&gt;$&#123;logRabbitmqRoutingKey&#125;&lt;/routingKeyPattern&gt;</span><br><span class="line"></span><br><span class="line">		        &lt;declareExchange&gt;true&lt;/declareExchange&gt;</span><br><span class="line">		        &lt;exchangeType&gt;topic&lt;/exchangeType&gt;</span><br><span class="line">		        &lt;generateId&gt;true&lt;/generateId&gt;</span><br><span class="line">		        &lt;charset&gt;UTF-8&lt;/charset&gt;</span><br><span class="line">		        &lt;durable&gt;true&lt;/durable&gt;</span><br><span class="line">		        &lt;deliveryMode&gt;PERSISTENT&lt;/deliveryMode&gt;</span><br><span class="line">		     &lt;/appender&gt;</span><br><span class="line">        &lt;/then&gt;</span><br><span class="line">    &lt;/if&gt;</span><br><span class="line"></span><br><span class="line">    &lt;!-- 根logger --&gt;</span><br><span class="line">    &lt;root level=<span class="string">"INFO"</span>&gt;</span><br><span class="line">        &lt;!-- 控制台 --&gt;</span><br><span class="line">        &lt;<span class="keyword">if</span> condition=<span class="string">'property("logConsoleEnable").equalsIgnoreCase("true")'</span>&gt;</span><br><span class="line">            &lt;then&gt;</span><br><span class="line">                &lt;appender-ref ref=<span class="string">"CONSOLE"</span> /&gt;</span><br><span class="line">            &lt;/then&gt;</span><br><span class="line">        &lt;/if&gt;</span><br><span class="line"></span><br><span class="line">        &lt;!-- file --&gt;</span><br><span class="line">        &lt;<span class="keyword">if</span> condition=<span class="string">'property("logFileEnable").equalsIgnoreCase("true")'</span>&gt;</span><br><span class="line">            &lt;then&gt;</span><br><span class="line">                &lt;appender-ref ref=<span class="string">"FILE"</span> /&gt;</span><br><span class="line">            &lt;/then&gt;</span><br><span class="line">        &lt;/if&gt;</span><br><span class="line"></span><br><span class="line">        &lt;!-- rabbitmq --&gt;</span><br><span class="line">        &lt;<span class="keyword">if</span> condition=<span class="string">'property("logRabbitmqEnable").equalsIgnoreCase("true")'</span>&gt;</span><br><span class="line">            &lt;then&gt;</span><br><span class="line">                &lt;appender-ref ref=<span class="string">"AMQP"</span> /&gt;</span><br><span class="line">            &lt;/then&gt;</span><br><span class="line">        &lt;/if&gt;</span><br><span class="line">    &lt;/root&gt;</span><br><span class="line"></span><br><span class="line">    &lt;logger name=<span class="string">"com.wise"</span> level=<span class="string">"$&#123;logLevel&#125;"</span> /&gt;</span><br><span class="line"></span><br><span class="line">    &lt;logger name=<span class="string">"org.springframework"</span> level=<span class="string">"$&#123;logLevel&#125;"</span> /&gt;</span><br><span class="line">    &lt;logger name=<span class="string">"com.netflix"</span> level=<span class="string">"$&#123;logLevel&#125;"</span> /&gt;</span><br><span class="line"></span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure></p>
+<h4 id="1-4-5-启动服务"><a href="#1-4-5-启动服务" class="headerlink" title="1.4.5 启动服务"></a>1.4.5 启动服务</h4><p>运行 com.wise.demo.Application 类</p>
+<blockquote>
+<p>TIPS：日志文件的位置为当前工程目录下。</p>
+</blockquote>
+<h3 id="1-5-部署-Elasticsearch"><a href="#1-5-部署-Elasticsearch" class="headerlink" title="1.5 部署 Elasticsearch"></a>1.5 部署 Elasticsearch</h3><p>elasticsearch 官方镜像文档</p>
+<p><a href="https://hub.docker.com/_/elasticsearch/" target="_blank" rel="noopener">https://hub.docker.com/_/elasticsearch/</a></p>
+<p>下载官方镜像<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker pull elasticsearch:5.6.9-alpine</span><br></pre></td></tr></table></figure></p>
+<p>启动容器<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker run -d --name elasticsearch -v /data/elasticsearch:/usr/share/elasticsearch/data -p 9200:9200 -p 9300:9300 elasticsearch:5.6.9-alpine</span><br></pre></td></tr></table></figure></p>
+<h3 id="1-6-部署-kibana"><a href="#1-6-部署-kibana" class="headerlink" title="1.6 部署 kibana"></a>1.6 部署 kibana</h3><p>kibana 官方镜像文档</p>
+<p><a href="https://hub.docker.com/_/kibana/" target="_blank" rel="noopener">https://hub.docker.com/_/kibana/</a></p>
+<p>下载官方镜像<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker pull kibana:5.6.9</span><br></pre></td></tr></table></figure></p>
+<p>新建 kibana.yml 文件<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> mkdir -p /etc/kibana</span><br><span class="line"><span class="meta">$</span> vi /etc/kibana/kibana.yml</span><br><span class="line">server.host: '0.0.0.0'</span><br><span class="line"><span class="meta">#</span> 先不填，测试环境变量是否生效</span><br><span class="line">elasticsearch.url: ''</span><br><span class="line">logging.quiet: true</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>TIPS：需要配置挂载，将此配置文件挂载到容器目录 <strong>/etc/kibana</strong>，将默认配置替换。主要是将 <strong>logging.quiet</strong> 设置为 true，默认是 false，表示“设置为 true 以禁止除错误消息之外的所有日志记录输出”。<strong>elasticsearch.url</strong> 环境变量会替换，这里可以不配。</p>
+</blockquote>
+<p>kibana.yml 详细内容（包括注释）<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> Kibana is served by a back end server. This setting specifies the port to use.</span><br><span class="line"><span class="meta">#</span>server.port: 5601</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> Specifies the address to which the Kibana server will bind. IP addresses and host names are both valid values.</span><br><span class="line"><span class="meta">#</span> The default is 'localhost', which usually means remote machines will not be able to connect.</span><br><span class="line"><span class="meta">#</span> To allow connections from remote users, set this parameter to a non-loopback address.</span><br><span class="line">server.host: '0.0.0.0'</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> Enables you to specify a path to mount Kibana at if you are running behind a proxy. This only affects</span><br><span class="line"><span class="meta">#</span> the URLs generated by Kibana, your proxy is expected to remove the basePath value before forwarding requests</span><br><span class="line"><span class="meta">#</span> to Kibana. This setting cannot end in a slash.</span><br><span class="line"><span class="meta">#</span>server.basePath: ""</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> The maximum payload size in bytes for incoming server requests.</span><br><span class="line"><span class="meta">#</span>server.maxPayloadBytes: 1048576</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> The Kibana server's name.  This is used for display purposes.</span><br><span class="line"><span class="meta">#</span>server.name: "your-hostname"</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> The URL of the Elasticsearch instance to use for all your queries.</span><br><span class="line">elasticsearch.url: ''</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> When this setting's value is true Kibana uses the hostname specified in the server.host</span><br><span class="line"><span class="meta">#</span> setting. When the value of this setting is false, Kibana uses the hostname of the host</span><br><span class="line"><span class="meta">#</span> that connects to this Kibana instance.</span><br><span class="line"><span class="meta">#</span>elasticsearch.preserveHost: true</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> Kibana uses an index in Elasticsearch to store saved searches, visualizations and</span><br><span class="line"><span class="meta">#</span> dashboards. Kibana creates a new index if the index doesn't already exist.</span><br><span class="line"><span class="meta">#</span>kibana.index: ".kibana"</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> The default application to load.</span><br><span class="line"><span class="meta">#</span>kibana.defaultAppId: "discover"</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> If your Elasticsearch is protected with basic authentication, these settings provide</span><br><span class="line"><span class="meta">#</span> the username and password that the Kibana server uses to perform maintenance on the Kibana</span><br><span class="line"><span class="meta">#</span> index at startup. Your Kibana users still need to authenticate with Elasticsearch, which</span><br><span class="line"><span class="meta">#</span> is proxied through the Kibana server.</span><br><span class="line"><span class="meta">#</span>elasticsearch.username: "user"</span><br><span class="line"><span class="meta">#</span>elasticsearch.password: "pass"</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> Enables SSL and paths to the PEM-format SSL certificate and SSL key files, respectively.</span><br><span class="line"><span class="meta">#</span> These settings enable SSL for outgoing requests from the Kibana server to the browser.</span><br><span class="line"><span class="meta">#</span>server.ssl.enabled: false</span><br><span class="line"><span class="meta">#</span>server.ssl.certificate: /path/to/your/server.crt</span><br><span class="line"><span class="meta">#</span>server.ssl.key: /path/to/your/server.key</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> Optional settings that provide the paths to the PEM-format SSL certificate and key files.</span><br><span class="line"><span class="meta">#</span> These files validate that your Elasticsearch backend uses the same key files.</span><br><span class="line"><span class="meta">#</span>elasticsearch.ssl.certificate: /path/to/your/client.crt</span><br><span class="line"><span class="meta">#</span>elasticsearch.ssl.key: /path/to/your/client.key</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> Optional setting that enables you to specify a path to the PEM file for the certificate</span><br><span class="line"><span class="meta">#</span> authority for your Elasticsearch instance.</span><br><span class="line"><span class="meta">#</span>elasticsearch.ssl.certificateAuthorities: [ "/path/to/your/CA.pem" ]</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> To disregard the validity of SSL certificates, change this setting's value to 'none'.</span><br><span class="line"><span class="meta">#</span>elasticsearch.ssl.verificationMode: full</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> Time in milliseconds to wait for Elasticsearch to respond to pings. Defaults to the value of</span><br><span class="line"><span class="meta">#</span> the elasticsearch.requestTimeout setting.</span><br><span class="line"><span class="meta">#</span>elasticsearch.pingTimeout: 1500</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> Time in milliseconds to wait for responses from the back end or Elasticsearch. This value</span><br><span class="line"><span class="meta">#</span> must be a positive integer.</span><br><span class="line"><span class="meta">#</span>elasticsearch.requestTimeout: 30000</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> List of Kibana client-side headers to send to Elasticsearch. To send *no* client-side</span><br><span class="line"><span class="meta">#</span> headers, set this value to [] (an empty list).</span><br><span class="line"><span class="meta">#</span>elasticsearch.requestHeadersWhitelist: [ authorization ]</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> Header names and values that are sent to Elasticsearch. Any custom headers cannot be overwritten</span><br><span class="line"><span class="meta">#</span> by client-side headers, regardless of the elasticsearch.requestHeadersWhitelist configuration.</span><br><span class="line"><span class="meta">#</span>elasticsearch.customHeaders: &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> Time in milliseconds for Elasticsearch to wait for responses from shards. Set to 0 to disable.</span><br><span class="line"><span class="meta">#</span>elasticsearch.shardTimeout: 0</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> Time in milliseconds to wait for Elasticsearch at Kibana startup before retrying.</span><br><span class="line"><span class="meta">#</span>elasticsearch.startupTimeout: 5000</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> Specifies the path where Kibana creates the process ID file.</span><br><span class="line"><span class="meta">#</span>pid.file: /var/run/kibana.pid</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> Enables you specify a file where Kibana stores log output.</span><br><span class="line"><span class="meta">#</span>logging.dest: stdout</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> Set the value of this setting to true to suppress all logging output.</span><br><span class="line"><span class="meta">#</span>logging.silent: false</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> Set the value of this setting to true to suppress all logging output other than error messages.</span><br><span class="line">logging.quiet: true</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> Set the value of this setting to true to log all events, including system usage information</span><br><span class="line"><span class="meta">#</span> and all requests.</span><br><span class="line"><span class="meta">#</span>logging.verbose: false</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> Set the interval in milliseconds to sample system and process performance</span><br><span class="line"><span class="meta">#</span> metrics. Minimum is 100ms. Defaults to 5000.</span><br><span class="line"><span class="meta">#</span>ops.interval: 5000</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> The default locale. This locale can be used in certain circumstances to substitute any missing</span><br><span class="line"><span class="meta">#</span> translations.</span><br><span class="line"><span class="meta">#</span>i18n.defaultLocale: "en"</span><br></pre></td></tr></table></figure></p>
+<p>启动容器<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker run -d --name kibana -v /etc/kibana:/etc/kibana -e ELASTICSEARCH_URL="http://192.168.163.41:9200" -p 5601:5601 kibana:5.6.9</span><br></pre></td></tr></table></figure></p>
+<p>启动后检查环境变量的配置是否生效，<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> cat /etc/kibana/kibana.yml</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/04/19/MQ-ELK收集日志/check_kibana_config.png" alt></p>
+<p>浏览器访问 <a href="http://192.168.163.41:5601" target="_blank" rel="noopener">http://192.168.163.41:5601</a></p>
+<p><img src="/2019/04/19/MQ-ELK收集日志/kibana_index_ui.png" alt></p>
+<blockquote>
+<p>TIPS：kibana 没有权限控制，可以通过使用 Nginx 代理添加用户名和密码。</p>
+</blockquote>
+<h3 id="1-7-部署-Logstash"><a href="#1-7-部署-Logstash" class="headerlink" title="1.7 部署 Logstash"></a>1.7 部署 Logstash</h3><p>logstash 官方镜像文档</p>
+<p><a href="https://hub.docker.com/_/logstash/" target="_blank" rel="noopener">https://hub.docker.com/_/logstash/</a></p>
+<p>plugins-inputs-rabbitmq 官方文档</p>
+<p><a href="https://www.elastic.co/guide/en/logstash/5.6/plugins-inputs-rabbitmq.html" target="_blank" rel="noopener">https://www.elastic.co/guide/en/logstash/5.6/plugins-inputs-rabbitmq.html</a></p>
+<p>plugins-outputs-elasticsearch 官方文档</p>
+<p><a href="https://www.elastic.co/guide/en/logstash/5.6/plugins-outputs-elasticsearch.html" target="_blank" rel="noopener">https://www.elastic.co/guide/en/logstash/5.6/plugins-outputs-elasticsearch.html</a></p>
+<p>下载官方镜像<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker pull logstash:5.6.9-alpine</span><br></pre></td></tr></table></figure></p>
+<p>新建 rabbitmq.conf 配置文件，监听 MQ 消息<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> mkdir -p /etc/logstash</span><br><span class="line"><span class="meta">$</span> vi /etc/logstash/rabbitmq.conf</span><br><span class="line">input &#123;</span><br><span class="line">	rabbitmq &#123;</span><br><span class="line">		host =&gt; "192.168.163.41"</span><br><span class="line">		queue =&gt; "qu_logstash"</span><br><span class="line">		durable =&gt; true</span><br><span class="line">		exchange =&gt; "ex_logstash"</span><br><span class="line">		key =&gt; "runtime.*"</span><br><span class="line">		threads =&gt; 2</span><br><span class="line">		type =&gt; "topic"</span><br><span class="line">		prefetch_count =&gt; 200</span><br><span class="line">		port =&gt; 5672</span><br><span class="line">		user =&gt; "admin"</span><br><span class="line">		password =&gt; "123456"</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">output &#123;</span><br><span class="line">	elasticsearch &#123;</span><br><span class="line">		hosts =&gt; "192.168.163.41:9200"</span><br><span class="line">		index =&gt; "microserver-%&#123;+YYYY.MM.dd&#125;"</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>TIPS：</p>
+<ol>
+<li>需要配置挂载，将此配置文件挂载到目录 <strong>/usr/share/logstash/config</strong>。并需配置启动命令参数 <strong>-f</strong> 和 <strong>/config-dir/rabbitmq.conf</strong>，表示启动指定配置文档。</li>
+<li>当并发请求量比较大时，可以将 <strong>threads</strong> 参数配大点。</li>
+</ol>
+</blockquote>
+<p>启动容器<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker run -d --name logstash -v /etc/logstash:/usr/share/logstash/config logstash:5.6.9-alpine -f /usr/share/logstash/config/rabbitmq.conf</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>TIPS：外网不需访问，不需配置映射端口。需先启动 RabbitMQ 和 Elasticsearch，且 RabbitMQ 需要已存在 ex_logstash 交换器（由服务生成，先启动已集成的服务即可）。</p>
+</blockquote>
+<h3 id="1-8-测试"><a href="#1-8-测试" class="headerlink" title="1.8 测试"></a>1.8 测试</h3><p>kibana 官方使用手册</p>
+<p><a href="https://www.elastic.co/guide/cn/kibana/current/discover.html" target="_blank" rel="noopener">https://www.elastic.co/guide/cn/kibana/current/discover.html</a></p>
+<p>启动 spring-boot 服务，打开 kibana 新建微服务索引 microserver-*</p>
+<p><img src="/2019/04/19/MQ-ELK收集日志/kibana_create_index.png" alt></p>
+<p>索引管理</p>
+<p><img src="/2019/04/19/MQ-ELK收集日志/kibana_manage_index.png" alt></p>
+<p>查看日志</p>
+<p><img src="/2019/04/19/MQ-ELK收集日志/kibana_search_log.png" alt></p>
+<p>查询示例<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">appname: "spring-boot-rabbitmq-elk-demo" AND level:"WARN"</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/04/19/MQ-ELK收集日志/kibana_search_log_by_filter.png" alt></p>
+<h3 id="1-9-定时清理-elasticsearch-的日志"><a href="#1-9-定时清理-elasticsearch-的日志" class="headerlink" title="1.9 定时清理 elasticsearch 的日志"></a>1.9 定时清理 elasticsearch 的日志</h3><p>每天<strong>0</strong>时清理<strong>7</strong>天前数据，即保留最近<strong>7</strong>天数据<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> mkdir -p /usr/share/elasticsearch</span><br><span class="line"><span class="meta">$</span> vi /usr/share/elasticsearch/clear_es.sh</span><br><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line"><span class="meta">#</span> @Author: lingyuwang</span><br><span class="line"><span class="meta">#</span> @Date:   2018-05-09 11:46:00</span><br><span class="line"><span class="meta">#</span> @Last Modified by:   lingyuwang</span><br><span class="line"><span class="meta">#</span> @Last Modified time: 2018-05-10 11:46:00</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 保留近N天,不包括今天,今天的数据会保留</span><br><span class="line">KEEP_DAYS=7</span><br><span class="line">ES_IP=192.168.163.41</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 删除前N的所有天到前N+10天==&gt;每天执行</span><br><span class="line">function get_todelete_days()</span><br><span class="line">&#123;</span><br><span class="line">    # declare -A DAY_ARR</span><br><span class="line">    # DAY_ARR=""</span><br><span class="line">    for i in $(seq 1 10);</span><br><span class="line">    do</span><br><span class="line">        THIS_DAY=$(date -d "$(($KEEP_DAYS+$i)) day ago" +%Y.%m.%d)</span><br><span class="line">        DAY_ARR=( "$&#123;DAY_ARR[@]&#125;" $THIS_DAY)</span><br><span class="line">    done</span><br><span class="line"></span><br><span class="line">    echo $&#123;DAY_ARR[*]&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 返回数组的写法</span><br><span class="line">TO_DELETE_DAYS=(`get_todelete_days`)</span><br><span class="line"></span><br><span class="line">for day in "$&#123;TO_DELETE_DAYS[@]&#125;"</span><br><span class="line">do</span><br><span class="line">    echo "$day will be delete"</span><br><span class="line">    curl -XDELETE 'http://'$&#123;ES_IP&#125;':9200/*-'$&#123;day&#125;</span><br><span class="line">done</span><br></pre></td></tr></table></figure></p>
+<p>添加脚本执行权限<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> chmod +x /usr/share/elasticsearch/clear_es.sh</span><br></pre></td></tr></table></figure></p>
+<p>设置定时每天 0 点清理<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> crontab -e</span><br><span class="line">0 0 * * * /usr/share/elasticsearch/clear_es.sh</span><br></pre></td></tr></table></figure></p>
+<p>测试清理日志<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> /usr/share/elasticsearch/clear_es.sh</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/04/19/MQ-ELK收集日志/es_test_delete_log.png" alt></p>
+<h2 id="2-Kafka-ELK"><a href="#2-Kafka-ELK" class="headerlink" title="2 Kafka + ELK"></a>2 Kafka + ELK</h2><p>待更新。</p>
+
+    </div>
+    
+    <div class="post-footer">
+        <div class="col-sm-10">
+            <div>
+                <b>本文链接</b>：<a href="/2019/04/19/MQ-ELK收集日志/">MQ&ELK收集日志</a>
+            </div>
+            <div>
+                
+                    转载声明：本博客由周立创作，采用 <a href="https://creativecommons.org/licenses/by-nc-nd/3.0/" target="_blank"> CC BY 3.0 CN </a> 许可协议。可自由转载、引用，但需署名作者且注明文章出处。如转载至微信公众号，请在文末添加作者公众号二维码。
+                
+            </div>
+            <div>
+                
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <img src="/icons/wx.jpg" width=100%/>
+        </div>
+    </div>
+</article>
+
+<div class="article-nav prev-next-wrap clearfix">
+    
+        <a href="/2019/04/20/Docker安装Gitlab/" class="pre-post btn btn-default" title='Docker安装Gitlab'>
+            <i class="fa fa-angle-left fa-fw"></i><span class="hidden-lg">上一篇</span>
+            <span class="hidden-xs">Docker安装Gitlab</span>
+        </a>
+    
+    
+        <a href="/2019/04/17/代码生成系统/" class="next-post btn btn-default" title='代码生成系统'>
+            <span class="hidden-lg">下一篇</span>
+            <span class="hidden-xs">代码生成系统</span><i class="fa fa-angle-right fa-fw"></i>
+        </a>
+    
+</div>
+
+
+
+
+
+
+                </main>
+                
+                    
+    <aside class="col-md-4 sidebar">
+        
+        
+    <div class="widget">
+        <h3 class="title">搜索</h3>
+        <div id="search-form">
+            <div id="result-mask" class="hide"></div>
+            <div class="search-area">
+                
+                    <input id="search-key" type="search" autocomplete="off" placeholder="搜点什么呢？">
+                    <button type="button" class="search-form-submit" id="search-local">站内搜索</button>
+                
+                
+            </div>
+            <div id="result-wrap" class="hide">
+                <div id="search-result"></div>
+            </div>
+            <div class="hide">
+                <template id="search-tpl">
+                    <div class="item">
+                        <a href="/{path}" title="{title}">
+                            <div class="title">{title}</div>
+                            <div class="content">{content}</div>
+                        </a>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>
+
+        
+        
+    <div class="widget">
+        <h3 class="title">网站公告</h3>
+        <div class="notification">
+            <p>
+  <b>笔者微信</b>：jumping_me，欢迎加我<br/>
+  <b>公众号</b>：请扫描我的头像<br/>
+</p>
+        </div>
+    </div>
+
+        
+        
+        <div class="widget">
+            <div class="about-me">
+                <img src="/icons/wx.jpg" alt="哲锄">
+                <h2>周立</h2>
+                <p>《Spring Cloud与Docker微服务架构实战》作者<br/></p>
+            </div>
+        </div>
+
+
+
+
+        
+        
+    <div class="widget">
+      <h3 class="title">社交</h3> 
+        <div class="content social">
+            
+	            <a href="//github.com/eacdy" rel="external nofollow" title="GitHub" target="_blank">
+			    	<i class="github fa fa-github"></i>
+			    </a>
+            
+	            <a href="//gitee.com/itmuch" rel="external nofollow" title="Git@OSC" target="_blank">
+			    	<i class="git fa fa-git"></i>
+			    </a>
+            
+	            <a href="mailto:eacdy0000@126.com" rel="external nofollow" title="邮箱" target="_blank">
+			    	<i class="envelope-o fa fa-envelope-o"></i>
+			    </a>
+            
+	            <a href="/atom.xml" rel="external nofollow" title="RSS" target="_blank">
+			    	<i class="feed fa fa-feed"></i>
+			    </a>
+            
+        </div>
+    </div>
+
+
+        
+        
+    <div class="widget">
+        <h3 class="title">分类</h3>
+        <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/ELK/"><i class="fa" aria-hidden="true">ELK</i></a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Git/"><i class="fa" aria-hidden="true">Git</i></a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/"><i class="fa" aria-hidden="true">Java</i></a><span class="category-list-count">116</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/"><i class="fa" aria-hidden="true">Linux</i></a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/"><i class="fa" aria-hidden="true">Mysql</i></a><span class="category-list-count">26</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Nginx/"><i class="fa" aria-hidden="true">Nginx</i></a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/NodeJS/"><i class="fa" aria-hidden="true">NodeJS</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Others/"><i class="fa" aria-hidden="true">Others</i></a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/"><i class="fa" aria-hidden="true">Redis</i></a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Test/"><i class="fa" aria-hidden="true">Test</i></a><span class="category-list-count">2</span></li></ul>
+    </div>
+
+
+        
+        
+  <div class="widget">
+    <h3 class="title">标签云</h3>
+    <div class="content tag-cloud">
+        
+            <a href="/tags/CentOS7/" style="font-size: 17.5px;">CentOS7</a> <a href="/tags/Docker/" style="font-size: 17.5px;">Docker</a> <a href="/tags/Gradle/" style="font-size: 10px;">Gradle</a> <a href="/tags/IDEA/" style="font-size: 10px;">IDEA</a> <a href="/tags/IO/" style="font-size: 15.83px;">IO</a> <a href="/tags/JMeter/" style="font-size: 10.83px;">JMeter</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Maven/" style="font-size: 10.83px;">Maven</a> <a href="/tags/Netty/" style="font-size: 10.83px;">Netty</a> <a href="/tags/OAuth2/" style="font-size: 10.83px;">OAuth2</a> <a href="/tags/Spring/" style="font-size: 19.17px;">Spring</a> <a href="/tags/SpringCloud/" style="font-size: 15px;">SpringCloud</a> <a href="/tags/SpringSecurity/" style="font-size: 11.67px;">SpringSecurity</a> <a href="/tags/VM/" style="font-size: 10px;">VM</a> <a href="/tags/k8s/" style="font-size: 12.5px;">k8s</a> <a href="/tags/lombok/" style="font-size: 10px;">lombok</a> <a href="/tags/代码生成/" style="font-size: 10px;">代码生成</a> <a href="/tags/分布式事务/" style="font-size: 10.83px;">分布式事务</a> <a href="/tags/加速器/" style="font-size: 10px;">加速器</a> <a href="/tags/升级回滚/" style="font-size: 10px;">升级回滚</a> <a href="/tags/反射/" style="font-size: 10px;">反射</a> <a href="/tags/图/" style="font-size: 10px;">图</a> <a href="/tags/多线程/" style="font-size: 18.33px;">多线程</a> <a href="/tags/工具/" style="font-size: 11.67px;">工具</a> <a href="/tags/序列化/" style="font-size: 10.83px;">序列化</a> <a href="/tags/异常处理/" style="font-size: 10px;">异常处理</a> <a href="/tags/异步/" style="font-size: 10px;">异步</a> <a href="/tags/微服务/" style="font-size: 16.67px;">微服务</a> <a href="/tags/性能优化/" style="font-size: 18.33px;">性能优化</a> <a href="/tags/性能测试/" style="font-size: 10.83px;">性能测试</a> <a href="/tags/搜索/" style="font-size: 12.5px;">搜索</a> <a href="/tags/数据结构/" style="font-size: 13.33px;">数据结构</a> <a href="/tags/日志/" style="font-size: 10px;">日志</a> <a href="/tags/架构/" style="font-size: 10.83px;">架构</a> <a href="/tags/池化技术/" style="font-size: 10px;">池化技术</a> <a href="/tags/注册中心/" style="font-size: 10.83px;">注册中心</a> <a href="/tags/算法/" style="font-size: 20px;">算法</a> <a href="/tags/缓存/" style="font-size: 13.33px;">缓存</a> <a href="/tags/规范/" style="font-size: 14.17px;">规范</a> <a href="/tags/设计模式/" style="font-size: 15px;">设计模式</a> <a href="/tags/资料库/" style="font-size: 10px;">资料库</a> <a href="/tags/配置中心/" style="font-size: 11.67px;">配置中心</a> <a href="/tags/锁/" style="font-size: 12.5px;">锁</a> <a href="/tags/队列/" style="font-size: 12.5px;">队列</a> <a href="/tags/集合/" style="font-size: 10.83px;">集合</a>
+        
+    </div>
+  </div>
+
+
+        
+        
+    <div class="widget">
+        <h3 class="title">友链</h3>
+        <div class="content friends-link">
+        
+            <a href="http://blog.didispace.com/" class="fa" target="_blank">程序猿DD|翟永超</a>
+        
+            <a href="http://www.bysocket.com/" class="fa" target="_blank">泥瓦匠的博客</a>
+        
+            <a href="http://edisonxu.org/" class="fa" target="_blank">EdisonXu&#39;s Blog</a>
+        
+            <a href="http://blog.720ui.com/" class="fa" target="_blank">梁桂钊的博客</a>
+        
+            <a href="http://cxytiandi.com/" class="fa" target="_blank">猿天地</a>
+        
+        </div>
+    </div>
+
+
+        
+    </aside>
+
+                
+            </div>
+        </div>
+    </section>
+    <footer class="main-footer">
+    <div class="container">
+        <div class="row">
+        </div>
+    </div>
+</footer>
+
+<a id="back-to-top" class="icon-btn hide">
+	<i class="fa fa-chevron-up"></i>
+</a>
+
+
+
+
+    <div class="copyright">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="busuanzi">
+    
+        访问量:
+        <strong id="busuanzi_value_site_pv">
+            <i class="fa fa-spinner fa-spin"></i>
+        </strong>
+        &nbsp; | &nbsp;
+        访客数:
+        <strong id="busuanzi_value_site_uv">
+            <i class="fa fa-spinner fa-spin"></i>
+        </strong>
+    
+</div>
+
+            </div>
+            <div class="col-sm-12">
+                <span>Copyright &copy; 2016
+                </span> |
+                <span>
+                    Powered by <a href="//hexo.io" class="copyright-links" target="_blank" rel="nofollow">Hexo</a>
+                </span> |
+                <span>
+                    Theme by <a href="//github.com/itmuch/hexo-theme-itmuch.git" class="copyright-links" target="_blank" rel="nofollow">ITMuch</a>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script src="/js/app.js?rev=@@hash"></script>
+
+</body>
+</html>
