@@ -1,0 +1,707 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!--Setting-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta name="apple-mobile-web-app-capable" content="哲锄">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no,email=no,adress=no">
+    <meta name="browsermode" content="application">
+    <meta name="screen-orientation" content="portrait">
+    <link rel="dns-prefetch" href="http://www.zhechu.top">
+    <!--SEO-->
+
+    <meta name="keywords" content="IDEA,">
+
+
+    <meta name="description" content="环境说明
+
+
+
+环境
+说明
+
+
+
+
+IntelliJ IDEA 2019.2.3
+Java 智能开发工具
+
+
+
+安装文件及配置
+https://pan.baidu.com/s/1IHesoUd-JOr7BajxYNxxyw
+提取码：t9cq
+1 快捷键Eclipse 风格快捷键没有的则列出默认...">
+
+
+<meta name="robots" content="all">
+<meta name="google" content="all">
+<meta name="googlebot" content="all">
+<meta name="verify" content="all">
+    <!--Title-->
+
+
+<title>IntelliJ IDEA 使用手册 | 哲锄</title>
+
+
+    <link rel="alternate" href="/atom.xml" title="哲锄" type="application/atom+xml">
+
+
+    <link rel="icon" href="/favicon.ico">
+
+    
+
+
+
+<link rel="stylesheet" href="/css/bootstrap.min.css?rev=3.3.7">
+<link rel="stylesheet" href="/css/font-awesome.min.css?rev=4.5.0">
+<link rel="stylesheet" href="/css/style.css?rev=@@hash">
+
+
+
+
+    
+
+
+
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?13766878cde148282622871dd245a973";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    
+
+</head>
+
+</html>
+<!--[if lte IE 8]>
+<style>
+    html{ font-size: 1em }
+</style>
+<![endif]-->
+<!--[if lte IE 9]>
+<div style="ie">你使用的浏览器版本过低，为了你更好的阅读体验，请更新浏览器的版本或者使用其他现代浏览器，比如Chrome、Firefox、Safari等。</div>
+<![endif]-->
+
+<body>
+    
+    <nav class="main-navigation">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="navbar-header"><span class="nav-toggle-button collapsed pull-right" data-toggle="collapse" data-target="#main-menu" id="mnav">
+                    <span class="sr-only"></span>
+                        <i class="fa fa-bars"></i>
+                    </span>
+                    <a class="navbar-brand" href="http://www.zhechu.top">哲锄</a>
+                </div>
+                <div class="collapse navbar-collapse" id="main-menu">
+                    <ul class="menu">
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/"><i class="fa fa-home"></i>哲锄</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/categories"><i class="fa fa-list"></i>分类</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/about"><i class="fa fa-user"></i>关于我</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/archives"><i class="fa fa-archive"></i>归档</a>
+                            </li>
+                        
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<a href="http://github.com/zhechu">
+    <img style="position: absolute; top: 0; right: 0; border: 0;"
+        src="/img/forkme.png"
+        alt="Fork me on GitHub">
+</a>
+
+    <section class="content-wrap">
+        <div class="container">
+            <div class="row">
+                <main class="col-md-8 main-content m-post">
+                    <p id="process"></p>
+<article class="post">
+    <div class="post-head">
+        <h1 id="IntelliJ IDEA 使用手册">
+            
+                IntelliJ IDEA 使用手册
+            
+        </h1>
+        <div class="post-meta">
+    
+    
+    <span class="categories-meta fa-wrap">
+        <i class="fa fa-folder-open-o"></i>
+        <a href="/categories/Others">
+            Others
+        </a>
+    </span>
+    
+
+    
+    <span class="fa-wrap">
+        <i class="fa fa-tags"></i>
+        <span class="tags-meta">
+            
+                
+                    <a href="/tags/IDEA" title='IDEA'>
+                        IDEA
+                    </a>
+                
+            
+        </span>
+    </span>
+    
+
+    
+        
+        <span class="fa-wrap">
+            <i class="fa fa-clock-o"></i>
+            <span class="date-meta">2019/05/18</span>
+        </span>
+        
+            <span class="fa-wrap">
+                <i class="fa fa-eye"></i>
+                <span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    
+</div>
+
+        
+        
+    </div>
+    
+    <div class="post-body post-content">
+        <p>环境说明</p>
+<table>
+<thead>
+<tr>
+<th>环境</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>IntelliJ IDEA 2019.2.3</td>
+<td>Java 智能开发工具</td>
+</tr>
+</tbody>
+</table>
+<p>安装文件及配置</p>
+<p><a href="https://pan.baidu.com/s/1IHesoUd-JOr7BajxYNxxyw" target="_blank" rel="noopener">https://pan.baidu.com/s/1IHesoUd-JOr7BajxYNxxyw</a></p>
+<p>提取码：t9cq</p>
+<h2 id="1-快捷键"><a href="#1-快捷键" class="headerlink" title="1 快捷键"></a>1 快捷键</h2><p>Eclipse 风格快捷键没有的则列出默认快捷键。</p>
+<h3 id="1-1-搜索"><a href="#1-1-搜索" class="headerlink" title="1.1 搜索"></a>1.1 搜索</h3><table>
+<thead>
+<tr>
+<th>功能点</th>
+<th>Eclipse 风格快捷键</th>
+<th>备注</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>搜索文本</td>
+<td>Ctrl + F</td>
+<td>文件内范围搜索</td>
+<td></td>
+</tr>
+<tr>
+<td>继续搜索</td>
+<td>Ctrl + K 表示：向前搜索 ， Ctrl + Shift + K 表示：向后搜索</td>
+<td>搜索文本的辅助快捷键</td>
+<td></td>
+</tr>
+<tr>
+<td>搜索方法</td>
+<td>Ctrl + O</td>
+<td>搜索文件内的方法</td>
+<td></td>
+</tr>
+<tr>
+<td>搜索类</td>
+<td>Ctrl + Shift + T</td>
+<td>搜索项目范围的类文件。若勾上 Include none-project items 则表示搜索范围将包括依赖包</td>
+<td></td>
+</tr>
+<tr>
+<td>搜索所有引用处</td>
+<td>Ctrl + Alt + H</td>
+<td>鼠标需放方法名上</td>
+<td></td>
+</tr>
+<tr>
+<td>全局搜索文本</td>
+<td>Ctrl + H</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>查看类的继承关系 UML 图</td>
+<td>Ctrl + Alt + Shift + U</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="1-2-编辑"><a href="#1-2-编辑" class="headerlink" title="1.2 编辑"></a>1.2 编辑</h3><table>
+<thead>
+<tr>
+<th>功能点</th>
+<th>Eclipse 风格快捷键</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>自动代码补全</td>
+<td>Alt + /</td>
+<td>可能已被设置为其它用途，需修改</td>
+</tr>
+<tr>
+<td>自动代码生成</td>
+<td>Alt + I</td>
+<td>默认是 Alt + Insert，不方便操作</td>
+</tr>
+<tr>
+<td>快速修复错误</td>
+<td>Ctrl + 1</td>
+<td>可能已被设置为其它用途，需修改</td>
+</tr>
+<tr>
+<td>删除当前行</td>
+<td>Ctrl + D</td>
+<td></td>
+</tr>
+<tr>
+<td>注释/取消注释</td>
+<td>Ctrl + /</td>
+<td></td>
+</tr>
+<tr>
+<td>注释选中的代码</td>
+<td>Ctrl + Shift + /</td>
+<td></td>
+</tr>
+<tr>
+<td>补全当前行</td>
+<td>Ctrl + Shift + Enter</td>
+<td>常用的场景时补全当前行后的；号，并将光标定位到下一行</td>
+</tr>
+<tr>
+<td>查看最近复制的内容</td>
+<td>Ctrl + Shift + V</td>
+<td>粘贴历史</td>
+</tr>
+<tr>
+<td>查看最近编辑的文件</td>
+<td>Ctrl + E</td>
+<td></td>
+</tr>
+<tr>
+<td>对比最近的修改</td>
+<td>Alt + Shift + C</td>
+<td></td>
+</tr>
+<tr>
+<td>格式化代码</td>
+<td>Ctrl + Shift + F</td>
+<td></td>
+</tr>
+<tr>
+<td>整理 import</td>
+<td>Ctrl + Shift + O</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="1-3-跳转"><a href="#1-3-跳转" class="headerlink" title="1.3 跳转"></a>1.3 跳转</h3><table>
+<thead>
+<tr>
+<th>功能点</th>
+<th>Eclipse 风格快捷键</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>显示方法层次</td>
+<td>Ctrl + Shift + H</td>
+<td>鼠标需放方法名上。常用于查找方法的声明处</td>
+</tr>
+<tr>
+<td>跳到方法定义处</td>
+<td>Ctrl + 鼠标</td>
+<td></td>
+</tr>
+<tr>
+<td>跳到方法实现处</td>
+<td>Ctrl + Alt + B</td>
+<td></td>
+</tr>
+<tr>
+<td>上/下一查看处</td>
+<td>Alt + 左箭头 ， Alt + 右箭头</td>
+<td></td>
+</tr>
+<tr>
+<td>跳到指定行</td>
+<td>Ctrl + L</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="1-4-重构"><a href="#1-4-重构" class="headerlink" title="1.4 重构"></a>1.4 重构</h3><table>
+<thead>
+<tr>
+<th>功能点</th>
+<th>Eclipse 风格快捷键</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>改名</td>
+<td>Alt + Shift + R</td>
+<td></td>
+</tr>
+<tr>
+<td>添加包围语句</td>
+<td>Alt + Shift + Z</td>
+<td>如：添加 try catch</td>
+</tr>
+</tbody>
+</table>
+<h3 id="1-5-运行"><a href="#1-5-运行" class="headerlink" title="1.5 运行"></a>1.5 运行</h3><table>
+<thead>
+<tr>
+<th>功能点</th>
+<th>Eclipse 风格快捷键</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>启动调试</td>
+<td>Alt + Shift + F9</td>
+<td></td>
+</tr>
+<tr>
+<td>启动运行</td>
+<td>Alt + Shift + F10</td>
+<td></td>
+</tr>
+<tr>
+<td>单步进入</td>
+<td>F5</td>
+<td></td>
+</tr>
+<tr>
+<td>单步跳过</td>
+<td>F6</td>
+<td></td>
+</tr>
+<tr>
+<td>执行选中语句</td>
+<td>Alt + F8</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="1-6-窗口"><a href="#1-6-窗口" class="headerlink" title="1.6 窗口"></a>1.6 窗口</h3><table>
+<thead>
+<tr>
+<th>功能点</th>
+<th>Eclipse 风格快捷键</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>打开配置窗口</td>
+<td>Ctrl + Alt + S</td>
+<td></td>
+</tr>
+<tr>
+<td>打开项目配置窗口</td>
+<td>Ctrl + Alt + Shift + S</td>
+<td></td>
+</tr>
+<tr>
+<td>关闭打开的窗口</td>
+<td>Ctrl + F4 或 ESC</td>
+<td></td>
+</tr>
+<tr>
+<td>窗口缩放</td>
+<td>Ctrl + M</td>
+<td>默认是 Ctrl + Shift + F12，不方便操作</td>
+</tr>
+<tr>
+<td>隐藏窗口</td>
+<td>Shift + ESC</td>
+<td></td>
+</tr>
+<tr>
+<td>关闭当前文件</td>
+<td>Ctrl + F4</td>
+<td></td>
+</tr>
+<tr>
+<td>水平分屏</td>
+<td>Ctrl + Shift + 减号</td>
+<td></td>
+</tr>
+<tr>
+<td>垂直分屏</td>
+<td>Ctrl + Shift + \</td>
+<td></td>
+</tr>
+<tr>
+<td>切换窗口</td>
+<td>Ctrl + Tab</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="2-注意事项"><a href="#2-注意事项" class="headerlink" title="2 注意事项"></a>2 注意事项</h2><h3 id="2-1-Maven-项目-Java-文件夹-Mark-Directory-as-Sources-Root"><a href="#2-1-Maven-项目-Java-文件夹-Mark-Directory-as-Sources-Root" class="headerlink" title="2.1 Maven 项目 Java 文件夹 Mark Directory as Sources Root"></a>2.1 Maven 项目 Java 文件夹 Mark Directory as Sources Root</h3><h3 id="2-2-编译问题-源发行版-1-8-需要目标发行版-1-8"><a href="#2-2-编译问题-源发行版-1-8-需要目标发行版-1-8" class="headerlink" title="2.2 编译问题: 源发行版 1.8 需要目标发行版 1.8"></a>2.2 编译问题: 源发行版 1.8 需要目标发行版 1.8</h3><h3 id="2-3-Maven-项目模块间相互调用设置"><a href="#2-3-Maven-项目模块间相互调用设置" class="headerlink" title="2.3 Maven 项目模块间相互调用设置"></a>2.3 Maven 项目模块间相互调用设置</h3><h3 id="2-4-UTF-8-编码设置"><a href="#2-4-UTF-8-编码设置" class="headerlink" title="2.4 UTF-8 编码设置"></a>2.4 UTF-8 编码设置</h3><p>idea64.exe.vmoptions<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-Dfile.encoding=UTF-<span class="number">8</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="2-5-项目取消-Git-关联"><a href="#2-5-项目取消-Git-关联" class="headerlink" title="2.5 项目取消 Git 关联"></a>2.5 项目取消 Git 关联</h3><h3 id="3-6-IDEA-的-VM-参数设置"><a href="#3-6-IDEA-的-VM-参数设置" class="headerlink" title="3.6 IDEA 的 VM 参数设置"></a>3.6 IDEA 的 VM 参数设置</h3><p>16G 内存机器上 IntelliJ IDEA 2019.2.3 x64 的 VM 参数设置（idea64.exe.vmoptions）<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-Xms1024m</span><br><span class="line">-Xmx4096m</span><br><span class="line">-XX:ReservedCodeCacheSize=<span class="number">512</span>m</span><br></pre></td></tr></table></figure></p>
+<h3 id="3-7-清除缓存和索引"><a href="#3-7-清除缓存和索引" class="headerlink" title="3.7 清除缓存和索引"></a>3.7 清除缓存和索引</h3><h3 id="3-8-Editor-Tabs-多行显示"><a href="#3-8-Editor-Tabs-多行显示" class="headerlink" title="3.8 Editor Tabs 多行显示"></a>3.8 Editor Tabs 多行显示</h3><h3 id="3-9-禁用重启时打开最近使用的项目"><a href="#3-9-禁用重启时打开最近使用的项目" class="headerlink" title="3.9 禁用重启时打开最近使用的项目"></a>3.9 禁用重启时打开最近使用的项目</h3><h3 id="3-10-智能生成-serialVersionUID"><a href="#3-10-智能生成-serialVersionUID" class="headerlink" title="3.10 智能生成 serialVersionUID"></a>3.10 智能生成 serialVersionUID</h3><h3 id="3-11-编辑注释模板，留下开发者的脚印"><a href="#3-11-编辑注释模板，留下开发者的脚印" class="headerlink" title="3.11 编辑注释模板，留下开发者的脚印"></a>3.11 编辑注释模板，留下开发者的脚印</h3><h2 id="4-插件"><a href="#4-插件" class="headerlink" title="4 插件"></a>4 插件</h2><h3 id="4-1-JRebel-热部署插件"><a href="#4-1-JRebel-热部署插件" class="headerlink" title="4.1 JRebel 热部署插件"></a>4.1 JRebel 热部署插件</h3><p>使用教程</p>
+<p><a href="https://github.com/judasn/IntelliJ-IDEA-Tutorial/blob/master/jrebel-setup.md" target="_blank" rel="noopener">https://github.com/judasn/IntelliJ-IDEA-Tutorial/blob/master/jrebel-setup.md</a></p>
+<h3 id="4-2-MybatisX-快速开发插件"><a href="#4-2-MybatisX-快速开发插件" class="headerlink" title="4.2 MybatisX 快速开发插件"></a>4.2 MybatisX 快速开发插件</h3><p>使用教程</p>
+<p><a href="https://mp.baomidou.com/guide/mybatisx-idea-plugin.html#%E5%8A%9F%E8%83%BD" target="_blank" rel="noopener">https://mp.baomidou.com/guide/mybatisx-idea-plugin.html#%E5%8A%9F%E8%83%BD</a></p>
+<h3 id="4-3-阿里-p3c-编程规范插件"><a href="#4-3-阿里-p3c-编程规范插件" class="headerlink" title="4.3 阿里 p3c 编程规范插件"></a>4.3 阿里 p3c 编程规范插件</h3><p>官方文档</p>
+<p><a href="https://github.com/alibaba/p3c/blob/master/idea-plugin/README_cn.md" target="_blank" rel="noopener">https://github.com/alibaba/p3c/blob/master/idea-plugin/README_cn.md</a></p>
+<h3 id="4-4-mybatis-log-plugin-还原-SQL-插件"><a href="#4-4-mybatis-log-plugin-还原-SQL-插件" class="headerlink" title="4.4 mybatis-log-plugin 还原 SQL 插件"></a>4.4 mybatis-log-plugin 还原 SQL 插件</h3><p>官方文档</p>
+<p><a href="https://github.com/kookob/mybatis-log-plugin" target="_blank" rel="noopener">https://github.com/kookob/mybatis-log-plugin</a></p>
+<h3 id="4-5-lombok"><a href="#4-5-lombok" class="headerlink" title="4.5 lombok"></a>4.5 lombok</h3><h3 id="4-6-Translation-翻译插件"><a href="#4-6-Translation-翻译插件" class="headerlink" title="4.6 Translation 翻译插件"></a>4.6 Translation 翻译插件</h3><table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ctrl + shift + y</td>
+<td>选中后翻译。由于其与字母大小写切换快捷键冲突，建议设置为：ctrl + shift + alt + y</td>
+</tr>
+<tr>
+<td>ctrl + shift + s</td>
+<td>切换翻译源</td>
+</tr>
+</tbody>
+</table>
+
+    </div>
+    
+    <div class="post-footer">
+        <div class="col-sm-10">
+            <div>
+                <b>本文链接</b>：<a href="/2019/05/18/IntelliJ-IDEA-使用手册/">IntelliJ IDEA 使用手册</a>
+            </div>
+            <div>
+                
+                    转载声明：本博客由<trong>哲锄</strong>创作，采用 <a href="https://creativecommons.org/licenses/by-nc-nd/3.0/" target="_blank"> CC BY 3.0 CN </a> 许可协议。可自由转载、引用，但需署名作者且注明文章出处。如转载至微信公众号，请在文末添加作者公众号二维码。
+                
+            </div>
+            <div>
+                
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <img src="" width=100%/>
+        </div>
+    </div>
+</article>
+
+<div class="article-nav prev-next-wrap clearfix">
+    
+        <a href="/2019/05/19/数据库设计三范式/" class="pre-post btn btn-default" title='数据库设计三范式'>
+            <i class="fa fa-angle-left fa-fw"></i><span class="hidden-lg">上一篇</span>
+            <span class="hidden-xs">数据库设计三范式</span>
+        </a>
+    
+    
+        <a href="/2019/05/14/SpringSecurityOAuth2实现App身份认证/" class="next-post btn btn-default" title='SpringSecurityOAuth2实现App身份认证'>
+            <span class="hidden-lg">下一篇</span>
+            <span class="hidden-xs">SpringSecurityOAuth2实现App身份认证</span><i class="fa fa-angle-right fa-fw"></i>
+        </a>
+    
+</div>
+
+
+
+
+
+
+                </main>
+                
+                    
+    <aside class="col-md-4 sidebar">
+        
+        
+    <div class="widget">
+        <h3 class="title">搜索</h3>
+        <div id="search-form">
+            <div id="result-mask" class="hide"></div>
+            <div class="search-area">
+                
+                    <input id="search-key" type="search" autocomplete="off" placeholder="搜点什么呢？">
+                    <button type="button" class="search-form-submit" id="search-local">站内搜索</button>
+                
+                
+            </div>
+            <div id="result-wrap" class="hide">
+                <div id="search-result"></div>
+            </div>
+            <div class="hide">
+                <template id="search-tpl">
+                    <div class="item">
+                        <a href="/{path}" title="{title}">
+                            <div class="title">{title}</div>
+                            <div class="content">{content}</div>
+                        </a>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>
+
+        
+        
+    <div class="widget">
+        <h3 class="title">网站公告</h3>
+        <div class="notification">
+            <p>
+  <b>笔者微信</b>：ling-yu-wang，欢迎加我<br/>
+</p>
+        </div>
+    </div>
+
+        
+        
+    <div class="widget">
+      <h3 class="title">社交</h3> 
+        <div class="content social">
+            
+	            <a href="//github.com/zhechu" rel="external nofollow" title="GitHub" target="_blank">
+			    	<i class="github fa fa-github"></i>
+			    </a>
+            
+        </div>
+    </div>
+
+
+        
+        
+    <div class="widget">
+        <h3 class="title">分类</h3>
+        <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/ELK/"><i class="fa" aria-hidden="true">ELK</i></a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Git/"><i class="fa" aria-hidden="true">Git</i></a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/"><i class="fa" aria-hidden="true">Java</i></a><span class="category-list-count">116</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/"><i class="fa" aria-hidden="true">Linux</i></a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/"><i class="fa" aria-hidden="true">Mysql</i></a><span class="category-list-count">26</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Nginx/"><i class="fa" aria-hidden="true">Nginx</i></a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/NodeJS/"><i class="fa" aria-hidden="true">NodeJS</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Others/"><i class="fa" aria-hidden="true">Others</i></a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/"><i class="fa" aria-hidden="true">Redis</i></a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Test/"><i class="fa" aria-hidden="true">Test</i></a><span class="category-list-count">2</span></li></ul>
+    </div>
+
+
+        
+        
+  <div class="widget">
+    <h3 class="title">标签云</h3>
+    <div class="content tag-cloud">
+        
+            <a href="/tags/CentOS7/" style="font-size: 17.5px;">CentOS7</a> <a href="/tags/Docker/" style="font-size: 17.5px;">Docker</a> <a href="/tags/Gradle/" style="font-size: 10px;">Gradle</a> <a href="/tags/IDEA/" style="font-size: 10px;">IDEA</a> <a href="/tags/IO/" style="font-size: 15.83px;">IO</a> <a href="/tags/JMeter/" style="font-size: 10.83px;">JMeter</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Maven/" style="font-size: 10.83px;">Maven</a> <a href="/tags/Netty/" style="font-size: 10.83px;">Netty</a> <a href="/tags/OAuth2/" style="font-size: 10.83px;">OAuth2</a> <a href="/tags/Spring/" style="font-size: 19.17px;">Spring</a> <a href="/tags/SpringCloud/" style="font-size: 15px;">SpringCloud</a> <a href="/tags/SpringSecurity/" style="font-size: 11.67px;">SpringSecurity</a> <a href="/tags/VM/" style="font-size: 10px;">VM</a> <a href="/tags/k8s/" style="font-size: 12.5px;">k8s</a> <a href="/tags/lombok/" style="font-size: 10px;">lombok</a> <a href="/tags/代码生成/" style="font-size: 10px;">代码生成</a> <a href="/tags/分布式事务/" style="font-size: 10.83px;">分布式事务</a> <a href="/tags/加速器/" style="font-size: 10px;">加速器</a> <a href="/tags/升级回滚/" style="font-size: 10px;">升级回滚</a> <a href="/tags/反射/" style="font-size: 10px;">反射</a> <a href="/tags/图/" style="font-size: 10px;">图</a> <a href="/tags/多线程/" style="font-size: 18.33px;">多线程</a> <a href="/tags/工具/" style="font-size: 11.67px;">工具</a> <a href="/tags/序列化/" style="font-size: 10.83px;">序列化</a> <a href="/tags/异常处理/" style="font-size: 10px;">异常处理</a> <a href="/tags/异步/" style="font-size: 10px;">异步</a> <a href="/tags/微服务/" style="font-size: 16.67px;">微服务</a> <a href="/tags/性能优化/" style="font-size: 18.33px;">性能优化</a> <a href="/tags/性能测试/" style="font-size: 10.83px;">性能测试</a> <a href="/tags/搜索/" style="font-size: 12.5px;">搜索</a> <a href="/tags/数据结构/" style="font-size: 13.33px;">数据结构</a> <a href="/tags/日志/" style="font-size: 10px;">日志</a> <a href="/tags/架构/" style="font-size: 10.83px;">架构</a> <a href="/tags/池化技术/" style="font-size: 10px;">池化技术</a> <a href="/tags/注册中心/" style="font-size: 10.83px;">注册中心</a> <a href="/tags/算法/" style="font-size: 20px;">算法</a> <a href="/tags/缓存/" style="font-size: 13.33px;">缓存</a> <a href="/tags/规范/" style="font-size: 14.17px;">规范</a> <a href="/tags/设计模式/" style="font-size: 15px;">设计模式</a> <a href="/tags/资料库/" style="font-size: 10px;">资料库</a> <a href="/tags/配置中心/" style="font-size: 11.67px;">配置中心</a> <a href="/tags/锁/" style="font-size: 12.5px;">锁</a> <a href="/tags/队列/" style="font-size: 12.5px;">队列</a> <a href="/tags/集合/" style="font-size: 10.83px;">集合</a>
+        
+    </div>
+  </div>
+
+
+        
+    </aside>
+
+                
+            </div>
+        </div>
+    </section>
+    <footer class="main-footer">
+    <div class="container">
+        <div class="row">
+        </div>
+    </div>
+</footer>
+
+<a id="back-to-top" class="icon-btn hide">
+	<i class="fa fa-chevron-up"></i>
+</a>
+
+
+
+
+    <div class="copyright">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="busuanzi">
+    
+        访问量:
+        <strong id="busuanzi_value_site_pv">
+            <i class="fa fa-spinner fa-spin"></i>
+        </strong>
+        &nbsp; | &nbsp;
+        访客数:
+        <strong id="busuanzi_value_site_uv">
+            <i class="fa fa-spinner fa-spin"></i>
+        </strong>
+    
+</div>
+
+            </div>
+            <div class="col-sm-12">
+                <span>Copyright &copy; 2016
+                </span> |
+                <span>
+                    Powered by <a href="//hexo.io" class="copyright-links" target="_blank" rel="nofollow">Hexo</a>
+                </span> |
+                <span>
+                    Theme by <a href="//github.com/itmuch/hexo-theme-itmuch.git" class="copyright-links" target="_blank" rel="nofollow">ITMuch</a>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script src="/js/app.js?rev=@@hash"></script>
+
+</body>
+</html>

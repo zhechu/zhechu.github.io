@@ -1,0 +1,590 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!--Setting-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta name="apple-mobile-web-app-capable" content="哲锄">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no,email=no,adress=no">
+    <meta name="browsermode" content="application">
+    <meta name="screen-orientation" content="portrait">
+    <link rel="dns-prefetch" href="http://www.zhechu.top">
+    <!--SEO-->
+
+    <meta name="keywords" content="性能测试,JMeter,">
+
+
+    <meta name="description" content="JMeter安装及配置
+JMeter性能测试用例.zip
+1 聚合报告收集平均响应时间和吞吐率等重要测试指标
+
+
+
+参数
+说明
+
+
+
+
+Label
+每个JMeter的element都有一个Name属性，这里显示的就是Name属性的值
+
+
+#Samples
+表示此次测试中一共发出了多少个请求，若...">
+
+
+<meta name="robots" content="all">
+<meta name="google" content="all">
+<meta name="googlebot" content="all">
+<meta name="verify" content="all">
+    <!--Title-->
+
+
+<title>JMeter使用教程 | 哲锄</title>
+
+
+    <link rel="alternate" href="/atom.xml" title="哲锄" type="application/atom+xml">
+
+
+    <link rel="icon" href="/favicon.ico">
+
+    
+
+
+
+<link rel="stylesheet" href="/css/bootstrap.min.css?rev=3.3.7">
+<link rel="stylesheet" href="/css/font-awesome.min.css?rev=4.5.0">
+<link rel="stylesheet" href="/css/style.css?rev=@@hash">
+
+
+
+
+    
+
+
+
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?13766878cde148282622871dd245a973";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    
+
+</head>
+
+</html>
+<!--[if lte IE 8]>
+<style>
+    html{ font-size: 1em }
+</style>
+<![endif]-->
+<!--[if lte IE 9]>
+<div style="ie">你使用的浏览器版本过低，为了你更好的阅读体验，请更新浏览器的版本或者使用其他现代浏览器，比如Chrome、Firefox、Safari等。</div>
+<![endif]-->
+
+<body>
+    
+    <nav class="main-navigation">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="navbar-header"><span class="nav-toggle-button collapsed pull-right" data-toggle="collapse" data-target="#main-menu" id="mnav">
+                    <span class="sr-only"></span>
+                        <i class="fa fa-bars"></i>
+                    </span>
+                    <a class="navbar-brand" href="http://www.zhechu.top">哲锄</a>
+                </div>
+                <div class="collapse navbar-collapse" id="main-menu">
+                    <ul class="menu">
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/"><i class="fa fa-home"></i>哲锄</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/categories"><i class="fa fa-list"></i>分类</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/about"><i class="fa fa-user"></i>关于我</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/archives"><i class="fa fa-archive"></i>归档</a>
+                            </li>
+                        
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<a href="http://github.com/zhechu">
+    <img style="position: absolute; top: 0; right: 0; border: 0;"
+        src="/img/forkme.png"
+        alt="Fork me on GitHub">
+</a>
+
+    <section class="content-wrap">
+        <div class="container">
+            <div class="row">
+                <main class="col-md-8 main-content m-post">
+                    <p id="process"></p>
+<article class="post">
+    <div class="post-head">
+        <h1 id="JMeter使用教程">
+            
+                JMeter使用教程
+            
+        </h1>
+        <div class="post-meta">
+    
+    
+    <span class="categories-meta fa-wrap">
+        <i class="fa fa-folder-open-o"></i>
+        <a href="/categories/Test">
+            Test
+        </a>
+    </span>
+    
+
+    
+    <span class="fa-wrap">
+        <i class="fa fa-tags"></i>
+        <span class="tags-meta">
+            
+                
+                    <a href="/tags/性能测试" title='性能测试'>
+                        性能测试
+                    </a>
+                
+                    <a href="/tags/JMeter" title='JMeter'>
+                        JMeter
+                    </a>
+                
+            
+        </span>
+    </span>
+    
+
+    
+        
+        <span class="fa-wrap">
+            <i class="fa fa-clock-o"></i>
+            <span class="date-meta">2020/03/29</span>
+        </span>
+        
+            <span class="fa-wrap">
+                <i class="fa fa-eye"></i>
+                <span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    
+</div>
+
+        
+        
+    </div>
+    
+    <div class="post-body post-content">
+        <a href="/2020/03/29/JMeter安装及配置/" title="JMeter安装及配置">JMeter安装及配置</a>
+<p><a href="JMeter性能测试用例.zip" target="_blank">JMeter性能测试用例.zip</a></p>
+<h2 id="1-聚合报告"><a href="#1-聚合报告" class="headerlink" title="1 聚合报告"></a>1 聚合报告</h2><p>收集平均响应时间和吞吐率等重要测试指标</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Label</td>
+<td>每个JMeter的element都有一个Name属性，这里显示的就是Name属性的值</td>
+</tr>
+<tr>
+<td>#Samples</td>
+<td>表示此次测试中一共发出了多少个请求，若模拟10个用户，每个用户迭代10次，则显示100</td>
+</tr>
+<tr>
+<td>Average</td>
+<td>平均响应时间——默认情况下是单个 Request 的平均响应时间，当使用了 Transaction Controller 时，也可以以 Transaction 为单位显示平均响应时间</td>
+</tr>
+<tr>
+<td>Median</td>
+<td>中位数，也就是 50％ 用户的响应时间</td>
+</tr>
+<tr>
+<td>90% Line</td>
+<td>90％ 用户的响应时间</td>
+</tr>
+<tr>
+<td>95% Line</td>
+<td>95％ 用户的响应时间</td>
+</tr>
+<tr>
+<td>99% Line</td>
+<td>99％ 用户的响应时间</td>
+</tr>
+<tr>
+<td>Min</td>
+<td>最小响应时间</td>
+</tr>
+<tr>
+<td>Max</td>
+<td>最大响应时间</td>
+</tr>
+<tr>
+<td>Error%</td>
+<td>此次测试中出现错误的请求的数量/请求的总数</td>
+</tr>
+<tr>
+<td>Throughput</td>
+<td>吞吐量——默认情况下表示每秒完成的请求数（Request per Second），当使用了 Transaction Controller 时，也可以表示类似 LoadRunner 的 Transaction per Second 数</td>
+</tr>
+<tr>
+<td>接收 KB/sec</td>
+<td>每秒从服务器端接收到的数据量，相当于 LoadRunner 中的 Throughput/Sec</td>
+</tr>
+<tr>
+<td>发送 KB/sec</td>
+<td>每秒从客户端发送到服务器的数据量</td>
+</tr>
+</tbody>
+</table>
+<h2 id="2-测试计划"><a href="#2-测试计划" class="headerlink" title="2 测试计划"></a>2 测试计划</h2><h3 id="2-1-保存"><a href="#2-1-保存" class="headerlink" title="2.1 保存"></a>2.1 保存</h3><p><img src="/2020/03/29/JMeter使用教程/save_test_plan.png" alt></p>
+<blockquote>
+<p>TIPS：若不保存，关闭 JMeter 后则会丢失</p>
+</blockquote>
+<h3 id="2-2-打开"><a href="#2-2-打开" class="headerlink" title="2.2 打开"></a>2.2 打开</h3><p><img src="/2020/03/29/JMeter使用教程/open_test_plan.png" alt></p>
+<h2 id="3-测试用例"><a href="#3-测试用例" class="headerlink" title="3 测试用例"></a>3 测试用例</h2><h3 id="3-1-无状态接口"><a href="#3-1-无状态接口" class="headerlink" title="3.1 无状态接口"></a>3.1 无状态接口</h3><blockquote>
+<p>TIPS：无状态即为不需登录，或不需带上 Session 等保持状态的参数</p>
+</blockquote>
+<p>添加线程组并命名为<strong>获取服务状态</strong></p>
+<p><img src="/2020/03/29/JMeter使用教程/service_status_add_thread_group.png" alt></p>
+<p><img src="/2020/03/29/JMeter使用教程/service_status_setting_thread.png" alt></p>
+<p>添加 HTTP 请求配置</p>
+<p><img src="JMeter使用教程/service_status_add_http.png" alt></p>
+<p><img src="JMeter使用教程/service_status_setting_http.png" alt></p>
+<p>添加聚合报告</p>
+<p><img src="/2020/03/29/JMeter使用教程/service_status_add_aggregate_report.png" alt></p>
+<p><img src="/2020/03/29/JMeter使用教程/service_status_aggregate_report_display.png" alt></p>
+<p>清除上一次测试数据（否则会累计）</p>
+<p><img src="/2020/03/29/JMeter使用教程/service_status_clean_aggregate_report.png" alt></p>
+<p>添加察看结果树（查看请求详细过程）</p>
+<p><img src="/2020/03/29/JMeter使用教程/service_status_add_result_tree.png" alt></p>
+<blockquote>
+<p>TIPS：可以清除察看结果树，类似聚合报告。</p>
+</blockquote>
+<p>启动测试</p>
+<p><img src="/2020/03/29/JMeter使用教程/service_status_start_test.png" alt></p>
+<p>查看测试结果</p>
+<p><img src="/2020/03/29/JMeter使用教程/service_status_read_aggregate_report.png" alt></p>
+<p><img src="/2020/03/29/JMeter使用教程/service_status_read_result_tree.png" alt></p>
+<h3 id="3-2-有状态接口"><a href="#3-2-有状态接口" class="headerlink" title="3.2 有状态接口"></a>3.2 有状态接口</h3><h4 id="3-2-1-获取用户凭证接口"><a href="#3-2-1-获取用户凭证接口" class="headerlink" title="3.2.1 获取用户凭证接口"></a>3.2.1 获取用户凭证接口</h4><p>添加线程组并命名为<strong>获取用户凭证</strong></p>
+<p><img src="/2020/03/29/JMeter使用教程/get_user_token_add_thread_group.png" alt></p>
+<p>添加 HTTP 信息头管理器（HTTP Header）</p>
+<p><img src="JMeter使用教程/get_user_token_add_http_header.png" alt></p>
+<p><img src="JMeter使用教程/get_user_token_http_header_setting.png" alt></p>
+<blockquote>
+<p>TIPS：随便一个 token 即可，只是接口要求，其实并没有用处。</p>
+</blockquote>
+<p>添加 HTTP 请求配置</p>
+<p><img src="JMeter使用教程/get_user_token_add_http.png" alt></p>
+<p>添加察看结果树（查看请求详细过程）</p>
+<p><img src="/2020/03/29/JMeter使用教程/get_user_token_add_result_tree.png" alt></p>
+<h4 id="3-2-2-推荐视频列表接口"><a href="#3-2-2-推荐视频列表接口" class="headerlink" title="3.2.2 推荐视频列表接口"></a>3.2.2 推荐视频列表接口</h4><p>添加线程组并命名为<strong>推荐视频列表</strong></p>
+<p><img src="/2020/03/29/JMeter使用教程/get_recommend_video_add_thread_group.png" alt></p>
+<p>添加获取 token HTTP 请求</p>
+<p><img src="JMeter使用教程/get_recommend_video_add_get_token_http.jpg" alt></p>
+<p>获取 token HTTP 请求添加请求头</p>
+<p><img src="JMeter使用教程/get_recommend_video_get_token_http_add_header.jpg" alt></p>
+<p>添加 token 提取器</p>
+<p><img src="JMeter使用教程/get_recommend_video_get_token_http_add_extractor.jpg" alt></p>
+<p>添加推荐视频列表 HTTP 请求</p>
+<p><img src="/2020/03/29/JMeter使用教程/get_recommend_video_get_video_request.jpg" alt></p>
+<p>推荐视频列表 HTTP 请求添加请求头</p>
+<p><img src="/2020/03/29/JMeter使用教程/get_recommend_video_get_video_request_add_header.jpg" alt></p>
+<p>添加察看结果树（查看请求详细过程）</p>
+<p><img src="/2020/03/29/JMeter使用教程/get_recommend_video_add_result_tree.jpg" alt></p>
+<h3 id="3-3-引用外部文件数据"><a href="#3-3-引用外部文件数据" class="headerlink" title="3.3 引用外部文件数据"></a>3.3 引用外部文件数据</h3><h4 id="3-3-1-批量用户查询推荐视频列表接口"><a href="#3-3-1-批量用户查询推荐视频列表接口" class="headerlink" title="3.3.1 批量用户查询推荐视频列表接口"></a>3.3.1 批量用户查询推荐视频列表接口</h4><p>添加线程组并命名为<strong>批量用户查询推荐视频列表</strong></p>
+<p><img src="/2020/03/29/JMeter使用教程/batch_get_recommend_video_add_thread_group.jpg" alt></p>
+<p>添加获取 token HTTP 请求</p>
+<p><img src="JMeter使用教程/batch_get_recommend_video_add_get_token_http.jpg" alt></p>
+<p>添加 CSV 数据文件设置（引用外部文件数据）</p>
+<p><img src="/2020/03/29/JMeter使用教程/batch_get_recommend_video_add_get_token_csv.jpg" alt></p>
+<p>CSV 文件内容为待测试的用户手机号（每行一个手机号，测试时线程数需跟用户数一致；若线程数大于用户数，则会在其中的用户中循环获取）</p>
+<p><img src="/2020/03/29/JMeter使用教程/batch_get_recommend_video_add_get_token_csv_txt.png" alt></p>
+<blockquote>
+<p>TIPS：后续步骤请参考 3.2.2 章</p>
+</blockquote>
+<p>添加察看结果树（查看请求详细过程）</p>
+<p><img src="/2020/03/29/JMeter使用教程/batch_get_recommend_video_add_result_tree.jpg" alt></p>
+<h3 id="3-4-集合点"><a href="#3-4-集合点" class="headerlink" title="3.4 集合点"></a>3.4 集合点</h3><h4 id="3-4-1-集合用户查询推荐视频列表接口"><a href="#3-4-1-集合用户查询推荐视频列表接口" class="headerlink" title="3.4.1 集合用户查询推荐视频列表接口"></a>3.4.1 集合用户查询推荐视频列表接口</h4><p>添加线程组并命名为<strong>集合用户查询推荐视频列表</strong></p>
+<p><img src="/2020/03/29/JMeter使用教程/meet_point_get_recommend_video_add_thread_group.jpg" alt></p>
+<blockquote>
+<p>TIPS：后续步骤请参考 3.3.1 章</p>
+</blockquote>
+<p>CSV 文件内容为待测试的用户手机号（每行一个手机号，测试时线程数需跟用户数一致；若线程数大于用户数，则会在其中的用户中循环获取）</p>
+<p><img src="/2020/03/29/JMeter使用教程/meet_point_get_recommend_video_add_get_token_csv_txt.png" alt></p>
+<p>添加固定定时器（防止获取 token 的请求影响后续接口的测试）</p>
+<p><img src="/2020/03/29/JMeter使用教程/meet_point_get_recommend_video_add_wait_timer.jpg" alt></p>
+<p>添加集合同步定时器（集合点关键）</p>
+<p><img src="/2020/03/29/JMeter使用教程/meet_point_get_recommend_video_add_meet_point_timer.jpg" alt></p>
+<p>查看测试结果</p>
+<p><img src="/2020/03/29/JMeter使用教程/meet_point_get_recommend_video_read_aggregate_report.jpg" alt></p>
+<p><img src="/2020/03/29/JMeter使用教程/meet_point_get_recommend_video_read_result_tree.jpg" alt></p>
+<h3 id="3-5-分布式"><a href="#3-5-分布式" class="headerlink" title="3.5 分布式"></a>3.5 分布式</h3><p>官方文档</p>
+<p><a href="https://jmeter.apache.org/usermanual/jmeter_distributed_testing_step_by_step.html" target="_blank" rel="noopener">https://jmeter.apache.org/usermanual/jmeter_distributed_testing_step_by_step.html</a></p>
+<table>
+<thead>
+<tr>
+<th>角色</th>
+<th>IP</th>
+<th>RMI 端口</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>控制机（同时为负载机）</td>
+<td>10.113.248.63</td>
+<td>1099</td>
+</tr>
+<tr>
+<td>负载机</td>
+<td>10.113.248.63</td>
+<td>2099</td>
+</tr>
+<tr>
+<td>负载机</td>
+<td>10.113.248.63</td>
+<td>3099</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>TIPS：集合点只能是单机内部集合，JMeter 无法做到多节点集合。</p>
+</blockquote>
+<h4 id="3-5-1-控制机"><a href="#3-5-1-控制机" class="headerlink" title="3.5.1 控制机"></a>3.5.1 控制机</h4><p>创建密钥文件<strong>rmi_keystore.jks</strong>（RMI 的默认传输机制需使用 SSL）</p>
+<p><img src="/2020/03/29/JMeter使用教程/distributed_control_machine_start_jks.png" alt></p>
+<p><img src="/2020/03/29/JMeter使用教程/distributed_control_machine_create_jks.png" alt></p>
+<p>控制机 jmeter 的 bin 目录下 jmeter.properties 配置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">remote_hosts=10.113.248.63:1099,10.113.248.63:2099,10.113.248.63:3099</span><br><span class="line">server_port=1099</span><br></pre></td></tr></table></figure></p>
+<p>启动完负载机后，再启动控制机</p>
+<p><img src="/2020/03/29/JMeter使用教程/distributed_control_machine_start.png" alt></p>
+<h4 id="3-5-2-负载机"><a href="#3-5-2-负载机" class="headerlink" title="3.5.2 负载机"></a>3.5.2 负载机</h4><p>复制控制机生成的<strong>rmi_keystore.jks</strong>文件到每一台负载机 jmeter 的 bin 目录下</p>
+<p><img src="/2020/03/29/JMeter使用教程/distributed_control_machine_copy_jks.png" alt></p>
+<p>负载机 jmeter 的 bin 目录下 jmeter.properties 修改端口为 2099<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">server_port=2099</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2020/03/29/JMeter使用教程/distributed_loader_machine_port.png" alt></p>
+<p>启动负载机<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> jmeter-server -Djava.rmi.server.hostname=10.113.248.63</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2020/03/29/JMeter使用教程/distributed_loader_machine_start.jpg" alt></p>
+<blockquote>
+<p>TIPS：10.113.248.63:3099 同理。</p>
+</blockquote>
+<h4 id="3-5-3-使用效果"><a href="#3-5-3-使用效果" class="headerlink" title="3.5.3 使用效果"></a>3.5.3 使用效果</h4><p>使用单台负载机测试</p>
+<p><img src="/2020/03/29/JMeter使用教程/distributed_single_test.png" alt></p>
+<p>使用所有负载机测试</p>
+<p><img src="/2020/03/29/JMeter使用教程/distributed_all_test.png" alt></p>
+<blockquote>
+<p>TIPS：使用察看结果树查看响应结果时为空，是正常的。</p>
+</blockquote>
+
+    </div>
+    
+    <div class="post-footer">
+        <div class="col-sm-10">
+            <div>
+                <b>本文链接</b>：<a href="/2020/03/29/JMeter使用教程/">JMeter使用教程</a>
+            </div>
+            <div>
+                
+                    转载声明：本博客由<trong>哲锄</strong>创作，采用 <a href="https://creativecommons.org/licenses/by-nc-nd/3.0/" target="_blank"> CC BY 3.0 CN </a> 许可协议。可自由转载、引用，但需署名作者且注明文章出处。如转载至微信公众号，请在文末添加作者公众号二维码。
+                
+            </div>
+            <div>
+                
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <img src="" width=100%/>
+        </div>
+    </div>
+</article>
+
+<div class="article-nav prev-next-wrap clearfix">
+    
+        <a href="/2020/04/01/求图中两节点间的有效路径/" class="pre-post btn btn-default" title='求图中两节点间的有效路径'>
+            <i class="fa fa-angle-left fa-fw"></i><span class="hidden-lg">上一篇</span>
+            <span class="hidden-xs">求图中两节点间的有效路径</span>
+        </a>
+    
+    
+        <a href="/2020/03/29/JMeter安装及配置/" class="next-post btn btn-default" title='JMeter安装及配置'>
+            <span class="hidden-lg">下一篇</span>
+            <span class="hidden-xs">JMeter安装及配置</span><i class="fa fa-angle-right fa-fw"></i>
+        </a>
+    
+</div>
+
+
+
+
+
+
+                </main>
+                
+                    
+    <aside class="col-md-4 sidebar">
+        
+        
+    <div class="widget">
+        <h3 class="title">搜索</h3>
+        <div id="search-form">
+            <div id="result-mask" class="hide"></div>
+            <div class="search-area">
+                
+                    <input id="search-key" type="search" autocomplete="off" placeholder="搜点什么呢？">
+                    <button type="button" class="search-form-submit" id="search-local">站内搜索</button>
+                
+                
+            </div>
+            <div id="result-wrap" class="hide">
+                <div id="search-result"></div>
+            </div>
+            <div class="hide">
+                <template id="search-tpl">
+                    <div class="item">
+                        <a href="/{path}" title="{title}">
+                            <div class="title">{title}</div>
+                            <div class="content">{content}</div>
+                        </a>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>
+
+        
+        
+    <div class="widget">
+        <h3 class="title">网站公告</h3>
+        <div class="notification">
+            <p>
+  <b>笔者微信</b>：ling-yu-wang，欢迎加我<br/>
+</p>
+        </div>
+    </div>
+
+        
+        
+    <div class="widget">
+      <h3 class="title">社交</h3> 
+        <div class="content social">
+            
+	            <a href="//github.com/zhechu" rel="external nofollow" title="GitHub" target="_blank">
+			    	<i class="github fa fa-github"></i>
+			    </a>
+            
+        </div>
+    </div>
+
+
+        
+        
+    <div class="widget">
+        <h3 class="title">分类</h3>
+        <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/ELK/"><i class="fa" aria-hidden="true">ELK</i></a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Git/"><i class="fa" aria-hidden="true">Git</i></a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/"><i class="fa" aria-hidden="true">Java</i></a><span class="category-list-count">116</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/"><i class="fa" aria-hidden="true">Linux</i></a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/"><i class="fa" aria-hidden="true">Mysql</i></a><span class="category-list-count">26</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Nginx/"><i class="fa" aria-hidden="true">Nginx</i></a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/NodeJS/"><i class="fa" aria-hidden="true">NodeJS</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Others/"><i class="fa" aria-hidden="true">Others</i></a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/"><i class="fa" aria-hidden="true">Redis</i></a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Test/"><i class="fa" aria-hidden="true">Test</i></a><span class="category-list-count">2</span></li></ul>
+    </div>
+
+
+        
+        
+  <div class="widget">
+    <h3 class="title">标签云</h3>
+    <div class="content tag-cloud">
+        
+            <a href="/tags/CentOS7/" style="font-size: 17.5px;">CentOS7</a> <a href="/tags/Docker/" style="font-size: 17.5px;">Docker</a> <a href="/tags/Gradle/" style="font-size: 10px;">Gradle</a> <a href="/tags/IDEA/" style="font-size: 10px;">IDEA</a> <a href="/tags/IO/" style="font-size: 15.83px;">IO</a> <a href="/tags/JMeter/" style="font-size: 10.83px;">JMeter</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Maven/" style="font-size: 10.83px;">Maven</a> <a href="/tags/Netty/" style="font-size: 10.83px;">Netty</a> <a href="/tags/OAuth2/" style="font-size: 10.83px;">OAuth2</a> <a href="/tags/Spring/" style="font-size: 19.17px;">Spring</a> <a href="/tags/SpringCloud/" style="font-size: 15px;">SpringCloud</a> <a href="/tags/SpringSecurity/" style="font-size: 11.67px;">SpringSecurity</a> <a href="/tags/VM/" style="font-size: 10px;">VM</a> <a href="/tags/k8s/" style="font-size: 12.5px;">k8s</a> <a href="/tags/lombok/" style="font-size: 10px;">lombok</a> <a href="/tags/代码生成/" style="font-size: 10px;">代码生成</a> <a href="/tags/分布式事务/" style="font-size: 10.83px;">分布式事务</a> <a href="/tags/加速器/" style="font-size: 10px;">加速器</a> <a href="/tags/升级回滚/" style="font-size: 10px;">升级回滚</a> <a href="/tags/反射/" style="font-size: 10px;">反射</a> <a href="/tags/图/" style="font-size: 10px;">图</a> <a href="/tags/多线程/" style="font-size: 18.33px;">多线程</a> <a href="/tags/工具/" style="font-size: 11.67px;">工具</a> <a href="/tags/序列化/" style="font-size: 10.83px;">序列化</a> <a href="/tags/异常处理/" style="font-size: 10px;">异常处理</a> <a href="/tags/异步/" style="font-size: 10px;">异步</a> <a href="/tags/微服务/" style="font-size: 16.67px;">微服务</a> <a href="/tags/性能优化/" style="font-size: 18.33px;">性能优化</a> <a href="/tags/性能测试/" style="font-size: 10.83px;">性能测试</a> <a href="/tags/搜索/" style="font-size: 12.5px;">搜索</a> <a href="/tags/数据结构/" style="font-size: 13.33px;">数据结构</a> <a href="/tags/日志/" style="font-size: 10px;">日志</a> <a href="/tags/架构/" style="font-size: 10.83px;">架构</a> <a href="/tags/池化技术/" style="font-size: 10px;">池化技术</a> <a href="/tags/注册中心/" style="font-size: 10.83px;">注册中心</a> <a href="/tags/算法/" style="font-size: 20px;">算法</a> <a href="/tags/缓存/" style="font-size: 13.33px;">缓存</a> <a href="/tags/规范/" style="font-size: 14.17px;">规范</a> <a href="/tags/设计模式/" style="font-size: 15px;">设计模式</a> <a href="/tags/资料库/" style="font-size: 10px;">资料库</a> <a href="/tags/配置中心/" style="font-size: 11.67px;">配置中心</a> <a href="/tags/锁/" style="font-size: 12.5px;">锁</a> <a href="/tags/队列/" style="font-size: 12.5px;">队列</a> <a href="/tags/集合/" style="font-size: 10.83px;">集合</a>
+        
+    </div>
+  </div>
+
+
+        
+    </aside>
+
+                
+            </div>
+        </div>
+    </section>
+    <footer class="main-footer">
+    <div class="container">
+        <div class="row">
+        </div>
+    </div>
+</footer>
+
+<a id="back-to-top" class="icon-btn hide">
+	<i class="fa fa-chevron-up"></i>
+</a>
+
+
+
+
+    <div class="copyright">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="busuanzi">
+    
+        访问量:
+        <strong id="busuanzi_value_site_pv">
+            <i class="fa fa-spinner fa-spin"></i>
+        </strong>
+        &nbsp; | &nbsp;
+        访客数:
+        <strong id="busuanzi_value_site_uv">
+            <i class="fa fa-spinner fa-spin"></i>
+        </strong>
+    
+</div>
+
+            </div>
+            <div class="col-sm-12">
+                <span>Copyright &copy; 2016
+                </span> |
+                <span>
+                    Powered by <a href="//hexo.io" class="copyright-links" target="_blank" rel="nofollow">Hexo</a>
+                </span> |
+                <span>
+                    Theme by <a href="//github.com/itmuch/hexo-theme-itmuch.git" class="copyright-links" target="_blank" rel="nofollow">ITMuch</a>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script src="/js/app.js?rev=@@hash"></script>
+
+</body>
+</html>

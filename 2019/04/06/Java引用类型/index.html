@@ -1,0 +1,427 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!--Setting-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta name="apple-mobile-web-app-capable" content="哲锄">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no,email=no,adress=no">
+    <meta name="browsermode" content="application">
+    <meta name="screen-orientation" content="portrait">
+    <link rel="dns-prefetch" href="http://www.zhechu.top">
+    <!--SEO-->
+
+    <meta name="keywords" content="Java">
+
+
+    <meta name="description" content="1 引用对象的状态
+
+
+状态
+说明
+
+
+
+
+Active
+活动状态，新创建的引用对象都是这个状态，GC 会根据引用对象是否在创建时指定ReferenceQueue参数进行状态转移，若指定了，那么转移到Pending状态，如果没指定，转移到Inactive状态
+
+
+Pending
+待定状态，该状...">
+
+
+<meta name="robots" content="all">
+<meta name="google" content="all">
+<meta name="googlebot" content="all">
+<meta name="verify" content="all">
+    <!--Title-->
+
+
+<title>Java引用类型 | 哲锄</title>
+
+
+    <link rel="alternate" href="/atom.xml" title="哲锄" type="application/atom+xml">
+
+
+    <link rel="icon" href="/favicon.ico">
+
+    
+
+
+
+<link rel="stylesheet" href="/css/bootstrap.min.css?rev=3.3.7">
+<link rel="stylesheet" href="/css/font-awesome.min.css?rev=4.5.0">
+<link rel="stylesheet" href="/css/style.css?rev=@@hash">
+
+
+
+
+    
+
+
+
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?13766878cde148282622871dd245a973";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    
+
+</head>
+
+</html>
+<!--[if lte IE 8]>
+<style>
+    html{ font-size: 1em }
+</style>
+<![endif]-->
+<!--[if lte IE 9]>
+<div style="ie">你使用的浏览器版本过低，为了你更好的阅读体验，请更新浏览器的版本或者使用其他现代浏览器，比如Chrome、Firefox、Safari等。</div>
+<![endif]-->
+
+<body>
+    
+    <nav class="main-navigation">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="navbar-header"><span class="nav-toggle-button collapsed pull-right" data-toggle="collapse" data-target="#main-menu" id="mnav">
+                    <span class="sr-only"></span>
+                        <i class="fa fa-bars"></i>
+                    </span>
+                    <a class="navbar-brand" href="http://www.zhechu.top">哲锄</a>
+                </div>
+                <div class="collapse navbar-collapse" id="main-menu">
+                    <ul class="menu">
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/"><i class="fa fa-home"></i>哲锄</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/categories"><i class="fa fa-list"></i>分类</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/about"><i class="fa fa-user"></i>关于我</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/archives"><i class="fa fa-archive"></i>归档</a>
+                            </li>
+                        
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<a href="http://github.com/zhechu">
+    <img style="position: absolute; top: 0; right: 0; border: 0;"
+        src="/img/forkme.png"
+        alt="Fork me on GitHub">
+</a>
+
+    <section class="content-wrap">
+        <div class="container">
+            <div class="row">
+                <main class="col-md-8 main-content m-post">
+                    <p id="process"></p>
+<article class="post">
+    <div class="post-head">
+        <h1 id="Java引用类型">
+            
+                Java引用类型
+            
+        </h1>
+        <div class="post-meta">
+    
+    
+    <span class="categories-meta fa-wrap">
+        <i class="fa fa-folder-open-o"></i>
+        <a href="/categories/Java">
+            Java
+        </a>
+    </span>
+    
+
+    
+    <span class="fa-wrap">
+        <i class="fa fa-tags"></i>
+        <span class="tags-meta">
+            
+                
+            
+        </span>
+    </span>
+    
+
+    
+        
+        <span class="fa-wrap">
+            <i class="fa fa-clock-o"></i>
+            <span class="date-meta">2019/04/06</span>
+        </span>
+        
+            <span class="fa-wrap">
+                <i class="fa fa-eye"></i>
+                <span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    
+</div>
+
+        
+        
+    </div>
+    
+    <div class="post-body post-content">
+        <h2 id="1-引用对象的状态"><a href="#1-引用对象的状态" class="headerlink" title="1 引用对象的状态"></a>1 引用对象的状态</h2><table>
+<thead>
+<tr>
+<th>状态</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Active</td>
+<td>活动状态，新创建的引用对象都是这个状态，GC 会根据引用对象是否在创建时指定ReferenceQueue参数进行状态转移，若指定了，那么转移到Pending状态，如果没指定，转移到Inactive状态</td>
+</tr>
+<tr>
+<td>Pending</td>
+<td>待定状态，该状态的引用对象等着被内部线程ReferenceHandler处理（会调用ReferenceQueue.enqueue方法）</td>
+</tr>
+<tr>
+<td>Enqueued</td>
+<td>入队状态，调用ReferenceQueue.enqueued方法后的引用对象处于这个状态中</td>
+</tr>
+<tr>
+<td>Inactive</td>
+<td>死亡状态，处于该状态的引用对象将被GC自动清理</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>TIPS：若构造函数中指定了 ReferenceQueue 参数，那么引用对象需要手动进行清理；若构造函数中没有指定 ReferenceQueue 参数，那么 GC 会自动清理引用对象。</p>
+</blockquote>
+<h2 id="2-引用类型"><a href="#2-引用类型" class="headerlink" title="2 引用类型"></a>2 引用类型</h2><h3 id="2-1-强引用"><a href="#2-1-强引用" class="headerlink" title="2.1 强引用"></a>2.1 强引用</h3><p>描述：</p>
+<p>一般情况下使用的都是强引用，如：Object obj = new Object()的 obj 就是一个强引用。</p>
+<p>生命周期：</p>
+<p>当内存不足，JVM 宁愿抛出 OutOfMemoryError 错误，使程序异常终止，也不会回收强引用对象来释放内存。</p>
+<h3 id="2-2-软引用"><a href="#2-2-软引用" class="headerlink" title="2.2 软引用"></a>2.2 软引用</h3><p>生命周期：</p>
+<p>垃圾收集器发现只具有软引用的对象并不会立即进行回收，在内存不足前再进行回收。</p>
+<p>使用场景：</p>
+<p>实现内存敏感的高速缓存。</p>
+<p>示例：测试软引用的对象生命周期（运行参数设置为：-Xmx5M）<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.lang.ref.SoftReference;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SoftRefTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">MyObject</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">finalize</span><span class="params">()</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">            <span class="keyword">super</span>.finalize();</span><br><span class="line">            System.out.println(<span class="string">"MyObject's finalize called"</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">"I am MyObject"</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SoftReference&lt;MyObject&gt; softRef = <span class="keyword">new</span> SoftReference&lt;&gt;(<span class="keyword">new</span> MyObject());</span><br><span class="line"></span><br><span class="line">        System.gc();</span><br><span class="line">        System.out.println(<span class="string">"After GC: Soft Get= "</span>+softRef.get());</span><br><span class="line">        System.out.println(<span class="string">"分配大块内存"</span>);</span><br><span class="line">        <span class="keyword">byte</span>[] b = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">3</span>*<span class="number">1024</span>*<span class="number">1170</span>];</span><br><span class="line">        System.out.println(<span class="string">"After new byte[]:Soft Get= "</span>+softRef.get());</span><br><span class="line">        System.gc();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/04/06/Java引用类型/soft_ref_test_result.png" alt></p>
+<h3 id="2-3-弱引用"><a href="#2-3-弱引用" class="headerlink" title="2.3 弱引用"></a>2.3 弱引用</h3><p>生命周期：</p>
+<p>垃圾收集器一旦发现了只具有弱引用的对象，不管当前内存空间足够与否，其都会被回收。</p>
+<p>使用场景：</p>
+<p>实现内存敏感的高速缓存。</p>
+<p>示例：测试弱引用的对象生命周期<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.lang.ref.Reference;</span><br><span class="line"><span class="keyword">import</span> java.lang.ref.WeakReference;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WeakRefTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">MyObject</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">finalize</span><span class="params">()</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">            <span class="keyword">super</span>.finalize();</span><br><span class="line">            System.out.println(<span class="string">"MyObject's finalize called"</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">"I am MyObject"</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Reference&lt;MyObject&gt; weakRef = <span class="keyword">new</span> WeakReference&lt;&gt;(<span class="keyword">new</span> MyObject());</span><br><span class="line">        System.out.println(<span class="string">"创建的弱引用为："</span>+weakRef);</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">"Before GC: Weak Get= "</span>+weakRef.get());</span><br><span class="line">        System.gc(); <span class="comment">// 主动触发 GC</span></span><br><span class="line">        System.out.println(<span class="string">"After GC: Weak Get= "</span>+weakRef.get());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/04/06/Java引用类型/weak_ref_test_result.png" alt></p>
+<h3 id="3-4-虚引用"><a href="#3-4-虚引用" class="headerlink" title="3.4 虚引用"></a>3.4 虚引用</h3><p>维基百科的解释</p>
+<p><a href="https://zh.wikipedia.org/wiki/%E8%99%9A%E5%BC%95%E7%94%A8" target="_blank" rel="noopener">https://zh.wikipedia.org/wiki/%E8%99%9A%E5%BC%95%E7%94%A8</a></p>
+<p>测试示例：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.lang.ref.PhantomReference;</span><br><span class="line"><span class="keyword">import</span> java.lang.ref.Reference;</span><br><span class="line"><span class="keyword">import</span> java.lang.ref.ReferenceQueue;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Field;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 虚引用 测试</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> lingyuwang</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PhantomReferenceTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> isRun = <span class="keyword">true</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        String abc = <span class="keyword">new</span> String(<span class="string">"abc"</span>);</span><br><span class="line"></span><br><span class="line">        System.out.println(abc.getClass() + <span class="string">"@"</span> + abc.hashCode());</span><br><span class="line"></span><br><span class="line">        <span class="keyword">final</span> ReferenceQueue&lt;String&gt; referenceQueue = <span class="keyword">new</span> ReferenceQueue&lt;String&gt;();</span><br><span class="line">        <span class="keyword">new</span> Thread() &#123;</span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                <span class="keyword">while</span> (isRun) &#123;</span><br><span class="line">                    Object obj = referenceQueue.poll();</span><br><span class="line">                    <span class="comment">// 若对象不为空，则表示虚引用已入队</span></span><br><span class="line">                    <span class="keyword">if</span> (obj != <span class="keyword">null</span>) &#123;</span><br><span class="line">                        <span class="keyword">try</span> &#123;</span><br><span class="line">                            Field rereferent = Reference.class.getDeclaredField("referent");</span><br><span class="line">                            rereferent.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">                            Object result = rereferent.get(obj);</span><br><span class="line">                            System.out.println(<span class="string">"gc will collect："</span></span><br><span class="line">                                    + result.getClass() + <span class="string">"@"</span></span><br><span class="line">                                    + result.hashCode() + <span class="string">"\t"</span></span><br><span class="line">                                    + (String) result);</span><br><span class="line"></span><br><span class="line">                            <span class="comment">// 可以在此重新创建对象</span></span><br><span class="line">                        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                            e.printStackTrace();</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">            	<span class="comment">/*try &#123;</span></span><br><span class="line"><span class="comment">					referenceQueue.remove();</span></span><br><span class="line"><span class="comment">				&#125; catch (InterruptedException e) &#123;</span></span><br><span class="line"><span class="comment">					e.printStackTrace();</span></span><br><span class="line"><span class="comment">				&#125;</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">            	System.out.println("对象已入队，其将被回收");*/</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;.start();</span><br><span class="line"></span><br><span class="line">        PhantomReference&lt;String&gt; abcWeakRef = <span class="keyword">new</span> PhantomReference&lt;String&gt;(abc, referenceQueue);</span><br><span class="line">        abc = <span class="keyword">null</span>;</span><br><span class="line">        Thread.sleep(<span class="number">3000</span>);</span><br><span class="line">        System.gc();</span><br><span class="line">        Thread.sleep(<span class="number">3000</span>);</span><br><span class="line">        isRun = <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+    </div>
+    
+    <div class="post-footer">
+        <div class="col-sm-10">
+            <div>
+                <b>本文链接</b>：<a href="/2019/04/06/Java引用类型/">Java引用类型</a>
+            </div>
+            <div>
+                
+                    转载声明：本博客由<trong>哲锄</strong>创作，采用 <a href="https://creativecommons.org/licenses/by-nc-nd/3.0/" target="_blank"> CC BY 3.0 CN </a> 许可协议。可自由转载、引用，但需署名作者且注明文章出处。如转载至微信公众号，请在文末添加作者公众号二维码。
+                
+            </div>
+            <div>
+                
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <img src="" width=100%/>
+        </div>
+    </div>
+</article>
+
+<div class="article-nav prev-next-wrap clearfix">
+    
+        <a href="/2019/04/06/Java8函数式接口/" class="pre-post btn btn-default" title='Java8函数式接口'>
+            <i class="fa fa-angle-left fa-fw"></i><span class="hidden-lg">上一篇</span>
+            <span class="hidden-xs">Java8函数式接口</span>
+        </a>
+    
+    
+        <a href="/2019/04/06/线程间交换数据/" class="next-post btn btn-default" title='线程间交换数据'>
+            <span class="hidden-lg">下一篇</span>
+            <span class="hidden-xs">线程间交换数据</span><i class="fa fa-angle-right fa-fw"></i>
+        </a>
+    
+</div>
+
+
+
+
+
+
+                </main>
+                
+                    
+    <aside class="col-md-4 sidebar">
+        
+        
+    <div class="widget">
+        <h3 class="title">搜索</h3>
+        <div id="search-form">
+            <div id="result-mask" class="hide"></div>
+            <div class="search-area">
+                
+                    <input id="search-key" type="search" autocomplete="off" placeholder="搜点什么呢？">
+                    <button type="button" class="search-form-submit" id="search-local">站内搜索</button>
+                
+                
+            </div>
+            <div id="result-wrap" class="hide">
+                <div id="search-result"></div>
+            </div>
+            <div class="hide">
+                <template id="search-tpl">
+                    <div class="item">
+                        <a href="/{path}" title="{title}">
+                            <div class="title">{title}</div>
+                            <div class="content">{content}</div>
+                        </a>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>
+
+        
+        
+    <div class="widget">
+        <h3 class="title">网站公告</h3>
+        <div class="notification">
+            <p>
+  <b>笔者微信</b>：ling-yu-wang，欢迎加我<br/>
+</p>
+        </div>
+    </div>
+
+        
+        
+    <div class="widget">
+      <h3 class="title">社交</h3> 
+        <div class="content social">
+            
+	            <a href="//github.com/zhechu" rel="external nofollow" title="GitHub" target="_blank">
+			    	<i class="github fa fa-github"></i>
+			    </a>
+            
+        </div>
+    </div>
+
+
+        
+        
+    <div class="widget">
+        <h3 class="title">分类</h3>
+        <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/ELK/"><i class="fa" aria-hidden="true">ELK</i></a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Git/"><i class="fa" aria-hidden="true">Git</i></a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/"><i class="fa" aria-hidden="true">Java</i></a><span class="category-list-count">116</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/"><i class="fa" aria-hidden="true">Linux</i></a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/"><i class="fa" aria-hidden="true">Mysql</i></a><span class="category-list-count">26</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Nginx/"><i class="fa" aria-hidden="true">Nginx</i></a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/NodeJS/"><i class="fa" aria-hidden="true">NodeJS</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Others/"><i class="fa" aria-hidden="true">Others</i></a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/"><i class="fa" aria-hidden="true">Redis</i></a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Test/"><i class="fa" aria-hidden="true">Test</i></a><span class="category-list-count">2</span></li></ul>
+    </div>
+
+
+        
+        
+  <div class="widget">
+    <h3 class="title">标签云</h3>
+    <div class="content tag-cloud">
+        
+            <a href="/tags/CentOS7/" style="font-size: 17.5px;">CentOS7</a> <a href="/tags/Docker/" style="font-size: 17.5px;">Docker</a> <a href="/tags/Gradle/" style="font-size: 10px;">Gradle</a> <a href="/tags/IDEA/" style="font-size: 10px;">IDEA</a> <a href="/tags/IO/" style="font-size: 15.83px;">IO</a> <a href="/tags/JMeter/" style="font-size: 10.83px;">JMeter</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Maven/" style="font-size: 10.83px;">Maven</a> <a href="/tags/Netty/" style="font-size: 10.83px;">Netty</a> <a href="/tags/OAuth2/" style="font-size: 10.83px;">OAuth2</a> <a href="/tags/Spring/" style="font-size: 19.17px;">Spring</a> <a href="/tags/SpringCloud/" style="font-size: 15px;">SpringCloud</a> <a href="/tags/SpringSecurity/" style="font-size: 11.67px;">SpringSecurity</a> <a href="/tags/VM/" style="font-size: 10px;">VM</a> <a href="/tags/k8s/" style="font-size: 12.5px;">k8s</a> <a href="/tags/lombok/" style="font-size: 10px;">lombok</a> <a href="/tags/代码生成/" style="font-size: 10px;">代码生成</a> <a href="/tags/分布式事务/" style="font-size: 10.83px;">分布式事务</a> <a href="/tags/加速器/" style="font-size: 10px;">加速器</a> <a href="/tags/升级回滚/" style="font-size: 10px;">升级回滚</a> <a href="/tags/反射/" style="font-size: 10px;">反射</a> <a href="/tags/图/" style="font-size: 10px;">图</a> <a href="/tags/多线程/" style="font-size: 18.33px;">多线程</a> <a href="/tags/工具/" style="font-size: 11.67px;">工具</a> <a href="/tags/序列化/" style="font-size: 10.83px;">序列化</a> <a href="/tags/异常处理/" style="font-size: 10px;">异常处理</a> <a href="/tags/异步/" style="font-size: 10px;">异步</a> <a href="/tags/微服务/" style="font-size: 16.67px;">微服务</a> <a href="/tags/性能优化/" style="font-size: 18.33px;">性能优化</a> <a href="/tags/性能测试/" style="font-size: 10.83px;">性能测试</a> <a href="/tags/搜索/" style="font-size: 12.5px;">搜索</a> <a href="/tags/数据结构/" style="font-size: 13.33px;">数据结构</a> <a href="/tags/日志/" style="font-size: 10px;">日志</a> <a href="/tags/架构/" style="font-size: 10.83px;">架构</a> <a href="/tags/池化技术/" style="font-size: 10px;">池化技术</a> <a href="/tags/注册中心/" style="font-size: 10.83px;">注册中心</a> <a href="/tags/算法/" style="font-size: 20px;">算法</a> <a href="/tags/缓存/" style="font-size: 13.33px;">缓存</a> <a href="/tags/规范/" style="font-size: 14.17px;">规范</a> <a href="/tags/设计模式/" style="font-size: 15px;">设计模式</a> <a href="/tags/资料库/" style="font-size: 10px;">资料库</a> <a href="/tags/配置中心/" style="font-size: 11.67px;">配置中心</a> <a href="/tags/锁/" style="font-size: 12.5px;">锁</a> <a href="/tags/队列/" style="font-size: 12.5px;">队列</a> <a href="/tags/集合/" style="font-size: 10.83px;">集合</a>
+        
+    </div>
+  </div>
+
+
+        
+    </aside>
+
+                
+            </div>
+        </div>
+    </section>
+    <footer class="main-footer">
+    <div class="container">
+        <div class="row">
+        </div>
+    </div>
+</footer>
+
+<a id="back-to-top" class="icon-btn hide">
+	<i class="fa fa-chevron-up"></i>
+</a>
+
+
+
+
+    <div class="copyright">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="busuanzi">
+    
+        访问量:
+        <strong id="busuanzi_value_site_pv">
+            <i class="fa fa-spinner fa-spin"></i>
+        </strong>
+        &nbsp; | &nbsp;
+        访客数:
+        <strong id="busuanzi_value_site_uv">
+            <i class="fa fa-spinner fa-spin"></i>
+        </strong>
+    
+</div>
+
+            </div>
+            <div class="col-sm-12">
+                <span>Copyright &copy; 2016
+                </span> |
+                <span>
+                    Powered by <a href="//hexo.io" class="copyright-links" target="_blank" rel="nofollow">Hexo</a>
+                </span> |
+                <span>
+                    Theme by <a href="//github.com/itmuch/hexo-theme-itmuch.git" class="copyright-links" target="_blank" rel="nofollow">ITMuch</a>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script src="/js/app.js?rev=@@hash"></script>
+
+</body>
+</html>

@@ -1,0 +1,729 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!--Setting-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta name="apple-mobile-web-app-capable" content="哲锄">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no,email=no,adress=no">
+    <meta name="browsermode" content="application">
+    <meta name="screen-orientation" content="portrait">
+    <link rel="dns-prefetch" href="http://www.zhechu.top">
+    <!--SEO-->
+
+    <meta name="keywords" content="CentOS7,">
+
+
+    <meta name="description" content="1 文件传输安装 rz、sz1$ yum -y install lrzsz
+将本地文件上传至服务器1$ rz
+将服务器文件传输到本地1$ sz filename.extensioname
+
+TIPS：只能操作文件，若是目录，可压缩为zip文件再进行传输。
+
+2 命令行编辑快捷键
+
+
+按键
+说明...">
+
+
+<meta name="robots" content="all">
+<meta name="google" content="all">
+<meta name="googlebot" content="all">
+<meta name="verify" content="all">
+    <!--Title-->
+
+
+<title>CentOS7常用命令 | 哲锄</title>
+
+
+    <link rel="alternate" href="/atom.xml" title="哲锄" type="application/atom+xml">
+
+
+    <link rel="icon" href="/favicon.ico">
+
+    
+
+
+
+<link rel="stylesheet" href="/css/bootstrap.min.css?rev=3.3.7">
+<link rel="stylesheet" href="/css/font-awesome.min.css?rev=4.5.0">
+<link rel="stylesheet" href="/css/style.css?rev=@@hash">
+
+
+
+
+    
+
+
+
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?13766878cde148282622871dd245a973";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    
+
+</head>
+
+</html>
+<!--[if lte IE 8]>
+<style>
+    html{ font-size: 1em }
+</style>
+<![endif]-->
+<!--[if lte IE 9]>
+<div style="ie">你使用的浏览器版本过低，为了你更好的阅读体验，请更新浏览器的版本或者使用其他现代浏览器，比如Chrome、Firefox、Safari等。</div>
+<![endif]-->
+
+<body>
+    
+    <nav class="main-navigation">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="navbar-header"><span class="nav-toggle-button collapsed pull-right" data-toggle="collapse" data-target="#main-menu" id="mnav">
+                    <span class="sr-only"></span>
+                        <i class="fa fa-bars"></i>
+                    </span>
+                    <a class="navbar-brand" href="http://www.zhechu.top">哲锄</a>
+                </div>
+                <div class="collapse navbar-collapse" id="main-menu">
+                    <ul class="menu">
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/"><i class="fa fa-home"></i>哲锄</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/categories"><i class="fa fa-list"></i>分类</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/about"><i class="fa fa-user"></i>关于我</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/archives"><i class="fa fa-archive"></i>归档</a>
+                            </li>
+                        
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<a href="http://github.com/zhechu">
+    <img style="position: absolute; top: 0; right: 0; border: 0;"
+        src="/img/forkme.png"
+        alt="Fork me on GitHub">
+</a>
+
+    <section class="content-wrap">
+        <div class="container">
+            <div class="row">
+                <main class="col-md-8 main-content m-post">
+                    <p id="process"></p>
+<article class="post">
+    <div class="post-head">
+        <h1 id="CentOS7常用命令">
+            
+                CentOS7常用命令
+            
+        </h1>
+        <div class="post-meta">
+    
+    
+    <span class="categories-meta fa-wrap">
+        <i class="fa fa-folder-open-o"></i>
+        <a href="/categories/Linux">
+            Linux
+        </a>
+    </span>
+    
+
+    
+    <span class="fa-wrap">
+        <i class="fa fa-tags"></i>
+        <span class="tags-meta">
+            
+                
+                    <a href="/tags/CentOS7" title='CentOS7'>
+                        CentOS7
+                    </a>
+                
+            
+        </span>
+    </span>
+    
+
+    
+        
+        <span class="fa-wrap">
+            <i class="fa fa-clock-o"></i>
+            <span class="date-meta">2019/04/05</span>
+        </span>
+        
+            <span class="fa-wrap">
+                <i class="fa fa-eye"></i>
+                <span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    
+</div>
+
+        
+        
+    </div>
+    
+    <div class="post-body post-content">
+        <h2 id="1-文件传输"><a href="#1-文件传输" class="headerlink" title="1 文件传输"></a>1 文件传输</h2><p>安装 rz、sz<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> yum -y install lrzsz</span><br></pre></td></tr></table></figure></p>
+<p>将本地文件上传至服务器<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> rz</span><br></pre></td></tr></table></figure></p>
+<p>将服务器文件传输到本地<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> sz filename.extensioname</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>TIPS：只能操作文件，若是目录，可压缩为zip文件再进行传输。</p>
+</blockquote>
+<h2 id="2-命令行编辑快捷键"><a href="#2-命令行编辑快捷键" class="headerlink" title="2 命令行编辑快捷键"></a>2 命令行编辑快捷键</h2><table>
+<thead>
+<tr>
+<th>按键</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CTRL-B</td>
+<td>左移光标</td>
+</tr>
+<tr>
+<td>CTRL-F</td>
+<td>右移光标</td>
+</tr>
+<tr>
+<td>CTRL-P</td>
+<td>查看上一条命令【等价于上移光标】</td>
+</tr>
+<tr>
+<td>CTRL-N</td>
+<td>查看下一条命令【等价于下移光标】</td>
+</tr>
+<tr>
+<td>CTRL-A</td>
+<td>移动光标至行首</td>
+</tr>
+<tr>
+<td>CTRL-E</td>
+<td>移动光标至行尾</td>
+</tr>
+<tr>
+<td>CTRL-W</td>
+<td>删除前一个词</td>
+</tr>
+<tr>
+<td>CTRL-U</td>
+<td>删除从光标至行首的内容</td>
+</tr>
+<tr>
+<td>CTRL-K</td>
+<td>删除从光标至行尾的内容</td>
+</tr>
+<tr>
+<td>CTRL-Y</td>
+<td>粘贴已删除的文本【如：粘贴CTRL-U删除的内容】</td>
+</tr>
+<tr>
+<td>CTRL-L</td>
+<td>清空当前屏幕【等价于clear命令】</td>
+</tr>
+</tbody>
+</table>
+<h2 id="3-输入输出"><a href="#3-输入输出" class="headerlink" title="3 输入输出"></a>3 输入输出</h2><p>重定向输出<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> command &gt; file</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>TIPS：若文件不存在，会创建一个新的文件。若已存在，则先清空文件内容。</p>
+</blockquote>
+<p>将输出追加到文件末尾<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> command &gt;&gt; file</span><br></pre></td></tr></table></figure></p>
+<p>示例：重定向输出到 output.txt<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> echo test &gt; output.txt</span><br><span class="line"><span class="meta">$</span> cat output.txt</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/04/05/CentOS7常用命令/redirect_output_to_file.png" alt></p>
+<p>示例：将标准输出和标准错误输出重定向到同一个文件<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> ls /fff &gt; f 2&gt;&amp;1</span><br><span class="line"><span class="meta">$</span> cat f</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/04/05/CentOS7常用命令/redirect_output_to_same_file.png" alt></p>
+<p>示例：输出到空设备文件【目的是将输出信息忽略】<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> ls /fff &gt; /dev/null 2&gt;&amp;1</span><br></pre></td></tr></table></figure></p>
+<p>示例：将 echo 的输出追加到 output.txt 末尾<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> echo test &gt; output.txt</span><br><span class="line"><span class="meta">$</span> echo "new content" &gt;&gt; output.txt</span><br><span class="line"><span class="meta">$</span> cat output.txt</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/04/05/CentOS7常用命令/output_append_to_file.png" alt></p>
+<p>示例：多行输出到文件<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> cat &lt;&lt;END &gt; multiline_ouput</span><br><span class="line">	1.[install lamp]</span><br><span class="line">	2.[install lnmp]</span><br><span class="line">	3.[install nfs]</span><br><span class="line">	4.[install rsync]</span><br><span class="line">	please input the num that you want:</span><br><span class="line">END</span><br><span class="line"><span class="meta">$</span> cat multiline_ouput</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/04/05/CentOS7常用命令/rows_output_to_file.png" alt></p>
+<h2 id="4-进程管理"><a href="#4-进程管理" class="headerlink" title="4 进程管理"></a>4 进程管理</h2><h3 id="4-1-查看进程"><a href="#4-1-查看进程" class="headerlink" title="4.1 查看进程"></a>4.1 查看进程</h3><p>查看系统中所有进程，使用BSD操作系统格式<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> ps auxw</span><br></pre></td></tr></table></figure></p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>x</td>
+<td>显示当前用户运行的所有进程</td>
+</tr>
+<tr>
+<td>ax</td>
+<td>显示系统当前运行的所有进程，包括其他用户的进程</td>
+</tr>
+<tr>
+<td>u</td>
+<td>显示更详细的进程信息</td>
+</tr>
+<tr>
+<td>w</td>
+<td>显示命令的全名，而非仅显示一行以内的内容</td>
+</tr>
+</tbody>
+</table>
+<p><img src="/2019/04/05/CentOS7常用命令/ps_auxw.png" alt></p>
+<table>
+<thead>
+<tr>
+<th>显示列</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>USER</td>
+<td>该进程是由哪个用户产生的</td>
+</tr>
+<tr>
+<td>PID</td>
+<td>进程的ID号</td>
+</tr>
+<tr>
+<td>%CPU</td>
+<td>该进程占用CPU资源的百分比，占用越高，进程越耗费资源</td>
+</tr>
+<tr>
+<td>%MEM</td>
+<td>该进程占用物理内存的百分比，占用越高，进程越耗费资源</td>
+</tr>
+<tr>
+<td>VSZ</td>
+<td>该进程占用虚拟内存的大小，单位KB</td>
+</tr>
+<tr>
+<td>RSS</td>
+<td>该进程占用实际物理内存的大小，单位KB</td>
+</tr>
+<tr>
+<td>TTY</td>
+<td>该进程是在哪个终端中运行的。其中tty1-tty7代表本地控制台终端，tty1-tty6是本地字符界面终端，tty7是图形终端。pts/0-256代表虚拟终端</td>
+</tr>
+<tr>
+<td>STAT</td>
+<td>进程状态。常见的状态有：R，运行、S，睡眠、T，停止状态、s，包含子进程、+，位于后台</td>
+</tr>
+<tr>
+<td>START</td>
+<td>该进程的启动时间</td>
+</tr>
+<tr>
+<td>TIME</td>
+<td>该进程占用CPU的运算时间</td>
+</tr>
+<tr>
+<td>COMMAND</td>
+<td>产生此进程的命令名</td>
+</tr>
+</tbody>
+</table>
+<h3 id="4-2-查看系统健康状态"><a href="#4-2-查看系统健康状态" class="headerlink" title="4.2 查看系统健康状态"></a>4.2 查看系统健康状态</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> top [option]</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-d 秒数</td>
+<td>指定 top 命令每隔几秒更新。默认是3秒</td>
+</tr>
+</tbody>
+</table>
+<p>在 top 命令的交互模式可执行的命令</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>? 或 h</td>
+<td>显示交互模式的帮助</td>
+</tr>
+<tr>
+<td>P</td>
+<td>以 CPU 使用率排序，默认就是此项</td>
+</tr>
+<tr>
+<td>M</td>
+<td>以内存的使用率排序</td>
+</tr>
+<tr>
+<td>N</td>
+<td>以 PID 排序</td>
+</tr>
+<tr>
+<td>q</td>
+<td>退出 top</td>
+</tr>
+</tbody>
+</table>
+<p><img src="/2019/04/05/CentOS7常用命令/top_command.png" alt></p>
+<div><table><thead><tr><th>显示行</th><th>显示示例</th><th>说明</th></tr></thead><tbody><tr><td rowspan="4">1【任务队列信息】</td><td>12:26:46</td><td>系统当前时间</td></tr><tr><td>up 1 day,13:32</td><td>系统的运行时间，本机已经运行1天13小时32分钟</td></tr><tr><td>2 users</td><td>当前登录了两个用户</td></tr><tr><td>load average: 0.00, 0.00, 0.00</td><td>系统在之前1分钟，5分钟，15分钟的平均负载。一般认为小于1时，负载较小。若大于1，系统已经出负荷</td></tr><tr><td rowspan="5">2【进程信息】</td><td>Tasks: 95 total</td><td>系统中的进程总数</td></tr><tr><td>1 running</td><td>正在运行的进程数</td></tr><tr><td>94 sleeping</td><td>睡眠的进程</td></tr><tr><td>0 stopped</td><td>正在停止的进程</td></tr><tr><td>0 zombie</td><td>僵尸进程。若不是0，需手工检查僵尸进程</td></tr><tr><td rowspan="8">3【CPU信息】</td><td>Cpu(s)：0.1%us</td><td>用户模式占用的CPU百分比</td></tr><tr><td>0.1%sy</td><td>系统模式占用的CPU百分比</td></tr><tr><td>0.0%ni</td><td>改变过优先级的用户进程占用的CPU百分比</td></tr><tr><td>99.7%id</td><td>空闲CPU的CPU百分比</td></tr><tr><td>0.1%wa</td><td>等待输入/输出的进程的占用CPU百分比</td></tr><tr><td>0.0%hi</td><td>硬中断请求服务占用的CPU百分比</td></tr><tr><td>0.1%si</td><td>软中断请求服务占用的CPU百分比</td></tr><tr><td>0.0%st</td><td>st(Steal time)虚拟时间百分比。就是当有虚拟机时，虚拟CPU等待实际CPU的时间百分比</td></tr><tr><td rowspan="4">4【物理内存信息】</td><td>Mem：625344k total</td><td>物理内存的总量，单位KB</td></tr><tr><td>571504k used</td><td>已使用的物理内存数量</td></tr><tr><td>53840k free</td><td>空闲的物理内存数量，使用的是虚拟机，总共分配了628MB内存，因此只有53MB的空闲内存了</td></tr><tr><td>65800k buffers</td><td>作为缓冲的内存数量</td></tr><tr><td rowspan="4">5【交换分区信息】</td><td>Swap：524280k total</td><td>交换分区（虚拟内存）的总大小</td></tr><tr><td>0k used</td><td>已使用的交换分区的大小</td></tr><tr><td>524280k free</td><td>空闲交换分区的大小</td></tr><tr><td>409280k cached</td><td>作为缓存的交换分区的大小</td></tr></tbody></table></div>
+
+<h3 id="4-3-查看进程树"><a href="#4-3-查看进程树" class="headerlink" title="4.3 查看进程树"></a>4.3 查看进程树</h3><p>语法<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> pstree [option]</span><br></pre></td></tr></table></figure></p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-p</td>
+<td>显示进程的PID</td>
+</tr>
+<tr>
+<td>-u</td>
+<td>显示进程的所属用户</td>
+</tr>
+</tbody>
+</table>
+<p><img src="/2019/04/05/CentOS7常用命令/pstree.png" alt></p>
+<blockquote>
+<p>TIPS：若没有安装 psmisc，不可用；安装命令，yum -y install psmisc。</p>
+</blockquote>
+<h3 id="4-4-查看可用的进程信号"><a href="#4-4-查看可用的进程信号" class="headerlink" title="4.4 查看可用的进程信号"></a>4.4 查看可用的进程信号</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> kill -l</span><br></pre></td></tr></table></figure>
+<p><img src="/2019/04/05/CentOS7常用命令/kill_l.png" alt></p>
+<h3 id="4-5-kill-命令"><a href="#4-5-kill-命令" class="headerlink" title="4.5 kill 命令"></a>4.5 kill 命令</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> kill [-信号代号] pid</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>信号代号</th>
+<th>信号名称</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>SIGHUP</td>
+<td>该信号让进程立即关闭，然后重新读取配置文件之后重启</td>
+</tr>
+<tr>
+<td>2</td>
+<td>SIGINT</td>
+<td>程序终止信号，用于终止前台进程。相当于输出ctrl+c快捷键</td>
+</tr>
+<tr>
+<td>8</td>
+<td>GIGFPE</td>
+<td>在发生指明的算术运算错误时发出，不仅包括浮点运算错误，还包括溢出及除数为0等其它所有的算术的错误</td>
+</tr>
+<tr>
+<td>9</td>
+<td>SIGKILL</td>
+<td>用来立即结束程序的运行。本信号不能被阻塞、处理和忽略。一般用于强制终止进程</td>
+</tr>
+<tr>
+<td>14</td>
+<td>SIGALRM</td>
+<td>时钟定时信号，计算的是实际的时间或时钟时间。alarm函数使用该信号</td>
+</tr>
+<tr>
+<td>15</td>
+<td>GIGTERM</td>
+<td>正常结束进程的信号，kill命令的默认信号。有时若进程已发生问题，这个信号是无法正常终止进程的，才会尝试SIGKILL信号，也就是信号9</td>
+</tr>
+<tr>
+<td>18</td>
+<td>SIGCONT</td>
+<td>该信号可让暂停的进程恢复执行，本信号不能被阻断</td>
+</tr>
+<tr>
+<td>19</td>
+<td>SIGSTOP</td>
+<td>该信号可以暂停前台进程，相当于输入ctrl+z快捷键。本信号不能被阻断</td>
+</tr>
+</tbody>
+</table>
+<h3 id="4-6-pkill-命令"><a href="#4-6-pkill-命令" class="headerlink" title="4.6 pkill 命令"></a>4.6 pkill 命令</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> pkill [选项] [信号] 进程名</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-t 终端号</td>
+<td>按照终端号剔出用户</td>
+</tr>
+</tbody>
+</table>
+<p>示例：强制杀死从 pts/1 虚拟终端登录的进程<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> pkill -t -9 pts/1</span><br></pre></td></tr></table></figure></p>
+<h3 id="4-7-查看暂停进程"><a href="#4-7-查看暂停进程" class="headerlink" title="4.7 查看暂停进程"></a>4.7 查看暂停进程</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> jobs</span><br></pre></td></tr></table></figure>
+<h2 id="5-压缩-amp-解压"><a href="#5-压缩-amp-解压" class="headerlink" title="5 压缩&amp;解压"></a>5 压缩&amp;解压</h2><p>gzip压缩<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> gzip [文件]</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>TIPS：压缩后文件格式是 .gz 且不保留原文件</p>
+</blockquote>
+<p>gunzip解压缩.gz的压缩文件<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> gunzip [压缩文件]</span><br></pre></td></tr></table></figure></p>
+<p>tar压缩或解压缩【压缩后文件格式是.tar.gz】<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> tar 选项 [-zcf] [压缩后文件名] [目录]</span><br></pre></td></tr></table></figure></p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-c</td>
+<td>打包</td>
+</tr>
+<tr>
+<td>-v</td>
+<td>显示详细信息</td>
+</tr>
+<tr>
+<td>-f</td>
+<td>指定文件名</td>
+</tr>
+<tr>
+<td>-z</td>
+<td>打包同时压缩</td>
+</tr>
+</tbody>
+</table>
+<p>示例：解压缩 filename.tgz 文件<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> tar -zxvf filename.tgz</span><br></pre></td></tr></table></figure></p>
+<p>zip压缩文件或目录<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> zip 选项 [-r] [压缩后文件名] [文件或目录]</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>TIPS：-r表示压缩目录，压缩后文件格式是.zip且保留原文件或目录</p>
+</blockquote>
+<p>unzip解压缩.zip的压缩文件<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> unzip [压缩文件]</span><br></pre></td></tr></table></figure></p>
+<h2 id="6-文件处理"><a href="#6-文件处理" class="headerlink" title="6 文件处理"></a>6 文件处理</h2><h3 id="6-1-du-命令"><a href="#6-1-du-命令" class="headerlink" title="6.1 du 命令"></a>6.1 du 命令</h3><p>示例：查看某文件夹占用总的空间大小<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> du -h --max-depth=1 /usr/local/</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/04/05/CentOS7常用命令/du_h.png" alt></p>
+<h3 id="6-2-find-命令"><a href="#6-2-find-命令" class="headerlink" title="6.2 find 命令"></a>6.2 find 命令</h3><p>示例：查找/log目录，删除15天以前修改过的文件<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> find /log -type f -name “*.log” -mtime +15 | xargs rm -f</span><br></pre></td></tr></table></figure></p>
+<p>示例：查找工作目录下的文件【递归查找】<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> find . -type f</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/04/05/CentOS7常用命令/find_type_f.png" alt></p>
+<p>示例：删除工作目录下的文件【递归删除】<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> find . -type f -name 'stu*'</span><br><span class="line"><span class="meta">$</span> find . -type f -name 'stu*' | xargs rm</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/04/05/CentOS7常用命令/find_type_f_all.png" alt></p>
+<p>示例：查找取反<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> find /data -type d -name "3*"</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/04/05/CentOS7常用命令/find_type_f_name.png" alt><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> find /data -type d ! -name "3*"</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/04/05/CentOS7常用命令/find_type_f_exclude_name.png" alt></p>
+<h2 id="7-查看系统信息"><a href="#7-查看系统信息" class="headerlink" title="7 查看系统信息"></a>7 查看系统信息</h2><p>查看操作系统位数<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> uname -m</span><br></pre></td></tr></table></figure></p>
+<p>查看操作系统<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> cat /etc/redhat-release</span><br></pre></td></tr></table></figure></p>
+<p>查看操作系统内核<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> uname -r</span><br></pre></td></tr></table></figure></p>
+
+    </div>
+    
+    <div class="post-footer">
+        <div class="col-sm-10">
+            <div>
+                <b>本文链接</b>：<a href="/2019/04/05/CentOS7常用命令/">CentOS7常用命令</a>
+            </div>
+            <div>
+                
+                    转载声明：本博客由<trong>哲锄</strong>创作，采用 <a href="https://creativecommons.org/licenses/by-nc-nd/3.0/" target="_blank"> CC BY 3.0 CN </a> 许可协议。可自由转载、引用，但需署名作者且注明文章出处。如转载至微信公众号，请在文末添加作者公众号二维码。
+                
+            </div>
+            <div>
+                
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <img src="" width=100%/>
+        </div>
+    </div>
+</article>
+
+<div class="article-nav prev-next-wrap clearfix">
+    
+        <a href="/2019/04/05/CentOS7添加Nginx服务/" class="pre-post btn btn-default" title='CentOS7添加Nginx服务'>
+            <i class="fa fa-angle-left fa-fw"></i><span class="hidden-lg">上一篇</span>
+            <span class="hidden-xs">CentOS7添加Nginx服务</span>
+        </a>
+    
+    
+        <a href="/2019/04/05/组装PC机/" class="next-post btn btn-default" title='组装PC机'>
+            <span class="hidden-lg">下一篇</span>
+            <span class="hidden-xs">组装PC机</span><i class="fa fa-angle-right fa-fw"></i>
+        </a>
+    
+</div>
+
+
+
+
+
+
+                </main>
+                
+                    
+    <aside class="col-md-4 sidebar">
+        
+        
+    <div class="widget">
+        <h3 class="title">搜索</h3>
+        <div id="search-form">
+            <div id="result-mask" class="hide"></div>
+            <div class="search-area">
+                
+                    <input id="search-key" type="search" autocomplete="off" placeholder="搜点什么呢？">
+                    <button type="button" class="search-form-submit" id="search-local">站内搜索</button>
+                
+                
+            </div>
+            <div id="result-wrap" class="hide">
+                <div id="search-result"></div>
+            </div>
+            <div class="hide">
+                <template id="search-tpl">
+                    <div class="item">
+                        <a href="/{path}" title="{title}">
+                            <div class="title">{title}</div>
+                            <div class="content">{content}</div>
+                        </a>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>
+
+        
+        
+    <div class="widget">
+        <h3 class="title">网站公告</h3>
+        <div class="notification">
+            <p>
+  <b>笔者微信</b>：ling-yu-wang，欢迎加我<br/>
+</p>
+        </div>
+    </div>
+
+        
+        
+    <div class="widget">
+      <h3 class="title">社交</h3> 
+        <div class="content social">
+            
+	            <a href="//github.com/zhechu" rel="external nofollow" title="GitHub" target="_blank">
+			    	<i class="github fa fa-github"></i>
+			    </a>
+            
+        </div>
+    </div>
+
+
+        
+        
+    <div class="widget">
+        <h3 class="title">分类</h3>
+        <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/ELK/"><i class="fa" aria-hidden="true">ELK</i></a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Git/"><i class="fa" aria-hidden="true">Git</i></a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/"><i class="fa" aria-hidden="true">Java</i></a><span class="category-list-count">116</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/"><i class="fa" aria-hidden="true">Linux</i></a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/"><i class="fa" aria-hidden="true">Mysql</i></a><span class="category-list-count">26</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Nginx/"><i class="fa" aria-hidden="true">Nginx</i></a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/NodeJS/"><i class="fa" aria-hidden="true">NodeJS</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Others/"><i class="fa" aria-hidden="true">Others</i></a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/"><i class="fa" aria-hidden="true">Redis</i></a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Test/"><i class="fa" aria-hidden="true">Test</i></a><span class="category-list-count">2</span></li></ul>
+    </div>
+
+
+        
+        
+  <div class="widget">
+    <h3 class="title">标签云</h3>
+    <div class="content tag-cloud">
+        
+            <a href="/tags/CentOS7/" style="font-size: 17.5px;">CentOS7</a> <a href="/tags/Docker/" style="font-size: 17.5px;">Docker</a> <a href="/tags/Gradle/" style="font-size: 10px;">Gradle</a> <a href="/tags/IDEA/" style="font-size: 10px;">IDEA</a> <a href="/tags/IO/" style="font-size: 15.83px;">IO</a> <a href="/tags/JMeter/" style="font-size: 10.83px;">JMeter</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Maven/" style="font-size: 10.83px;">Maven</a> <a href="/tags/Netty/" style="font-size: 10.83px;">Netty</a> <a href="/tags/OAuth2/" style="font-size: 10.83px;">OAuth2</a> <a href="/tags/Spring/" style="font-size: 19.17px;">Spring</a> <a href="/tags/SpringCloud/" style="font-size: 15px;">SpringCloud</a> <a href="/tags/SpringSecurity/" style="font-size: 11.67px;">SpringSecurity</a> <a href="/tags/VM/" style="font-size: 10px;">VM</a> <a href="/tags/k8s/" style="font-size: 12.5px;">k8s</a> <a href="/tags/lombok/" style="font-size: 10px;">lombok</a> <a href="/tags/代码生成/" style="font-size: 10px;">代码生成</a> <a href="/tags/分布式事务/" style="font-size: 10.83px;">分布式事务</a> <a href="/tags/加速器/" style="font-size: 10px;">加速器</a> <a href="/tags/升级回滚/" style="font-size: 10px;">升级回滚</a> <a href="/tags/反射/" style="font-size: 10px;">反射</a> <a href="/tags/图/" style="font-size: 10px;">图</a> <a href="/tags/多线程/" style="font-size: 18.33px;">多线程</a> <a href="/tags/工具/" style="font-size: 11.67px;">工具</a> <a href="/tags/序列化/" style="font-size: 10.83px;">序列化</a> <a href="/tags/异常处理/" style="font-size: 10px;">异常处理</a> <a href="/tags/异步/" style="font-size: 10px;">异步</a> <a href="/tags/微服务/" style="font-size: 16.67px;">微服务</a> <a href="/tags/性能优化/" style="font-size: 18.33px;">性能优化</a> <a href="/tags/性能测试/" style="font-size: 10.83px;">性能测试</a> <a href="/tags/搜索/" style="font-size: 12.5px;">搜索</a> <a href="/tags/数据结构/" style="font-size: 13.33px;">数据结构</a> <a href="/tags/日志/" style="font-size: 10px;">日志</a> <a href="/tags/架构/" style="font-size: 10.83px;">架构</a> <a href="/tags/池化技术/" style="font-size: 10px;">池化技术</a> <a href="/tags/注册中心/" style="font-size: 10.83px;">注册中心</a> <a href="/tags/算法/" style="font-size: 20px;">算法</a> <a href="/tags/缓存/" style="font-size: 13.33px;">缓存</a> <a href="/tags/规范/" style="font-size: 14.17px;">规范</a> <a href="/tags/设计模式/" style="font-size: 15px;">设计模式</a> <a href="/tags/资料库/" style="font-size: 10px;">资料库</a> <a href="/tags/配置中心/" style="font-size: 11.67px;">配置中心</a> <a href="/tags/锁/" style="font-size: 12.5px;">锁</a> <a href="/tags/队列/" style="font-size: 12.5px;">队列</a> <a href="/tags/集合/" style="font-size: 10.83px;">集合</a>
+        
+    </div>
+  </div>
+
+
+        
+    </aside>
+
+                
+            </div>
+        </div>
+    </section>
+    <footer class="main-footer">
+    <div class="container">
+        <div class="row">
+        </div>
+    </div>
+</footer>
+
+<a id="back-to-top" class="icon-btn hide">
+	<i class="fa fa-chevron-up"></i>
+</a>
+
+
+
+
+    <div class="copyright">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="busuanzi">
+    
+        访问量:
+        <strong id="busuanzi_value_site_pv">
+            <i class="fa fa-spinner fa-spin"></i>
+        </strong>
+        &nbsp; | &nbsp;
+        访客数:
+        <strong id="busuanzi_value_site_uv">
+            <i class="fa fa-spinner fa-spin"></i>
+        </strong>
+    
+</div>
+
+            </div>
+            <div class="col-sm-12">
+                <span>Copyright &copy; 2016
+                </span> |
+                <span>
+                    Powered by <a href="//hexo.io" class="copyright-links" target="_blank" rel="nofollow">Hexo</a>
+                </span> |
+                <span>
+                    Theme by <a href="//github.com/itmuch/hexo-theme-itmuch.git" class="copyright-links" target="_blank" rel="nofollow">ITMuch</a>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script src="/js/app.js?rev=@@hash"></script>
+
+</body>
+</html>

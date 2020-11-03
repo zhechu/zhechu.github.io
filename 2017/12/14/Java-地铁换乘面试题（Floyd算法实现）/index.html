@@ -1,0 +1,417 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!--Setting-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta name="apple-mobile-web-app-capable" content="哲锄">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no,email=no,adress=no">
+    <meta name="browsermode" content="application">
+    <meta name="screen-orientation" content="portrait">
+    <link rel="dns-prefetch" href="http://www.zhechu.top">
+    <!--SEO-->
+
+    <meta name="keywords" content="算法,">
+
+
+    <meta name="description" content="地铁换乘：
+已知2条地铁线路，其中A为环线，B为东西向线路，线路都是双向的。经过的站点名分别如下，两条线交叉的换乘点用T1、T2表示。编写程序，任意输入两个站点名称，输出乘坐地铁最少需要经过的车站及经过车站的数量（含输入的起点和终点，换乘站点只计算一次）。
+地铁线A（环线）经过车站：
+A1 A...">
+
+
+<meta name="robots" content="all">
+<meta name="google" content="all">
+<meta name="googlebot" content="all">
+<meta name="verify" content="all">
+    <!--Title-->
+
+
+<title>Java 地铁换乘面试题 | 哲锄</title>
+
+
+    <link rel="alternate" href="/atom.xml" title="哲锄" type="application/atom+xml">
+
+
+    <link rel="icon" href="/favicon.ico">
+
+    
+
+
+
+<link rel="stylesheet" href="/css/bootstrap.min.css?rev=3.3.7">
+<link rel="stylesheet" href="/css/font-awesome.min.css?rev=4.5.0">
+<link rel="stylesheet" href="/css/style.css?rev=@@hash">
+
+
+
+
+    
+
+
+
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?13766878cde148282622871dd245a973";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    
+
+</head>
+
+</html>
+<!--[if lte IE 8]>
+<style>
+    html{ font-size: 1em }
+</style>
+<![endif]-->
+<!--[if lte IE 9]>
+<div style="ie">你使用的浏览器版本过低，为了你更好的阅读体验，请更新浏览器的版本或者使用其他现代浏览器，比如Chrome、Firefox、Safari等。</div>
+<![endif]-->
+
+<body>
+    
+    <nav class="main-navigation">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="navbar-header"><span class="nav-toggle-button collapsed pull-right" data-toggle="collapse" data-target="#main-menu" id="mnav">
+                    <span class="sr-only"></span>
+                        <i class="fa fa-bars"></i>
+                    </span>
+                    <a class="navbar-brand" href="http://www.zhechu.top">哲锄</a>
+                </div>
+                <div class="collapse navbar-collapse" id="main-menu">
+                    <ul class="menu">
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/"><i class="fa fa-home"></i>哲锄</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/categories"><i class="fa fa-list"></i>分类</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/about"><i class="fa fa-user"></i>关于我</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/archives"><i class="fa fa-archive"></i>归档</a>
+                            </li>
+                        
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<a href="http://github.com/zhechu">
+    <img style="position: absolute; top: 0; right: 0; border: 0;"
+        src="/img/forkme.png"
+        alt="Fork me on GitHub">
+</a>
+
+    <section class="content-wrap">
+        <div class="container">
+            <div class="row">
+                <main class="col-md-8 main-content m-post">
+                    <p id="process"></p>
+<article class="post">
+    <div class="post-head">
+        <h1 id="Java 地铁换乘面试题">
+            
+                Java 地铁换乘面试题
+            
+        </h1>
+        <div class="post-meta">
+    
+    
+    <span class="categories-meta fa-wrap">
+        <i class="fa fa-folder-open-o"></i>
+        <a href="/categories/Java">
+            Java
+        </a>
+    </span>
+    
+
+    
+    <span class="fa-wrap">
+        <i class="fa fa-tags"></i>
+        <span class="tags-meta">
+            
+                
+                    <a href="/tags/算法" title='算法'>
+                        算法
+                    </a>
+                
+            
+        </span>
+    </span>
+    
+
+    
+        
+        <span class="fa-wrap">
+            <i class="fa fa-clock-o"></i>
+            <span class="date-meta">2017/12/14</span>
+        </span>
+        
+            <span class="fa-wrap">
+                <i class="fa fa-eye"></i>
+                <span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    
+</div>
+
+        
+        
+    </div>
+    
+    <div class="post-body post-content">
+        <p>地铁换乘：</p>
+<p>已知2条地铁线路，其中A为环线，B为东西向线路，线路都是双向的。经过的站点名分别如下，两条线交叉的换乘点用T1、T2表示。编写程序，任意输入两个站点名称，输出乘坐地铁最少需要<strong>经过的车站</strong>及<strong>经过车站的数量</strong>（含输入的起点和终点，换乘站点只计算一次）。</p>
+<p>地铁线A（环线）经过车站：</p>
+<p>A1 A2 A3 A4 A5 A6 A7 A8 A9 T1 A10 A11 A12 A13 T2 A14 A15 A16 A17 A18</p>
+<p>地铁线B（直线）经过车站：</p>
+<p>B1 B2 B3 B4 B5 T1 B6 B7 B8 B9 B10 T2 B11 B12 B13 B14 B15</p>
+<hr>
+<p>最短路径算法</p>
+<table>
+<thead>
+<tr>
+<th>算法</th>
+<th>时间复杂度</th>
+<th>支持负权</th>
+<th>支持负环</th>
+<th>单源/多源</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dijkstra</td>
+<td>O(n^2) -&gt; O(nlogn)</td>
+<td>否</td>
+<td>否</td>
+<td>单源</td>
+</tr>
+<tr>
+<td>Floyed</td>
+<td>O(n^3)</td>
+<td>是</td>
+<td>否</td>
+<td>多源</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h1 id="1-Dijkstra算法实现（通用且效率高）"><a href="#1-Dijkstra算法实现（通用且效率高）" class="headerlink" title="1 Dijkstra算法实现（通用且效率高）"></a>1 Dijkstra算法实现（通用且效率高）</h1><p>使用标准的 Dijkstra 算法实现：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.commons.lang.StringUtils;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DijkstraDemo</span></span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * 车站</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">    <span class="keyword">static</span> String strA = <span class="string">"A1 A2 A3 A4 A5 A6 A7 A8 A9 T1 A10 A11 A12 A13 T2 A14 A15 A16 A17 A18"</span>;</span><br><span class="line">    <span class="keyword">static</span> String strB = <span class="string">"B1 B2 B3 B4 B5 T1 B6 B7 B8 B9 B10 T2 B11 B12 B13 B14 B15"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 车站合并建模</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">static</span> String station = strA + <span class="string">" "</span> + strB;</span><br><span class="line">    <span class="keyword">static</span> String[] stations = station.split(<span class="string">" "</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 车站名到其索引值的映射</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">static</span> HashMap&lt;String, Integer&gt; stationMap = <span class="keyword">new</span> HashMap&lt;String, Integer&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 标记始点到该索引的节点是否为最短路径</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">boolean</span>[] flag = <span class="keyword">new</span> <span class="keyword">boolean</span>[stations.length];</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 初始点到该点的距离</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span>[] distance = <span class="keyword">new</span> <span class="keyword">int</span>[stations.length];</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 图的矩阵表示</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span>[][] arr = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 图中始点到每个节点间的路径表示，如：若始点为A1，终点为A2，则路径为 arrRoute[1] = "A1,A2";</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">static</span> String[] arrRoute = <span class="keyword">new</span> String[stations.length];</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 表示无穷大</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> INF = Integer.MAX_VALUE;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">	地铁换乘（参考答案，Floyd算法实现）</span></span><br><span class="line"><span class="comment">	已知2条地铁线路，其中A为环线，B为东西向线路，线路都是双向的。</span></span><br><span class="line"><span class="comment">	经过的站点名分别如下，两条线交叉的换乘点用T1、T2表示。编写程</span></span><br><span class="line"><span class="comment">	序，任意输入两个站点名称，输出乘坐地铁最少需要经过的车站数量</span></span><br><span class="line"><span class="comment">	（含输入的起点和终点，换乘站点只计算一次）。</span></span><br><span class="line"><span class="comment">	地铁线A（环线）经过车站：</span></span><br><span class="line"><span class="comment">		A1 A2 A3 A4 A5 A6 A7 A8 A9 T1 A10 A11 A12 A13 T2 A14 A15 A16 A17 A18</span></span><br><span class="line"><span class="comment">	地铁线B（直线）经过车站：</span></span><br><span class="line"><span class="comment">		B1 B2 B3 B4 B5 T1 B6 B7 B8 B9 B10 T2 B11 B12 B13 B14 B15</span></span><br><span class="line"><span class="comment">	*/</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span></span>&#123;</span><br><span class="line">		<span class="comment">// 接收输入的参数</span></span><br><span class="line">		System.out.println(<span class="string">"请输入\"始发站\"（空格）\"终到站\"(例如：A1 B4（回车结束）)："</span>);</span><br><span class="line">		Scanner sc = <span class="keyword">new</span> Scanner(System.in);</span><br><span class="line">        String[] strArray = sc.nextLine().split(<span class="string">" "</span>);</span><br><span class="line"></span><br><span class="line">        String x = strArray[<span class="number">0</span>].toUpperCase();</span><br><span class="line">        String y = strArray[<span class="number">1</span>].toUpperCase();</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">"go:"</span>+x);</span><br><span class="line">        System.out.println(<span class="string">"to:"</span>+y);</span><br><span class="line"></span><br><span class="line">        sc.close();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 初始化</span></span><br><span class="line"> 		init(x);</span><br><span class="line"></span><br><span class="line"> 		<span class="comment">// Dijkstra算法求解</span></span><br><span class="line"> 		dijkstra();</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">"经过的最少车站数："</span>+(distance[stationMap.get(y)] + <span class="number">1</span>));</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 处理A路线与B路线重复的车站T1和T2</span></span><br><span class="line">        List&lt;String&gt; resultList = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        List&lt;String&gt; routeList = Arrays.asList(arrRoute[stationMap.get(y)].split(<span class="string">","</span>));</span><br><span class="line">        <span class="keyword">int</span> size = routeList.size() - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">int</span> k = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (; k &lt; size; k++) &#123;</span><br><span class="line">			<span class="keyword">if</span> (!routeList.get(k).equals(routeList.get(k + <span class="number">1</span>))) &#123;</span><br><span class="line">				resultList.add(routeList.get(k));</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">        resultList.add(routeList.get(k));</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">"经过的车站："</span>+StringUtils.join(resultList, <span class="string">","</span>));</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * Dijkstra算法求解</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">dijkstra</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="comment">// 每次找出始点到其它节点的最短路径</span></span><br><span class="line">		<span class="keyword">int</span> length = stations.length;</span><br><span class="line">		<span class="keyword">int</span> k = <span class="number">0</span>;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;length; i++)&#123;</span><br><span class="line">			<span class="keyword">int</span> min = INF;</span><br><span class="line"></span><br><span class="line">			<span class="comment">// 寻找最短路径</span></span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;length; j++)&#123;</span><br><span class="line">				<span class="keyword">if</span>(flag[j] == <span class="keyword">false</span> &amp;&amp; distance[j] &lt; min)&#123;</span><br><span class="line">					k = j;</span><br><span class="line">					min = distance[j];</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			flag[k] = <span class="keyword">true</span>;</span><br><span class="line"></span><br><span class="line">			<span class="comment">// 更新图中始点到其它节点的距离</span></span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;length; j++)&#123;</span><br><span class="line">				<span class="keyword">int</span> len = arr[k][j] == INF ? INF : min + arr[k][j];</span><br><span class="line">				<span class="keyword">if</span>(flag[j] == <span class="keyword">false</span> &amp;&amp; len &lt; distance[j])&#123;</span><br><span class="line">					distance[j] = len;</span><br><span class="line"></span><br><span class="line">					<span class="comment">// 更新路径（由于后面节点的路径还未计算，所以，k-&gt;j的路径未经过其它节点）</span></span><br><span class="line">					arrRoute[j] = arrRoute[k] + <span class="string">","</span> + stations[j];</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * 初始化</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@param</span> startNode 始点</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">(String startNode)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">int</span> length = stations.length;</span><br><span class="line">		arr = <span class="keyword">new</span> <span class="keyword">int</span>[length][length];</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;stations.length; i++) &#123;</span><br><span class="line">			stationMap.put(stations[i], i);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;length; i++)&#123;</span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;length; j++) &#123;</span><br><span class="line">				<span class="keyword">if</span>(i == j) &#123;</span><br><span class="line">					arr[i][j] = <span class="number">0</span>;</span><br><span class="line">				&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">					arr[i][j] = <span class="number">1000</span>; <span class="comment">// 表示无穷大</span></span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;length-<span class="number">1</span>; i++) &#123;</span><br><span class="line">			arr[i][i+<span class="number">1</span>] = <span class="number">1</span>;</span><br><span class="line">			arr[i+<span class="number">1</span>][i] = <span class="number">1</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		arr[<span class="number">9</span>][<span class="number">25</span>] = <span class="number">0</span>;</span><br><span class="line">		arr[<span class="number">14</span>][<span class="number">31</span>] = <span class="number">0</span>;</span><br><span class="line">		arr[<span class="number">25</span>][<span class="number">9</span>] = <span class="number">0</span>;</span><br><span class="line">		arr[<span class="number">31</span>][<span class="number">14</span>] = <span class="number">0</span>;</span><br><span class="line">		arr[stationMap.get(<span class="string">"A18"</span>)][stationMap.get(<span class="string">"B1"</span>)] = <span class="number">1000</span>;</span><br><span class="line">		arr[stationMap.get(<span class="string">"B1"</span>)][stationMap.get(<span class="string">"A18"</span>)] = <span class="number">1000</span>;</span><br><span class="line"></span><br><span class="line">		arr[stationMap.get(<span class="string">"A1"</span>).intValue()][stationMap.get(<span class="string">"A18"</span>).intValue()] = <span class="number">1</span>;</span><br><span class="line">		arr[stationMap.get(<span class="string">"A18"</span>).intValue()][stationMap.get(<span class="string">"A1"</span>).intValue()] = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 始点索引</span></span><br><span class="line">		<span class="keyword">int</span> startNodeIndex = stationMap.get(startNode);</span><br><span class="line"></span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;length; i++)&#123;</span><br><span class="line">			flag[i] = <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line">			<span class="comment">// 初始化距离</span></span><br><span class="line">			distance[i] = arr[startNodeIndex][i];</span><br><span class="line"></span><br><span class="line">			<span class="comment">// 初始化路径</span></span><br><span class="line">			arrRoute[i] = stations[startNodeIndex] + <span class="string">","</span> + stations[i];</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 对始点本身进行初始化</span></span><br><span class="line">		flag[startNodeIndex] = <span class="keyword">true</span>;</span><br><span class="line">		distance[startNodeIndex] = <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="2-Floyed算法实现"><a href="#2-Floyed算法实现" class="headerlink" title="2 Floyed算法实现"></a>2 Floyed算法实现</h1><h2 id="2-1-标准算法实现（通用）"><a href="#2-1-标准算法实现（通用）" class="headerlink" title="2.1 标准算法实现（通用）"></a>2.1 标准算法实现（通用）</h2><p>使用标准的 Floyed 算法实现：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.commons.lang.StringUtils;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FloydDemo</span></span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * 车站</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">    <span class="keyword">static</span> String strA = <span class="string">"A1 A2 A3 A4 A5 A6 A7 A8 A9 T1 A10 A11 A12 A13 T2 A14 A15 A16 A17 A18"</span>;</span><br><span class="line">    <span class="keyword">static</span> String strB = <span class="string">"B1 B2 B3 B4 B5 T1 B6 B7 B8 B9 B10 T2 B11 B12 B13 B14 B15"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 车站合并建模</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">static</span> String station = strA + <span class="string">" "</span> + strB;</span><br><span class="line">    <span class="keyword">static</span> String[] stations = station.split(<span class="string">" "</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 车站名到其索引值的映射</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">static</span> HashMap&lt;String, Integer&gt; stationMap = <span class="keyword">new</span> HashMap&lt;String, Integer&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 图的矩阵表示</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span>[][] arr = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 图中每个节点间的路径表示，如：A1到A2节点的路径为 arrRoute[0][1] = "A1,A2";</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">static</span> String[][] arrRoute = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">	地铁换乘（参考答案，Floyd算法实现）</span></span><br><span class="line"><span class="comment">	已知2条地铁线路，其中A为环线，B为东西向线路，线路都是双向的。</span></span><br><span class="line"><span class="comment">	经过的站点名分别如下，两条线交叉的换乘点用T1、T2表示。编写程</span></span><br><span class="line"><span class="comment">	序，任意输入两个站点名称，输出乘坐地铁最少需要经过的车站数量</span></span><br><span class="line"><span class="comment">	（含输入的起点和终点，换乘站点只计算一次）。</span></span><br><span class="line"><span class="comment">	地铁线A（环线）经过车站：</span></span><br><span class="line"><span class="comment">		A1 A2 A3 A4 A5 A6 A7 A8 A9 T1 A10 A11 A12 A13 T2 A14 A15 A16 A17 A18</span></span><br><span class="line"><span class="comment">	地铁线B（直线）经过车站：</span></span><br><span class="line"><span class="comment">		B1 B2 B3 B4 B5 T1 B6 B7 B8 B9 B10 T2 B11 B12 B13 B14 B15</span></span><br><span class="line"><span class="comment">	*/</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span></span>&#123;</span><br><span class="line">		<span class="comment">// 初始化</span></span><br><span class="line">		init();</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Floyed算法求解</span></span><br><span class="line">		floyed();</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 接收输入的参数</span></span><br><span class="line">		System.out.println(<span class="string">"请输入\"始发站\"（空格）\"终到站\"(例如：A1 B4（回车结束）)："</span>);</span><br><span class="line">		Scanner sc = <span class="keyword">new</span> Scanner(System.in);</span><br><span class="line">        String[] strArray = sc.nextLine().split(<span class="string">" "</span>);</span><br><span class="line"></span><br><span class="line">        String x = strArray[<span class="number">0</span>].toUpperCase();</span><br><span class="line">        String y = strArray[<span class="number">1</span>].toUpperCase();</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">"go:"</span>+x);</span><br><span class="line">        System.out.println(<span class="string">"to:"</span>+y);</span><br><span class="line"></span><br><span class="line">        sc.close();</span><br><span class="line"></span><br><span class="line">		<span class="keyword">int</span> i = stationMap.get(x);</span><br><span class="line">		<span class="keyword">int</span> j = stationMap.get(y);</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">"经过的最少车站数："</span>+(arr[i][j] + <span class="number">1</span>));</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 处理A路线与B路线重复的车站T1和T2</span></span><br><span class="line">        List&lt;String&gt; resultList = duplicateRemoval(i, j);</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">"经过的车站："</span>+StringUtils.join(resultList, <span class="string">","</span>));</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * 处理A路线与B路线重复的车站T1和T2</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@param</span> i</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@param</span> j</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">static</span> List&lt;String&gt; <span class="title">duplicateRemoval</span><span class="params">(<span class="keyword">int</span> i, <span class="keyword">int</span> j)</span> </span>&#123;</span><br><span class="line">		List&lt;String&gt; resultList = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        List&lt;String&gt; routeList = Arrays.asList(arrRoute[i][j].split(<span class="string">","</span>));</span><br><span class="line">        <span class="keyword">int</span> size = routeList.size() - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">int</span> k = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (; k &lt; size; k++) &#123;</span><br><span class="line">			<span class="keyword">if</span> (!routeList.get(k).equals(routeList.get(k + <span class="number">1</span>))) &#123;</span><br><span class="line">				resultList.add(routeList.get(k));</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">        resultList.add(routeList.get(k));</span><br><span class="line">		<span class="keyword">return</span> resultList;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * Floyed算法求解</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">floyed</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">int</span> length = stations.length;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> k=<span class="number">0</span>; k&lt;length; k++)&#123;</span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;length; i++) &#123;</span><br><span class="line">				<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;length; j++) &#123;</span><br><span class="line">					<span class="keyword">if</span>((arr[i][k] + arr[k][j]) &lt; arr[i][j]) &#123;</span><br><span class="line">						arr[i][j] =  arr[i][k] + arr[k][j];</span><br><span class="line"></span><br><span class="line">						<span class="comment">// 更新路径</span></span><br><span class="line">						arrRoute[i][j] = arrRoute[i][k].substring(<span class="number">0</span>, arrRoute[i][k].lastIndexOf(<span class="string">","</span>)) + <span class="string">","</span> + arrRoute[k][j];</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * 初始化</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">int</span> length = stations.length;</span><br><span class="line">		arr = <span class="keyword">new</span> <span class="keyword">int</span>[length][length];</span><br><span class="line">		arrRoute = <span class="keyword">new</span> String[length][length];</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;stations.length; i++) &#123;</span><br><span class="line">			stationMap.put(stations[i], i);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;length; i++)&#123;</span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;length; j++) &#123;</span><br><span class="line">				<span class="keyword">if</span>(i == j) &#123;</span><br><span class="line">					arr[i][j] = <span class="number">0</span>;</span><br><span class="line">				&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">					arr[i][j] = <span class="number">1000</span>; <span class="comment">// 表示无穷大</span></span><br><span class="line">				&#125;</span><br><span class="line">				<span class="comment">// 初始化路径</span></span><br><span class="line">				arrRoute[i][j] = stations[i] + <span class="string">","</span> + stations[j];</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;length-<span class="number">1</span>; i++) &#123;</span><br><span class="line">			arr[i][i+<span class="number">1</span>] = <span class="number">1</span>;</span><br><span class="line">			arr[i+<span class="number">1</span>][i] = <span class="number">1</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		arr[<span class="number">9</span>][<span class="number">25</span>] = <span class="number">0</span>;</span><br><span class="line">		arr[<span class="number">14</span>][<span class="number">31</span>] = <span class="number">0</span>;</span><br><span class="line">		arr[<span class="number">25</span>][<span class="number">9</span>] = <span class="number">0</span>;</span><br><span class="line">		arr[<span class="number">31</span>][<span class="number">14</span>] = <span class="number">0</span>;</span><br><span class="line">		arr[stationMap.get(<span class="string">"A18"</span>)][stationMap.get(<span class="string">"B1"</span>)] = <span class="number">1000</span>;</span><br><span class="line">		arr[stationMap.get(<span class="string">"B1"</span>)][stationMap.get(<span class="string">"A18"</span>)] = <span class="number">1000</span>;</span><br><span class="line"></span><br><span class="line">		arr[stationMap.get(<span class="string">"A1"</span>).intValue()][stationMap.get(<span class="string">"A18"</span>).intValue()] = <span class="number">1</span>;</span><br><span class="line">		arr[stationMap.get(<span class="string">"A18"</span>).intValue()][stationMap.get(<span class="string">"A1"</span>).intValue()] = <span class="number">1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="2-2-非标准算法实现（效率高）"><a href="#2-2-非标准算法实现（效率高）" class="headerlink" title="2.2 非标准算法实现（效率高）"></a>2.2 非标准算法实现（效率高）</h2><p>结合线路自身特点，局部使用 Floyed 算法实现：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Date;</span><br><span class="line"><span class="keyword">import</span> java.util.Scanner;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainClass</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> String strA = <span class="string">"A1 A2 A3 A4 A5 A6 A7 A8 A9 T1 A10 A11 A12 A13 T2 A14 A15 A16 A17 A18"</span>;</span><br><span class="line">    <span class="keyword">static</span> String strB = <span class="string">"B1 B2 B3 B4 B5 T1 B6 B7 B8 B9 B10 T2 B11 B12 B13 B14 B15"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> String[] SA = strA.split(<span class="string">" "</span>);</span><br><span class="line">    <span class="keyword">static</span> String[] SB = strB.split(<span class="string">" "</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> LENSA = SA.length;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> LENSB = SB.length;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> indexT1SA = getIndexofSA(<span class="string">"T1"</span>);    <span class="comment">//"T1"车站在A线路上的数组下标</span></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> indexT1SB = getIndexofSB(<span class="string">"T1"</span>);    <span class="comment">//"T1"车站在B线路上的数组下标</span></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> indexT2SA = getIndexofSA(<span class="string">"T2"</span>);    <span class="comment">//"T2"车站在A线路上的数组下标</span></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> indexT2SB = getIndexofSB(<span class="string">"T2"</span>);    <span class="comment">//"T2"车站在B线路上的数组下标</span></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">	地铁换乘（参考答案，Floyd算法实现）</span></span><br><span class="line"><span class="comment">	已知2条地铁线路，其中A为环线，B为东西向线路，线路都是双向的。</span></span><br><span class="line"><span class="comment">	经过的站点名分别如下，两条线交叉的换乘点用T1、T2表示。编写程</span></span><br><span class="line"><span class="comment">	序，任意输入两个站点名称，输出乘坐地铁最少需要经过的车站数量</span></span><br><span class="line"><span class="comment">	（含输入的起点和终点，换乘站点只计算一次）。</span></span><br><span class="line"><span class="comment">	地铁线A（环线）经过车站：</span></span><br><span class="line"><span class="comment">		A1 A2 A3 A4 A5 A6 A7 A8 A9 T1 A10 A11 A12 A13 T2 A14 A15 A16 A17 A18</span></span><br><span class="line"><span class="comment">	地铁线B（直线）经过车站：</span></span><br><span class="line"><span class="comment">		B1 B2 B3 B4 B5 T1 B6 B7 B8 B9 B10 T2 B11 B12 B13 B14 B15</span></span><br><span class="line"><span class="comment">	*/</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> step = <span class="number">0</span>;</span><br><span class="line">        System.out.println(<span class="string">"请输入\"始发站\"（空格）\"终到站\"(例如：A1 B4（回车结束）)："</span>);</span><br><span class="line">        Scanner sc = <span class="keyword">new</span> Scanner(System.in);</span><br><span class="line">        String[] strArray = sc.nextLine().split(<span class="string">" "</span>);</span><br><span class="line"></span><br><span class="line">        String x = strArray[<span class="number">0</span>].toUpperCase();</span><br><span class="line">        String y = strArray[<span class="number">1</span>].toUpperCase();</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">"go:"</span>+x);</span><br><span class="line">        System.out.println(<span class="string">"to:"</span>+y);</span><br><span class="line"></span><br><span class="line">        sc.close();</span><br><span class="line">        Date startDate = <span class="keyword">new</span> Date();</span><br><span class="line">        step = getMinStep(x, y) + <span class="number">1</span>;</span><br><span class="line">        System.out.println(<span class="string">"经过的最少车站数："</span>+step);</span><br><span class="line">        Date endDate = <span class="keyword">new</span> Date();</span><br><span class="line">        System.out.println(<span class="string">"耗时："</span>+(endDate.getTime()-startDate.getTime())/<span class="number">1000</span>+<span class="string">"秒"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">getMinStep</span><span class="params">(String x, String y)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>((<span class="string">'A'</span> != x.charAt(<span class="number">0</span>))&amp;&amp;(<span class="string">'A'</span> != y.charAt(<span class="number">0</span>)))&#123;</span><br><span class="line">            <span class="comment">//在地铁B线路上</span></span><br><span class="line">            <span class="keyword">return</span> min(stepBtoB(x, y), stepT1orT2(x, y));</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span>((<span class="string">'B'</span> != x.charAt(<span class="number">0</span>))&amp;&amp;(<span class="string">'B'</span> != y.charAt(<span class="number">0</span>)))&#123;</span><br><span class="line">            <span class="comment">//在地铁A线路上</span></span><br><span class="line">            <span class="keyword">return</span> min(stepAtoA(x, y), stepT1orT2(x, y));</span><br><span class="line">        &#125; <span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="comment">//A到B，或者B到A</span></span><br><span class="line">            <span class="keyword">return</span> stepT1orT2(x, y);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//从T1或者T2站换乘，s1到s2的最短距离</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">stepT1orT2</span><span class="params">(String s1, String s2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> lenXtoT1 = steptoT1(s1);</span><br><span class="line">        <span class="keyword">int</span> lenXtoT2 = steptoT2(s1);</span><br><span class="line">        <span class="keyword">int</span> lenYtoT1 = steptoT1(s2);</span><br><span class="line">        <span class="keyword">int</span> lenYtoT2 = steptoT2(s2);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> lineT1 = lenXtoT1 + lenYtoT1;</span><br><span class="line">        <span class="keyword">int</span> lineT2 = lenXtoT2 + lenYtoT2;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> min(lineT1, lineT2);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//到T1的最短距离</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">steptoT1</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="string">"T1"</span>.equals(s))&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span>(<span class="string">"T2"</span>.equals(s))&#123;</span><br><span class="line">            <span class="keyword">return</span> min(stepAtoA(<span class="string">"T1"</span>, <span class="string">"T2"</span>), stepBtoB(<span class="string">"T1"</span>, <span class="string">"T2"</span>));</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span>(<span class="string">'A'</span> == s.charAt(<span class="number">0</span>))    <span class="comment">/*s是A线路上的车站*/</span>&#123;</span><br><span class="line">            <span class="comment">//找到s站在SA的下标</span></span><br><span class="line">            <span class="keyword">int</span> indexSSA = getIndexofSA(s);</span><br><span class="line">            <span class="comment">//不换乘，s到T1最短路程</span></span><br><span class="line">            <span class="keyword">int</span> line1 = min(mod(indexSSA, indexT1SA), LENSA-mod(indexSSA, indexT1SA));</span><br><span class="line">            <span class="comment">//不换乘，s到T2最短路程</span></span><br><span class="line">            <span class="keyword">int</span> line2 = min(mod(indexSSA, indexT2SA), LENSA-mod(indexSSA, indexT2SA));</span><br><span class="line">            <span class="keyword">return</span> min(line1, line2+min(stepAtoA(<span class="string">"T1"</span>, <span class="string">"T2"</span>), stepBtoB(<span class="string">"T1"</span>, <span class="string">"T2"</span>)));</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span>(<span class="string">'B'</span> == s.charAt(<span class="number">0</span>))    <span class="comment">/*s是B线路上的车站*/</span>&#123;</span><br><span class="line">            <span class="comment">//找到s站在SB的下标</span></span><br><span class="line">            <span class="keyword">int</span> indexSSB = getIndexofSB(s);</span><br><span class="line">            <span class="comment">//不换乘，s到T1最短路程</span></span><br><span class="line">            <span class="keyword">int</span> line1 = mod(indexSSB, indexT1SB);</span><br><span class="line">            <span class="comment">//不换乘，s到T2最短路程</span></span><br><span class="line">            <span class="keyword">int</span> line2 = mod(indexSSB, indexT2SB);</span><br><span class="line">            <span class="keyword">return</span> min(line1, line2+min(stepAtoA(<span class="string">"T1"</span>, <span class="string">"T2"</span>), stepBtoB(<span class="string">"T1"</span>, <span class="string">"T2"</span>)));</span><br><span class="line">        &#125; <span class="keyword">else</span>&#123;</span><br><span class="line">            System.out.println(<span class="string">"车站名有误，请检查！"</span>);</span><br><span class="line">            <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//s到T2的最短距离</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">steptoT2</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="string">"T2"</span>.equals(s)) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span>(<span class="string">"T1"</span>.equals(s))&#123;</span><br><span class="line">            <span class="keyword">return</span> min(stepAtoA(<span class="string">"T1"</span>, <span class="string">"T2"</span>), stepBtoB(<span class="string">"T1"</span>, <span class="string">"T2"</span>));</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span>(<span class="string">'A'</span> == s.charAt(<span class="number">0</span>))    <span class="comment">/*s是A线路上的车站*/</span>&#123;</span><br><span class="line">            <span class="comment">//找到s站在SA的下标</span></span><br><span class="line">            <span class="keyword">int</span> indexSSA = getIndexofSA(s);</span><br><span class="line">            <span class="comment">//不换乘，s到T1最短路程</span></span><br><span class="line">            <span class="keyword">int</span> line1 = min(mod(indexSSA, indexT1SA), LENSA-mod(indexSSA, indexT1SA));</span><br><span class="line">            <span class="comment">//不换乘，s到T2最短路程</span></span><br><span class="line">            <span class="keyword">int</span> line2 = min(mod(indexSSA, indexT2SA), LENSA-mod(indexSSA, indexT2SA));</span><br><span class="line">            <span class="keyword">return</span> min(line2, line1+min(stepAtoA(<span class="string">"T1"</span>, <span class="string">"T2"</span>), stepBtoB(<span class="string">"T1"</span>, <span class="string">"T2"</span>)));</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span>(<span class="string">'B'</span> == s.charAt(<span class="number">0</span>))    <span class="comment">/*s是B线路上的车站*/</span>&#123;</span><br><span class="line">            <span class="comment">//找到s站在SB的下标</span></span><br><span class="line">            <span class="keyword">int</span> indexSSB = getIndexofSB(s);</span><br><span class="line">            <span class="comment">//不换乘，s到T1最短路程</span></span><br><span class="line">            <span class="keyword">int</span> line1 = mod(indexSSB, indexT1SB);</span><br><span class="line">            <span class="comment">//不换乘，s到T2最短路程</span></span><br><span class="line">            <span class="keyword">int</span> line2 = mod(indexSSB, indexT2SB);</span><br><span class="line">            <span class="keyword">return</span> min(line2, line1+min(stepAtoA(<span class="string">"T1"</span>, <span class="string">"T2"</span>), stepBtoB(<span class="string">"T1"</span>, <span class="string">"T2"</span>)));</span><br><span class="line">        &#125; <span class="keyword">else</span>&#123;</span><br><span class="line">            System.out.println(<span class="string">"车站名有误，请检查！"</span>);</span><br><span class="line">            <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//A到A，不换乘</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">stepAtoA</span><span class="params">(String s1, String s2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>((<span class="string">'B'</span> == s1.charAt(<span class="number">0</span>))||(<span class="string">'B'</span> == s2.charAt(<span class="number">0</span>)))&#123;</span><br><span class="line">            System.out.println(<span class="string">"输入不是A线路上的站点，请检查！"</span>);</span><br><span class="line">            <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//找到s1站，在A线路上的数组下标</span></span><br><span class="line">        <span class="keyword">int</span> indexS1SA = getIndexofSA(s1);</span><br><span class="line">        <span class="comment">//找到s2站，在A线路上的数组下标</span></span><br><span class="line">        <span class="keyword">int</span> indexS2SA = getIndexofSA(s2);</span><br><span class="line">        <span class="comment">//不换乘，s1到s2的最短距离</span></span><br><span class="line">        <span class="keyword">return</span> min(mod(indexS1SA, indexS2SA), LENSA-mod(indexS1SA, indexS2SA));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//B到B，不换乘</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">stepBtoB</span><span class="params">(String s1, String s2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>((<span class="string">'A'</span> == s1.charAt(<span class="number">0</span>))||(<span class="string">'A'</span> == s2.charAt(<span class="number">0</span>)))&#123;</span><br><span class="line">            System.out.println(<span class="string">"输入不是B线路上的站点，请检查！"</span>);</span><br><span class="line">            <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//找到s1站，在B线路上的数组下标</span></span><br><span class="line">        <span class="keyword">int</span> indexS1SB = getIndexofSB(s1);</span><br><span class="line">        <span class="comment">//找到s2站，在B线路上的数组下标</span></span><br><span class="line">        <span class="keyword">int</span> indexS2SB = getIndexofSB(s2);</span><br><span class="line">        <span class="comment">//不换乘，s1到s2的最短距离</span></span><br><span class="line">        <span class="keyword">return</span> mod(indexS1SB, indexS2SB);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">min</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> a&lt;b?a:b;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">getIndexofSA</span><span class="params">(String str)</span></span>&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> index = <span class="number">0</span>; index &lt; LENSA; index++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(str.equals(SA[index]))&#123;</span><br><span class="line">                <span class="keyword">return</span> index;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">getIndexofSB</span><span class="params">(String str)</span></span>&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> index = <span class="number">0</span>; index &lt; LENSB; index++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(str.equals(SB[index]))&#123;</span><br><span class="line">                <span class="keyword">return</span> index;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">mod</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(a &lt; b)&#123;</span><br><span class="line">            <span class="keyword">return</span> b-a;</span><br><span class="line">        &#125; <span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">return</span> a-b;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>TIPS：由于此种方式结合了线路自身的特点，可以作为参考；但，不通用，因此不推荐。</p>
+</blockquote>
+
+    </div>
+    
+    <div class="post-footer">
+        <div class="col-sm-10">
+            <div>
+                <b>本文链接</b>：<a href="/2017/12/14/Java-地铁换乘面试题（Floyd算法实现）/">Java 地铁换乘面试题</a>
+            </div>
+            <div>
+                
+                    转载声明：本博客由<trong>哲锄</strong>创作，采用 <a href="https://creativecommons.org/licenses/by-nc-nd/3.0/" target="_blank"> CC BY 3.0 CN </a> 许可协议。可自由转载、引用，但需署名作者且注明文章出处。如转载至微信公众号，请在文末添加作者公众号二维码。
+                
+            </div>
+            <div>
+                
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <img src="" width=100%/>
+        </div>
+    </div>
+</article>
+
+<div class="article-nav prev-next-wrap clearfix">
+    
+        <a href="/2019/03/31/Docker安装Mysql/" class="pre-post btn btn-default" title='Docker安装Mysql'>
+            <i class="fa fa-angle-left fa-fw"></i><span class="hidden-lg">上一篇</span>
+            <span class="hidden-xs">Docker安装Mysql</span>
+        </a>
+    
+    
+        <a href="/2017/12/14/Java-模拟银行拿号排队系统/" class="next-post btn btn-default" title='Java 模拟银行取号排队系统'>
+            <span class="hidden-lg">下一篇</span>
+            <span class="hidden-xs">Java 模拟银行取号排队系统</span><i class="fa fa-angle-right fa-fw"></i>
+        </a>
+    
+</div>
+
+
+
+
+
+
+                </main>
+                
+                    
+    <aside class="col-md-4 sidebar">
+        
+        
+    <div class="widget">
+        <h3 class="title">搜索</h3>
+        <div id="search-form">
+            <div id="result-mask" class="hide"></div>
+            <div class="search-area">
+                
+                    <input id="search-key" type="search" autocomplete="off" placeholder="搜点什么呢？">
+                    <button type="button" class="search-form-submit" id="search-local">站内搜索</button>
+                
+                
+            </div>
+            <div id="result-wrap" class="hide">
+                <div id="search-result"></div>
+            </div>
+            <div class="hide">
+                <template id="search-tpl">
+                    <div class="item">
+                        <a href="/{path}" title="{title}">
+                            <div class="title">{title}</div>
+                            <div class="content">{content}</div>
+                        </a>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>
+
+        
+        
+    <div class="widget">
+        <h3 class="title">网站公告</h3>
+        <div class="notification">
+            <p>
+  <b>笔者微信</b>：ling-yu-wang，欢迎加我<br/>
+</p>
+        </div>
+    </div>
+
+        
+        
+    <div class="widget">
+      <h3 class="title">社交</h3> 
+        <div class="content social">
+            
+	            <a href="//github.com/zhechu" rel="external nofollow" title="GitHub" target="_blank">
+			    	<i class="github fa fa-github"></i>
+			    </a>
+            
+        </div>
+    </div>
+
+
+        
+        
+    <div class="widget">
+        <h3 class="title">分类</h3>
+        <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/ELK/"><i class="fa" aria-hidden="true">ELK</i></a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Git/"><i class="fa" aria-hidden="true">Git</i></a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/"><i class="fa" aria-hidden="true">Java</i></a><span class="category-list-count">116</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/"><i class="fa" aria-hidden="true">Linux</i></a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/"><i class="fa" aria-hidden="true">Mysql</i></a><span class="category-list-count">26</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Nginx/"><i class="fa" aria-hidden="true">Nginx</i></a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/NodeJS/"><i class="fa" aria-hidden="true">NodeJS</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Others/"><i class="fa" aria-hidden="true">Others</i></a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/"><i class="fa" aria-hidden="true">Redis</i></a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Test/"><i class="fa" aria-hidden="true">Test</i></a><span class="category-list-count">2</span></li></ul>
+    </div>
+
+
+        
+        
+  <div class="widget">
+    <h3 class="title">标签云</h3>
+    <div class="content tag-cloud">
+        
+            <a href="/tags/CentOS7/" style="font-size: 17.5px;">CentOS7</a> <a href="/tags/Docker/" style="font-size: 17.5px;">Docker</a> <a href="/tags/Gradle/" style="font-size: 10px;">Gradle</a> <a href="/tags/IDEA/" style="font-size: 10px;">IDEA</a> <a href="/tags/IO/" style="font-size: 15.83px;">IO</a> <a href="/tags/JMeter/" style="font-size: 10.83px;">JMeter</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Maven/" style="font-size: 10.83px;">Maven</a> <a href="/tags/Netty/" style="font-size: 10.83px;">Netty</a> <a href="/tags/OAuth2/" style="font-size: 10.83px;">OAuth2</a> <a href="/tags/Spring/" style="font-size: 19.17px;">Spring</a> <a href="/tags/SpringCloud/" style="font-size: 15px;">SpringCloud</a> <a href="/tags/SpringSecurity/" style="font-size: 11.67px;">SpringSecurity</a> <a href="/tags/VM/" style="font-size: 10px;">VM</a> <a href="/tags/k8s/" style="font-size: 12.5px;">k8s</a> <a href="/tags/lombok/" style="font-size: 10px;">lombok</a> <a href="/tags/代码生成/" style="font-size: 10px;">代码生成</a> <a href="/tags/分布式事务/" style="font-size: 10.83px;">分布式事务</a> <a href="/tags/加速器/" style="font-size: 10px;">加速器</a> <a href="/tags/升级回滚/" style="font-size: 10px;">升级回滚</a> <a href="/tags/反射/" style="font-size: 10px;">反射</a> <a href="/tags/图/" style="font-size: 10px;">图</a> <a href="/tags/多线程/" style="font-size: 18.33px;">多线程</a> <a href="/tags/工具/" style="font-size: 11.67px;">工具</a> <a href="/tags/序列化/" style="font-size: 10.83px;">序列化</a> <a href="/tags/异常处理/" style="font-size: 10px;">异常处理</a> <a href="/tags/异步/" style="font-size: 10px;">异步</a> <a href="/tags/微服务/" style="font-size: 16.67px;">微服务</a> <a href="/tags/性能优化/" style="font-size: 18.33px;">性能优化</a> <a href="/tags/性能测试/" style="font-size: 10.83px;">性能测试</a> <a href="/tags/搜索/" style="font-size: 12.5px;">搜索</a> <a href="/tags/数据结构/" style="font-size: 13.33px;">数据结构</a> <a href="/tags/日志/" style="font-size: 10px;">日志</a> <a href="/tags/架构/" style="font-size: 10.83px;">架构</a> <a href="/tags/池化技术/" style="font-size: 10px;">池化技术</a> <a href="/tags/注册中心/" style="font-size: 10.83px;">注册中心</a> <a href="/tags/算法/" style="font-size: 20px;">算法</a> <a href="/tags/缓存/" style="font-size: 13.33px;">缓存</a> <a href="/tags/规范/" style="font-size: 14.17px;">规范</a> <a href="/tags/设计模式/" style="font-size: 15px;">设计模式</a> <a href="/tags/资料库/" style="font-size: 10px;">资料库</a> <a href="/tags/配置中心/" style="font-size: 11.67px;">配置中心</a> <a href="/tags/锁/" style="font-size: 12.5px;">锁</a> <a href="/tags/队列/" style="font-size: 12.5px;">队列</a> <a href="/tags/集合/" style="font-size: 10.83px;">集合</a>
+        
+    </div>
+  </div>
+
+
+        
+    </aside>
+
+                
+            </div>
+        </div>
+    </section>
+    <footer class="main-footer">
+    <div class="container">
+        <div class="row">
+        </div>
+    </div>
+</footer>
+
+<a id="back-to-top" class="icon-btn hide">
+	<i class="fa fa-chevron-up"></i>
+</a>
+
+
+
+
+    <div class="copyright">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="busuanzi">
+    
+        访问量:
+        <strong id="busuanzi_value_site_pv">
+            <i class="fa fa-spinner fa-spin"></i>
+        </strong>
+        &nbsp; | &nbsp;
+        访客数:
+        <strong id="busuanzi_value_site_uv">
+            <i class="fa fa-spinner fa-spin"></i>
+        </strong>
+    
+</div>
+
+            </div>
+            <div class="col-sm-12">
+                <span>Copyright &copy; 2016
+                </span> |
+                <span>
+                    Powered by <a href="//hexo.io" class="copyright-links" target="_blank" rel="nofollow">Hexo</a>
+                </span> |
+                <span>
+                    Theme by <a href="//github.com/itmuch/hexo-theme-itmuch.git" class="copyright-links" target="_blank" rel="nofollow">ITMuch</a>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script src="/js/app.js?rev=@@hash"></script>
+
+</body>
+</html>

@@ -1,0 +1,380 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!--Setting-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta name="apple-mobile-web-app-capable" content="哲锄">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no,email=no,adress=no">
+    <meta name="browsermode" content="application">
+    <meta name="screen-orientation" content="portrait">
+    <link rel="dns-prefetch" href="http://www.zhechu.top">
+    <!--SEO-->
+
+    <meta name="keywords" content="多线程,">
+
+
+    <meta name="description" content="利用 Java 多线程模拟银行取号排队系统。
+代码地址：https://github.com/zhechu/bank-queue-system-demo
+程序入口123456789101112131415161718192021222324252627282930313233343536373...">
+
+
+<meta name="robots" content="all">
+<meta name="google" content="all">
+<meta name="googlebot" content="all">
+<meta name="verify" content="all">
+    <!--Title-->
+
+
+<title>Java 模拟银行取号排队系统 | 哲锄</title>
+
+
+    <link rel="alternate" href="/atom.xml" title="哲锄" type="application/atom+xml">
+
+
+    <link rel="icon" href="/favicon.ico">
+
+    
+
+
+
+<link rel="stylesheet" href="/css/bootstrap.min.css?rev=3.3.7">
+<link rel="stylesheet" href="/css/font-awesome.min.css?rev=4.5.0">
+<link rel="stylesheet" href="/css/style.css?rev=@@hash">
+
+
+
+
+    
+
+
+
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?13766878cde148282622871dd245a973";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    
+
+</head>
+
+</html>
+<!--[if lte IE 8]>
+<style>
+    html{ font-size: 1em }
+</style>
+<![endif]-->
+<!--[if lte IE 9]>
+<div style="ie">你使用的浏览器版本过低，为了你更好的阅读体验，请更新浏览器的版本或者使用其他现代浏览器，比如Chrome、Firefox、Safari等。</div>
+<![endif]-->
+
+<body>
+    
+    <nav class="main-navigation">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="navbar-header"><span class="nav-toggle-button collapsed pull-right" data-toggle="collapse" data-target="#main-menu" id="mnav">
+                    <span class="sr-only"></span>
+                        <i class="fa fa-bars"></i>
+                    </span>
+                    <a class="navbar-brand" href="http://www.zhechu.top">哲锄</a>
+                </div>
+                <div class="collapse navbar-collapse" id="main-menu">
+                    <ul class="menu">
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/"><i class="fa fa-home"></i>哲锄</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/categories"><i class="fa fa-list"></i>分类</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/about"><i class="fa fa-user"></i>关于我</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/archives"><i class="fa fa-archive"></i>归档</a>
+                            </li>
+                        
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<a href="http://github.com/zhechu">
+    <img style="position: absolute; top: 0; right: 0; border: 0;"
+        src="/img/forkme.png"
+        alt="Fork me on GitHub">
+</a>
+
+    <section class="content-wrap">
+        <div class="container">
+            <div class="row">
+                <main class="col-md-8 main-content m-post">
+                    <p id="process"></p>
+<article class="post">
+    <div class="post-head">
+        <h1 id="Java 模拟银行取号排队系统">
+            
+                Java 模拟银行取号排队系统
+            
+        </h1>
+        <div class="post-meta">
+    
+    
+    <span class="categories-meta fa-wrap">
+        <i class="fa fa-folder-open-o"></i>
+        <a href="/categories/Java">
+            Java
+        </a>
+    </span>
+    
+
+    
+    <span class="fa-wrap">
+        <i class="fa fa-tags"></i>
+        <span class="tags-meta">
+            
+                
+                    <a href="/tags/多线程" title='多线程'>
+                        多线程
+                    </a>
+                
+            
+        </span>
+    </span>
+    
+
+    
+        
+        <span class="fa-wrap">
+            <i class="fa fa-clock-o"></i>
+            <span class="date-meta">2017/12/14</span>
+        </span>
+        
+            <span class="fa-wrap">
+                <i class="fa fa-eye"></i>
+                <span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    
+</div>
+
+        
+        
+    </div>
+    
+    <div class="post-body post-content">
+        <p>利用 Java 多线程模拟银行取号排队系统。</p>
+<p>代码地址：<a href="https://github.com/zhechu/bank-queue-system-demo" target="_blank" rel="noopener">https://github.com/zhechu/bank-queue-system-demo</a></p>
+<h1 id="程序入口"><a href="#程序入口" class="headerlink" title="程序入口"></a>程序入口</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.concurrent.Executors;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.TimeUnit;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 入口类</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> lingyuwang</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainClass</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		<span class="comment">//产生4个普通窗口</span></span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;<span class="number">5</span>;i++)&#123;</span><br><span class="line">			ServiceWindow commonWindow =  <span class="keyword">new</span> ServiceWindow();</span><br><span class="line">			commonWindow.setNumber(i);</span><br><span class="line">			commonWindow.setType(CustomerType.COMMON);</span><br><span class="line">			commonWindow.start();</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">//产生1个快速窗口</span></span><br><span class="line">		ServiceWindow expressWindow =  <span class="keyword">new</span> ServiceWindow();</span><br><span class="line">		expressWindow.setNumber(<span class="number">5</span>);</span><br><span class="line">		expressWindow.setType(CustomerType.EXPRESS);</span><br><span class="line">		expressWindow.start();</span><br><span class="line"></span><br><span class="line">		<span class="comment">//产生1个VIP窗口</span></span><br><span class="line">		ServiceWindow vipWindow =  <span class="keyword">new</span> ServiceWindow();</span><br><span class="line">		vipWindow.setNumber(<span class="number">6</span>);</span><br><span class="line">		vipWindow.setType(CustomerType.VIP);</span><br><span class="line">		vipWindow.start();</span><br><span class="line"></span><br><span class="line">		<span class="comment">//普通客户拿号</span></span><br><span class="line">		Executors.newScheduledThreadPool(<span class="number">1</span>).scheduleAtFixedRate(</span><br><span class="line">				<span class="keyword">new</span> Runnable()&#123;</span><br><span class="line">					<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">						Integer serviceNumber = NumberMachine.getInstance().getCommonManager().generateNewNumber();</span><br><span class="line">						<span class="comment">/**</span></span><br><span class="line"><span class="comment">						 * 采用logger方式，无法看到直观的运行效果，因为logger.log方法内部并不是直接把内容打印出出来，</span></span><br><span class="line"><span class="comment">						 * 而是交给内部的一个线程去处理，所以，打印出来的结果在时间顺序上看起来很混乱。</span></span><br><span class="line"><span class="comment">						 */</span></span><br><span class="line">						<span class="comment">//logger.info("第" + serviceNumber + "号普通客户正在等待服务！");</span></span><br><span class="line">						System.out.println(<span class="string">"第"</span> + serviceNumber + <span class="string">"号普通客户正在等待服务！"</span>);</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;,</span><br><span class="line">				<span class="number">0</span>,</span><br><span class="line">				Constants.COMMON_CUSTOMER_INTERVAL_TIME,</span><br><span class="line">				TimeUnit.SECONDS);</span><br><span class="line"></span><br><span class="line">		<span class="comment">//快速客户拿号</span></span><br><span class="line">		Executors.newScheduledThreadPool(<span class="number">1</span>).scheduleAtFixedRate(</span><br><span class="line">				<span class="keyword">new</span> Runnable()&#123;</span><br><span class="line">					<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">						Integer serviceNumber = NumberMachine.getInstance().getExpressManager().generateNewNumber();</span><br><span class="line">						System.out.println(<span class="string">"第"</span> + serviceNumber + <span class="string">"号快速客户正在等待服务！"</span>);</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;,</span><br><span class="line">				<span class="number">0</span>,</span><br><span class="line">				Constants.COMMON_CUSTOMER_INTERVAL_TIME * <span class="number">2</span>,</span><br><span class="line">				TimeUnit.SECONDS);</span><br><span class="line"></span><br><span class="line">		<span class="comment">//VIP客户拿号</span></span><br><span class="line">		Executors.newScheduledThreadPool(<span class="number">1</span>).scheduleAtFixedRate(</span><br><span class="line">				<span class="keyword">new</span> Runnable()&#123;</span><br><span class="line">					<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">						Integer serviceNumber = NumberMachine.getInstance().getVipManager().generateNewNumber();</span><br><span class="line">						System.out.println(<span class="string">"第"</span> + serviceNumber + <span class="string">"号VIP客户正在等待服务！"</span>);</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;,</span><br><span class="line">				<span class="number">0</span>,</span><br><span class="line">				Constants.COMMON_CUSTOMER_INTERVAL_TIME * <span class="number">6</span>,</span><br><span class="line">				TimeUnit.SECONDS);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="服务窗口"><a href="#服务窗口" class="headerlink" title="服务窗口"></a>服务窗口</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Random;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.Executors;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 没有把VIP窗口和快速窗口做成子类，是因为实际业务中的普通窗口可以随时被设置为VIP窗口和快速窗口。</span></span><br><span class="line"><span class="comment"> * */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ServiceWindow</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">private</span> CustomerType type = CustomerType.COMMON;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> number = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> CustomerType <span class="title">getType</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> type;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setType</span><span class="params">(CustomerType type)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.type = type;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setNumber</span><span class="params">(<span class="keyword">int</span> number)</span></span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.number = number;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">start</span><span class="params">()</span></span>&#123;</span><br><span class="line">		Executors.newSingleThreadExecutor().execute(</span><br><span class="line">				<span class="keyword">new</span> Runnable()&#123;</span><br><span class="line">					<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">						<span class="comment">//下面这种写法的运行效率低，最好是把while放在case下面</span></span><br><span class="line">						<span class="comment">/*</span></span><br><span class="line"><span class="comment">						while(true)&#123;</span></span><br><span class="line"><span class="comment">							switch(type)&#123;</span></span><br><span class="line"><span class="comment">								case COMMON:</span></span><br><span class="line"><span class="comment">									commonService();</span></span><br><span class="line"><span class="comment">									break;</span></span><br><span class="line"><span class="comment">								case EXPRESS:</span></span><br><span class="line"><span class="comment">									expressService();</span></span><br><span class="line"><span class="comment">									break;</span></span><br><span class="line"><span class="comment">								case VIP:</span></span><br><span class="line"><span class="comment">									vipService();</span></span><br><span class="line"><span class="comment">									break;</span></span><br><span class="line"><span class="comment">							&#125;</span></span><br><span class="line"><span class="comment">						&#125;</span></span><br><span class="line"><span class="comment">						*/</span></span><br><span class="line">						<span class="keyword">switch</span>(type)&#123;</span><br><span class="line">							<span class="keyword">case</span> COMMON:</span><br><span class="line">								<span class="keyword">while</span>(<span class="keyword">true</span>) commonService();</span><br><span class="line">							<span class="keyword">case</span> EXPRESS:</span><br><span class="line">								<span class="keyword">while</span>(<span class="keyword">true</span>) expressService();</span><br><span class="line">							<span class="keyword">case</span> VIP:</span><br><span class="line">								<span class="keyword">while</span>(<span class="keyword">true</span>) vipService();</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">		);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">commonService</span><span class="params">()</span></span>&#123;</span><br><span class="line">		String windowName = <span class="string">"第"</span> + number + <span class="string">"号"</span> + type + <span class="string">"窗口"</span>;</span><br><span class="line">		System.out.println(windowName + <span class="string">"开始获取普通任务!"</span>);</span><br><span class="line">		Integer serviceNumber = NumberMachine.getInstance().getCommonManager().fetchNumber();</span><br><span class="line">		<span class="keyword">if</span>(serviceNumber != <span class="keyword">null</span> )&#123;</span><br><span class="line">			System.out.println(windowName + <span class="string">"开始为第"</span> + serviceNumber + <span class="string">"号普通客户服务"</span>);</span><br><span class="line">			<span class="keyword">int</span> maxRandom = Constants.MAX_SERVICE_TIME - Constants.MIN_SERVICE_TIME;</span><br><span class="line">			<span class="keyword">int</span> serviceTime = <span class="keyword">new</span> Random().nextInt(maxRandom)+<span class="number">1000</span> + Constants.MIN_SERVICE_TIME;</span><br><span class="line">			<span class="keyword">try</span> &#123;</span><br><span class="line">				Thread.sleep(serviceTime);</span><br><span class="line">			&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">				e.printStackTrace();</span><br><span class="line">			&#125;</span><br><span class="line">			System.out.println(windowName + <span class="string">"完成为第"</span> + serviceNumber + <span class="string">"号普通客户服务，总共耗时"</span> + serviceTime/<span class="number">1000</span> + <span class="string">"秒"</span>);</span><br><span class="line">		&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">			System.out.println(windowName + <span class="string">"没有取到普通任务，正在空闲一秒"</span>);</span><br><span class="line">			<span class="keyword">try</span> &#123;</span><br><span class="line">				Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">			&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">				e.printStackTrace();</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">expressService</span><span class="params">()</span></span>&#123;</span><br><span class="line">		Integer serviceNumber = NumberMachine.getInstance().getExpressManager().fetchNumber();</span><br><span class="line">		String windowName = <span class="string">"第"</span> + number + <span class="string">"号"</span> + type + <span class="string">"窗口"</span>;</span><br><span class="line">		System.out.println(windowName + <span class="string">"开始获取快速任务!"</span>);</span><br><span class="line">		<span class="keyword">if</span>(serviceNumber !=<span class="keyword">null</span>)&#123;</span><br><span class="line">			System.out.println(windowName + <span class="string">"开始为第"</span> + serviceNumber + <span class="string">"号快速客户服务"</span>);</span><br><span class="line">			<span class="keyword">int</span> serviceTime = Constants.MIN_SERVICE_TIME;</span><br><span class="line">			<span class="keyword">try</span> &#123;</span><br><span class="line">				Thread.sleep(serviceTime);</span><br><span class="line">			&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">				e.printStackTrace();</span><br><span class="line">			&#125;</span><br><span class="line">			System.out.println(windowName + <span class="string">"完成为第"</span> + serviceNumber + <span class="string">"号快速客户服务，总共耗时"</span> + serviceTime/<span class="number">1000</span> + <span class="string">"秒"</span>);</span><br><span class="line">		&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">			System.out.println(windowName + <span class="string">"没有取到快速任务！"</span>);</span><br><span class="line">			commonService();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">vipService</span><span class="params">()</span></span>&#123;</span><br><span class="line">		Integer serviceNumber = NumberMachine.getInstance().getVipManager().fetchNumber();</span><br><span class="line">		String windowName = <span class="string">"第"</span> + number + <span class="string">"号"</span> + type + <span class="string">"窗口"</span>;</span><br><span class="line">		System.out.println(windowName + <span class="string">"开始获取VIP任务!"</span>);</span><br><span class="line">		<span class="keyword">if</span>(serviceNumber !=<span class="keyword">null</span>)&#123;</span><br><span class="line">			System.out.println(windowName + <span class="string">"开始为第"</span> + serviceNumber + <span class="string">"号VIP客户服务"</span>);</span><br><span class="line">			<span class="keyword">int</span> maxRandom = Constants.MAX_SERVICE_TIME - Constants.MIN_SERVICE_TIME;</span><br><span class="line">			<span class="keyword">int</span> serviceTime = <span class="keyword">new</span> Random().nextInt(maxRandom)+<span class="number">1000</span> + Constants.MIN_SERVICE_TIME;</span><br><span class="line">			<span class="keyword">try</span> &#123;</span><br><span class="line">				Thread.sleep(serviceTime);</span><br><span class="line">			&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">				e.printStackTrace();</span><br><span class="line">			&#125;</span><br><span class="line">			System.out.println(windowName + <span class="string">"完成为第"</span> + serviceNumber + <span class="string">"号VIP客户服务，总共耗时"</span> + serviceTime/<span class="number">1000</span> + <span class="string">"秒"</span>);</span><br><span class="line">		&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">			System.out.println(windowName + <span class="string">"没有取到VIP任务！"</span>);</span><br><span class="line">			commonService();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="客户类型"><a href="#客户类型" class="headerlink" title="客户类型"></a>客户类型</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 客户类型</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> CustomerType &#123;</span><br><span class="line">	COMMON,EXPRESS,VIP;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span></span>&#123;</span><br><span class="line">		String name = <span class="keyword">null</span>;</span><br><span class="line">		<span class="keyword">switch</span>(<span class="keyword">this</span>)&#123;</span><br><span class="line">			<span class="keyword">case</span> COMMON:</span><br><span class="line">				name = <span class="string">"普通"</span>;</span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">			<span class="keyword">case</span> EXPRESS:</span><br><span class="line">				name = <span class="string">"快速"</span>;</span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">			<span class="keyword">case</span> VIP:</span><br><span class="line">				name = name();</span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> name;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="客户取号管理器"><a href="#客户取号管理器" class="headerlink" title="客户取号管理器"></a>客户取号管理器</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 客户取号管理器</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NumberMachine</span> </span>&#123;</span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * 单例的构造函数必须私有化</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="title">NumberMachine</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * 单例</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> NumberMachine instance = <span class="keyword">new</span> NumberMachine();</span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * 获取单例客户取号管理器</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@return</span> NumberMachine</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> NumberMachine <span class="title">getInstance</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="keyword">return</span> instance;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * 普通客户的生成器</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="keyword">private</span> NumberManager commonManager = <span class="keyword">new</span> NumberManager();</span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * 快速客户的生成器</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="keyword">private</span> NumberManager expressManager = <span class="keyword">new</span> NumberManager();</span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * VIP客户的生成器</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="keyword">private</span> NumberManager vipManager = <span class="keyword">new</span> NumberManager();</span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * 获取普通客户的生成器</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> NumberManager <span class="title">getCommonManager</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> commonManager;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * 获取快速客户的生成器</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> NumberManager <span class="title">getExpressManager</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> expressManager;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * 获取VIP客户的生成器</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> NumberManager <span class="title">getVipManager</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> vipManager;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="常量"><a href="#常量" class="headerlink" title="常量"></a>常量</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 常量静态类</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Constants</span> </span>&#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> MAX_SERVICE_TIME = <span class="number">10000</span>; <span class="comment">//10秒！</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> MIN_SERVICE_TIME = <span class="number">1000</span>; <span class="comment">//1秒！</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">/*每个普通窗口服务一个客户的平均时间为5秒，一共有4个这样的窗口，也就是说银行的所有普通窗口合起来</span></span><br><span class="line"><span class="comment">	 * 平均1.25秒内可以服务完一个普通客户，再加上快速窗口和VIP窗口也可以服务普通客户，所以，</span></span><br><span class="line"><span class="comment">	 * 1秒钟产生一个普通客户比较合理，*/</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> COMMON_CUSTOMER_INTERVAL_TIME = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="title">Constants</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="客户取号生成器"><a href="#客户取号生成器" class="headerlink" title="客户取号生成器"></a>客户取号生成器</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 客户取号生成器</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NumberManager</span> </span>&#123;</span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * 最近一个号（最后一个号）</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> lastNumber = <span class="number">0</span>;</span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * 客户取号集</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="keyword">private</span> List&lt;Integer&gt; queueNumbers = <span class="keyword">new</span> ArrayList&lt;Integer&gt;();</span><br><span class="line"></span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * 生成最后一个号</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@return</span> Integer</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> Integer <span class="title">generateNewNumber</span><span class="params">()</span></span>&#123;</span><br><span class="line">		queueNumbers.add(++lastNumber);</span><br><span class="line">		<span class="keyword">return</span> lastNumber;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * 获取最后一个号，并将其从客户取号集里删除</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@return</span> Integer</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> Integer <span class="title">fetchNumber</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(queueNumbers.size()&gt;<span class="number">0</span>)&#123;</span><br><span class="line">			<span class="keyword">return</span> (Integer)queueNumbers.remove(<span class="number">0</span>);</span><br><span class="line">		&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="控制台部分日志"><a href="#控制台部分日志" class="headerlink" title="控制台部分日志"></a>控制台部分日志</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br></pre></td><td class="code"><pre><span class="line">第1号普通窗口开始获取普通任务!</span><br><span class="line">第3号普通窗口开始获取普通任务!</span><br><span class="line">第4号普通窗口开始获取普通任务!</span><br><span class="line">第2号普通窗口开始获取普通任务!</span><br><span class="line">第1号普通窗口没有取到普通任务，正在空闲一秒</span><br><span class="line">第6号VIP窗口开始获取VIP任务!</span><br><span class="line">第6号VIP窗口没有取到VIP任务！</span><br><span class="line">第6号VIP窗口开始获取普通任务!</span><br><span class="line">第6号VIP窗口没有取到普通任务，正在空闲一秒</span><br><span class="line">第3号普通窗口没有取到普通任务，正在空闲一秒</span><br><span class="line">第4号普通窗口没有取到普通任务，正在空闲一秒</span><br><span class="line">第5号快速窗口开始获取快速任务!</span><br><span class="line">第5号快速窗口没有取到快速任务！</span><br><span class="line">第5号快速窗口开始获取普通任务!</span><br><span class="line">第5号快速窗口没有取到普通任务，正在空闲一秒</span><br><span class="line">第2号普通窗口没有取到普通任务，正在空闲一秒</span><br><span class="line">第1号普通客户正在等待服务！</span><br><span class="line">第1号快速客户正在等待服务！</span><br><span class="line">第1号VIP客户正在等待服务！</span><br><span class="line">第4号普通窗口开始获取普通任务!</span><br><span class="line">第3号普通窗口开始获取普通任务!</span><br><span class="line">第6号VIP窗口开始获取VIP任务!</span><br><span class="line">第5号快速窗口开始获取快速任务!</span><br><span class="line">第5号快速窗口开始为第1号快速客户服务</span><br><span class="line">第2号普通窗口开始获取普通任务!</span><br><span class="line">第1号普通窗口开始获取普通任务!</span><br><span class="line">第1号普通窗口没有取到普通任务，正在空闲一秒</span><br><span class="line">第2号普通窗口没有取到普通任务，正在空闲一秒</span><br><span class="line">第6号VIP窗口开始为第1号VIP客户服务</span><br><span class="line">第3号普通窗口没有取到普通任务，正在空闲一秒</span><br><span class="line">第4号普通窗口开始为第1号普通客户服务</span><br><span class="line">第2号普通客户正在等待服务！</span><br><span class="line">第3号普通窗口开始获取普通任务!</span><br><span class="line">第3号普通窗口开始为第2号普通客户服务</span><br><span class="line">第2号普通窗口开始获取普通任务!</span><br><span class="line">第2号普通窗口没有取到普通任务，正在空闲一秒</span><br><span class="line">第5号快速窗口完成为第1号快速客户服务，总共耗时1秒</span><br><span class="line">第5号快速窗口开始获取快速任务!</span><br><span class="line">第5号快速窗口没有取到快速任务！</span><br><span class="line">第1号普通窗口开始获取普通任务!</span><br><span class="line">第1号普通窗口没有取到普通任务，正在空闲一秒</span><br><span class="line">第5号快速窗口开始获取普通任务!</span><br><span class="line">第5号快速窗口没有取到普通任务，正在空闲一秒</span><br><span class="line">第3号普通客户正在等待服务！</span><br><span class="line">第2号快速客户正在等待服务！</span><br><span class="line">第2号普通窗口开始获取普通任务!</span><br><span class="line">第2号普通窗口开始为第3号普通客户服务</span><br><span class="line">第1号普通窗口开始获取普通任务!</span><br><span class="line">第5号快速窗口开始获取快速任务!</span><br><span class="line">第5号快速窗口开始为第2号快速客户服务</span><br><span class="line">第1号普通窗口没有取到普通任务，正在空闲一秒</span><br><span class="line">第4号普通客户正在等待服务！</span><br><span class="line">第5号快速窗口完成为第2号快速客户服务，总共耗时1秒</span><br><span class="line">第5号快速窗口开始获取快速任务!</span><br><span class="line">第5号快速窗口没有取到快速任务！</span><br><span class="line">第1号普通窗口开始获取普通任务!</span><br><span class="line">第1号普通窗口开始为第4号普通客户服务</span><br><span class="line">第5号快速窗口开始获取普通任务!</span><br><span class="line">第5号快速窗口没有取到普通任务，正在空闲一秒</span><br><span class="line">第5号普通客户正在等待服务！</span><br><span class="line">第3号快速客户正在等待服务！</span><br><span class="line">第4号普通窗口完成为第1号普通客户服务，总共耗时3秒</span><br><span class="line">第4号普通窗口开始获取普通任务!</span><br><span class="line">第4号普通窗口开始为第5号普通客户服务</span><br><span class="line">第5号快速窗口开始获取快速任务!</span><br><span class="line">第5号快速窗口开始为第3号快速客户服务</span><br><span class="line">第6号普通客户正在等待服务！</span><br><span class="line">第7号普通客户正在等待服务！</span><br><span class="line">第2号VIP客户正在等待服务！</span><br><span class="line">第4号快速客户正在等待服务！</span><br><span class="line">第5号快速窗口完成为第3号快速客户服务，总共耗时1秒</span><br><span class="line">第5号快速窗口开始获取快速任务!</span><br><span class="line">第5号快速窗口开始为第4号快速客户服务</span><br><span class="line">第6号VIP窗口完成为第1号VIP客户服务，总共耗时5秒</span><br><span class="line">第6号VIP窗口开始获取VIP任务!</span><br><span class="line">第6号VIP窗口开始为第2号VIP客户服务</span><br><span class="line">第8号普通客户正在等待服务！</span><br><span class="line">第5号快速窗口完成为第4号快速客户服务，总共耗时1秒</span><br><span class="line">第5号快速窗口开始获取快速任务!</span><br><span class="line">第5号快速窗口没有取到快速任务！</span><br><span class="line">第5号快速窗口开始获取普通任务!</span><br><span class="line">第5号快速窗口开始为第6号普通客户服务</span><br><span class="line">第9号普通客户正在等待服务！</span><br><span class="line">第5号快速客户正在等待服务！</span><br><span class="line">第2号普通窗口完成为第3号普通客户服务，总共耗时5秒</span><br><span class="line">第2号普通窗口开始获取普通任务!</span><br><span class="line">第2号普通窗口开始为第7号普通客户服务</span><br><span class="line">第10号普通客户正在等待服务！</span><br><span class="line">第3号普通窗口完成为第2号普通客户服务，总共耗时7秒</span><br><span class="line">第3号普通窗口开始获取普通任务!</span><br><span class="line">第3号普通窗口开始为第8号普通客户服务</span><br><span class="line">第11号普通客户正在等待服务！</span><br><span class="line">第6号快速客户正在等待服务！</span><br><span class="line">第5号快速窗口完成为第6号普通客户服务，总共耗时3秒</span><br><span class="line">第5号快速窗口开始获取快速任务!</span><br><span class="line">第5号快速窗口开始为第5号快速客户服务</span><br><span class="line">第4号普通窗口完成为第5号普通客户服务，总共耗时5秒</span><br><span class="line">第4号普通窗口开始获取普通任务!</span><br><span class="line">第4号普通窗口开始为第9号普通客户服务</span><br><span class="line">第12号普通客户正在等待服务！</span><br><span class="line">第1号普通窗口完成为第4号普通客户服务，总共耗时7秒</span><br><span class="line">第1号普通窗口开始获取普通任务!</span><br><span class="line">第1号普通窗口开始为第10号普通客户服务</span><br><span class="line">第5号快速窗口完成为第5号快速客户服务，总共耗时1秒</span><br><span class="line">第5号快速窗口开始获取快速任务!</span><br><span class="line">第5号快速窗口开始为第6号快速客户服务</span><br><span class="line">第13号普通客户正在等待服务！</span><br><span class="line">第3号VIP客户正在等待服务！</span><br><span class="line">第7号快速客户正在等待服务！</span><br><span class="line">第5号快速窗口完成为第6号快速客户服务，总共耗时1秒</span><br><span class="line">第5号快速窗口开始获取快速任务!</span><br><span class="line">第5号快速窗口开始为第7号快速客户服务</span><br><span class="line">第6号VIP窗口完成为第2号VIP客户服务，总共耗时6秒</span><br><span class="line">第6号VIP窗口开始获取VIP任务!</span><br><span class="line">第6号VIP窗口开始为第3号VIP客户服务</span><br><span class="line">第14号普通客户正在等待服务！</span><br><span class="line">第5号快速窗口完成为第7号快速客户服务，总共耗时1秒</span><br><span class="line">第5号快速窗口开始获取快速任务!</span><br><span class="line">第5号快速窗口没有取到快速任务！</span><br><span class="line">第5号快速窗口开始获取普通任务!</span><br><span class="line">第5号快速窗口开始为第11号普通客户服务</span><br><span class="line">第4号普通窗口完成为第9号普通客户服务，总共耗时2秒</span><br><span class="line">第4号普通窗口开始获取普通任务!</span><br><span class="line">第4号普通窗口开始为第12号普通客户服务</span><br><span class="line">第8号快速客户正在等待服务！</span><br><span class="line">第15号普通客户正在等待服务！</span><br><span class="line">第16号普通客户正在等待服务！</span><br><span class="line">第3号普通窗口完成为第8号普通客户服务，总共耗时5秒</span><br><span class="line">第3号普通窗口开始获取普通任务!</span><br><span class="line">第3号普通窗口开始为第13号普通客户服务</span><br><span class="line">第17号普通客户正在等待服务！</span><br><span class="line">第9号快速客户正在等待服务！</span><br><span class="line">第18号普通客户正在等待服务！</span><br><span class="line">第1号普通窗口完成为第10号普通客户服务，总共耗时6秒</span><br><span class="line">第1号普通窗口开始获取普通任务!</span><br><span class="line">第1号普通窗口开始为第14号普通客户服务</span><br><span class="line">第10号快速客户正在等待服务！</span><br><span class="line">第19号普通客户正在等待服务！</span><br><span class="line">第4号VIP客户正在等待服务！</span><br></pre></td></tr></table></figure>
+
+    </div>
+    
+    <div class="post-footer">
+        <div class="col-sm-10">
+            <div>
+                <b>本文链接</b>：<a href="/2017/12/14/Java-模拟银行拿号排队系统/">Java 模拟银行取号排队系统</a>
+            </div>
+            <div>
+                
+                    转载声明：本博客由<trong>哲锄</strong>创作，采用 <a href="https://creativecommons.org/licenses/by-nc-nd/3.0/" target="_blank"> CC BY 3.0 CN </a> 许可协议。可自由转载、引用，但需署名作者且注明文章出处。如转载至微信公众号，请在文末添加作者公众号二维码。
+                
+            </div>
+            <div>
+                
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <img src="" width=100%/>
+        </div>
+    </div>
+</article>
+
+<div class="article-nav prev-next-wrap clearfix">
+    
+        <a href="/2017/12/14/Java-地铁换乘面试题（Floyd算法实现）/" class="pre-post btn btn-default" title='Java 地铁换乘面试题'>
+            <i class="fa fa-angle-left fa-fw"></i><span class="hidden-lg">上一篇</span>
+            <span class="hidden-xs">Java 地铁换乘面试题</span>
+        </a>
+    
+    
+        <a href="/2017/12/14/Java-自定义序列化过程/" class="next-post btn btn-default" title='Java 自定义序列化过程'>
+            <span class="hidden-lg">下一篇</span>
+            <span class="hidden-xs">Java 自定义序列化过程</span><i class="fa fa-angle-right fa-fw"></i>
+        </a>
+    
+</div>
+
+
+
+
+
+
+                </main>
+                
+                    
+    <aside class="col-md-4 sidebar">
+        
+        
+    <div class="widget">
+        <h3 class="title">搜索</h3>
+        <div id="search-form">
+            <div id="result-mask" class="hide"></div>
+            <div class="search-area">
+                
+                    <input id="search-key" type="search" autocomplete="off" placeholder="搜点什么呢？">
+                    <button type="button" class="search-form-submit" id="search-local">站内搜索</button>
+                
+                
+            </div>
+            <div id="result-wrap" class="hide">
+                <div id="search-result"></div>
+            </div>
+            <div class="hide">
+                <template id="search-tpl">
+                    <div class="item">
+                        <a href="/{path}" title="{title}">
+                            <div class="title">{title}</div>
+                            <div class="content">{content}</div>
+                        </a>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>
+
+        
+        
+    <div class="widget">
+        <h3 class="title">网站公告</h3>
+        <div class="notification">
+            <p>
+  <b>笔者微信</b>：ling-yu-wang，欢迎加我<br/>
+</p>
+        </div>
+    </div>
+
+        
+        
+    <div class="widget">
+      <h3 class="title">社交</h3> 
+        <div class="content social">
+            
+	            <a href="//github.com/zhechu" rel="external nofollow" title="GitHub" target="_blank">
+			    	<i class="github fa fa-github"></i>
+			    </a>
+            
+        </div>
+    </div>
+
+
+        
+        
+    <div class="widget">
+        <h3 class="title">分类</h3>
+        <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/ELK/"><i class="fa" aria-hidden="true">ELK</i></a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Git/"><i class="fa" aria-hidden="true">Git</i></a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/"><i class="fa" aria-hidden="true">Java</i></a><span class="category-list-count">116</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/"><i class="fa" aria-hidden="true">Linux</i></a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/"><i class="fa" aria-hidden="true">Mysql</i></a><span class="category-list-count">26</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Nginx/"><i class="fa" aria-hidden="true">Nginx</i></a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/NodeJS/"><i class="fa" aria-hidden="true">NodeJS</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Others/"><i class="fa" aria-hidden="true">Others</i></a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/"><i class="fa" aria-hidden="true">Redis</i></a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Test/"><i class="fa" aria-hidden="true">Test</i></a><span class="category-list-count">2</span></li></ul>
+    </div>
+
+
+        
+        
+  <div class="widget">
+    <h3 class="title">标签云</h3>
+    <div class="content tag-cloud">
+        
+            <a href="/tags/CentOS7/" style="font-size: 17.5px;">CentOS7</a> <a href="/tags/Docker/" style="font-size: 17.5px;">Docker</a> <a href="/tags/Gradle/" style="font-size: 10px;">Gradle</a> <a href="/tags/IDEA/" style="font-size: 10px;">IDEA</a> <a href="/tags/IO/" style="font-size: 15.83px;">IO</a> <a href="/tags/JMeter/" style="font-size: 10.83px;">JMeter</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Maven/" style="font-size: 10.83px;">Maven</a> <a href="/tags/Netty/" style="font-size: 10.83px;">Netty</a> <a href="/tags/OAuth2/" style="font-size: 10.83px;">OAuth2</a> <a href="/tags/Spring/" style="font-size: 19.17px;">Spring</a> <a href="/tags/SpringCloud/" style="font-size: 15px;">SpringCloud</a> <a href="/tags/SpringSecurity/" style="font-size: 11.67px;">SpringSecurity</a> <a href="/tags/VM/" style="font-size: 10px;">VM</a> <a href="/tags/k8s/" style="font-size: 12.5px;">k8s</a> <a href="/tags/lombok/" style="font-size: 10px;">lombok</a> <a href="/tags/代码生成/" style="font-size: 10px;">代码生成</a> <a href="/tags/分布式事务/" style="font-size: 10.83px;">分布式事务</a> <a href="/tags/加速器/" style="font-size: 10px;">加速器</a> <a href="/tags/升级回滚/" style="font-size: 10px;">升级回滚</a> <a href="/tags/反射/" style="font-size: 10px;">反射</a> <a href="/tags/图/" style="font-size: 10px;">图</a> <a href="/tags/多线程/" style="font-size: 18.33px;">多线程</a> <a href="/tags/工具/" style="font-size: 11.67px;">工具</a> <a href="/tags/序列化/" style="font-size: 10.83px;">序列化</a> <a href="/tags/异常处理/" style="font-size: 10px;">异常处理</a> <a href="/tags/异步/" style="font-size: 10px;">异步</a> <a href="/tags/微服务/" style="font-size: 16.67px;">微服务</a> <a href="/tags/性能优化/" style="font-size: 18.33px;">性能优化</a> <a href="/tags/性能测试/" style="font-size: 10.83px;">性能测试</a> <a href="/tags/搜索/" style="font-size: 12.5px;">搜索</a> <a href="/tags/数据结构/" style="font-size: 13.33px;">数据结构</a> <a href="/tags/日志/" style="font-size: 10px;">日志</a> <a href="/tags/架构/" style="font-size: 10.83px;">架构</a> <a href="/tags/池化技术/" style="font-size: 10px;">池化技术</a> <a href="/tags/注册中心/" style="font-size: 10.83px;">注册中心</a> <a href="/tags/算法/" style="font-size: 20px;">算法</a> <a href="/tags/缓存/" style="font-size: 13.33px;">缓存</a> <a href="/tags/规范/" style="font-size: 14.17px;">规范</a> <a href="/tags/设计模式/" style="font-size: 15px;">设计模式</a> <a href="/tags/资料库/" style="font-size: 10px;">资料库</a> <a href="/tags/配置中心/" style="font-size: 11.67px;">配置中心</a> <a href="/tags/锁/" style="font-size: 12.5px;">锁</a> <a href="/tags/队列/" style="font-size: 12.5px;">队列</a> <a href="/tags/集合/" style="font-size: 10.83px;">集合</a>
+        
+    </div>
+  </div>
+
+
+        
+    </aside>
+
+                
+            </div>
+        </div>
+    </section>
+    <footer class="main-footer">
+    <div class="container">
+        <div class="row">
+        </div>
+    </div>
+</footer>
+
+<a id="back-to-top" class="icon-btn hide">
+	<i class="fa fa-chevron-up"></i>
+</a>
+
+
+
+
+    <div class="copyright">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="busuanzi">
+    
+        访问量:
+        <strong id="busuanzi_value_site_pv">
+            <i class="fa fa-spinner fa-spin"></i>
+        </strong>
+        &nbsp; | &nbsp;
+        访客数:
+        <strong id="busuanzi_value_site_uv">
+            <i class="fa fa-spinner fa-spin"></i>
+        </strong>
+    
+</div>
+
+            </div>
+            <div class="col-sm-12">
+                <span>Copyright &copy; 2016
+                </span> |
+                <span>
+                    Powered by <a href="//hexo.io" class="copyright-links" target="_blank" rel="nofollow">Hexo</a>
+                </span> |
+                <span>
+                    Theme by <a href="//github.com/itmuch/hexo-theme-itmuch.git" class="copyright-links" target="_blank" rel="nofollow">ITMuch</a>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script src="/js/app.js?rev=@@hash"></script>
+
+</body>
+</html>

@@ -1,0 +1,473 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!--Setting-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta name="apple-mobile-web-app-capable" content="哲锄">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no,email=no,adress=no">
+    <meta name="browsermode" content="application">
+    <meta name="screen-orientation" content="portrait">
+    <link rel="dns-prefetch" href="http://www.zhechu.top">
+    <!--SEO-->
+
+    <meta name="keywords" content="Java">
+
+
+    <meta name="description" content="JDK-1.8 官方文档
+https://docs.oracle.com/javase/8/docs/
+
+1 内存分布1.1 内存分配策略
+优先分配到Eden
+大对象直接分配到老年代
+长期存活的对象分配到老年代
+空间分配担保
+动态对象年龄判断
+
+1.2 栈上分配没有逃逸的对象会在栈上分配，而不...">
+
+
+<meta name="robots" content="all">
+<meta name="google" content="all">
+<meta name="googlebot" content="all">
+<meta name="verify" content="all">
+    <!--Title-->
+
+
+<title>JVM备忘 | 哲锄</title>
+
+
+    <link rel="alternate" href="/atom.xml" title="哲锄" type="application/atom+xml">
+
+
+    <link rel="icon" href="/favicon.ico">
+
+    
+
+
+
+<link rel="stylesheet" href="/css/bootstrap.min.css?rev=3.3.7">
+<link rel="stylesheet" href="/css/font-awesome.min.css?rev=4.5.0">
+<link rel="stylesheet" href="/css/style.css?rev=@@hash">
+
+
+
+
+    
+
+
+
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?13766878cde148282622871dd245a973";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    
+
+</head>
+
+</html>
+<!--[if lte IE 8]>
+<style>
+    html{ font-size: 1em }
+</style>
+<![endif]-->
+<!--[if lte IE 9]>
+<div style="ie">你使用的浏览器版本过低，为了你更好的阅读体验，请更新浏览器的版本或者使用其他现代浏览器，比如Chrome、Firefox、Safari等。</div>
+<![endif]-->
+
+<body>
+    
+    <nav class="main-navigation">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="navbar-header"><span class="nav-toggle-button collapsed pull-right" data-toggle="collapse" data-target="#main-menu" id="mnav">
+                    <span class="sr-only"></span>
+                        <i class="fa fa-bars"></i>
+                    </span>
+                    <a class="navbar-brand" href="http://www.zhechu.top">哲锄</a>
+                </div>
+                <div class="collapse navbar-collapse" id="main-menu">
+                    <ul class="menu">
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/"><i class="fa fa-home"></i>哲锄</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/categories"><i class="fa fa-list"></i>分类</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/about"><i class="fa fa-user"></i>关于我</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/archives"><i class="fa fa-archive"></i>归档</a>
+                            </li>
+                        
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<a href="http://github.com/zhechu">
+    <img style="position: absolute; top: 0; right: 0; border: 0;"
+        src="/img/forkme.png"
+        alt="Fork me on GitHub">
+</a>
+
+    <section class="content-wrap">
+        <div class="container">
+            <div class="row">
+                <main class="col-md-8 main-content m-post">
+                    <p id="process"></p>
+<article class="post">
+    <div class="post-head">
+        <h1 id="JVM备忘">
+            
+                JVM备忘
+            
+        </h1>
+        <div class="post-meta">
+    
+    
+    <span class="categories-meta fa-wrap">
+        <i class="fa fa-folder-open-o"></i>
+        <a href="/categories/Java">
+            Java
+        </a>
+    </span>
+    
+
+    
+    <span class="fa-wrap">
+        <i class="fa fa-tags"></i>
+        <span class="tags-meta">
+            
+                
+            
+        </span>
+    </span>
+    
+
+    
+        
+        <span class="fa-wrap">
+            <i class="fa fa-clock-o"></i>
+            <span class="date-meta">2019/04/06</span>
+        </span>
+        
+            <span class="fa-wrap">
+                <i class="fa fa-eye"></i>
+                <span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    
+</div>
+
+        
+        
+    </div>
+    
+    <div class="post-body post-content">
+        <p>JDK-1.8 官方文档</p>
+<p><a href="https://docs.oracle.com/javase/8/docs/" target="_blank" rel="noopener">https://docs.oracle.com/javase/8/docs/</a></p>
+<hr>
+<h2 id="1-内存分布"><a href="#1-内存分布" class="headerlink" title="1 内存分布"></a>1 内存分布</h2><h3 id="1-1-内存分配策略"><a href="#1-1-内存分配策略" class="headerlink" title="1.1 内存分配策略"></a>1.1 内存分配策略</h3><ol>
+<li>优先分配到Eden</li>
+<li>大对象直接分配到老年代</li>
+<li>长期存活的对象分配到老年代</li>
+<li>空间分配担保</li>
+<li>动态对象年龄判断</li>
+</ol>
+<h3 id="1-2-栈上分配"><a href="#1-2-栈上分配" class="headerlink" title="1.2 栈上分配"></a>1.2 栈上分配</h3><p>没有逃逸的对象会在栈上分配，而不是在堆分配。JDK-1.8 默认开启逃逸分析。</p>
+<h3 id="1-3-查看-JDK-是否开启逃逸分析"><a href="#1-3-查看-JDK-是否开启逃逸分析" class="headerlink" title="1.3 查看 JDK 是否开启逃逸分析"></a>1.3 查看 JDK 是否开启逃逸分析</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ jinfo -flag DoEscapeAnalysis <span class="number">7920</span></span><br></pre></td></tr></table></figure>
+<p><img src="/2019/04/06/JVM备忘及性能调优/search_escape_analysis.png" alt></p>
+<h2 id="2-垃圾回收"><a href="#2-垃圾回收" class="headerlink" title="2 垃圾回收"></a>2 垃圾回收</h2><h3 id="2-1-判定对象为垃圾对象"><a href="#2-1-判定对象为垃圾对象" class="headerlink" title="2.1 判定对象为垃圾对象"></a>2.1 判定对象为垃圾对象</h3><ol>
+<li>引用计数法</li>
+<li>可达性分析法</li>
+</ol>
+<h3 id="2-2-回收策略"><a href="#2-2-回收策略" class="headerlink" title="2.2 回收策略"></a>2.2 回收策略</h3><ol>
+<li>标记-清除算法</li>
+<li>复制算法（新生代）</li>
+<li>标记-整理算法（老年代）</li>
+<li>分代收集算法</li>
+</ol>
+<h3 id="2-3-垃圾回收器"><a href="#2-3-垃圾回收器" class="headerlink" title="2.3 垃圾回收器"></a>2.3 垃圾回收器</h3><ol>
+<li>Serial：最基本，发展历史最悠久，单线程，桌面应用</li>
+<li>Parnew</li>
+<li>Parallel</li>
+<li>Cms</li>
+<li>G1：并行与并发，分代收集，空间整合，可预测的停顿</li>
+</ol>
+<h3 id="2-4-打印垃圾回收的日志"><a href="#2-4-打印垃圾回收的日志" class="headerlink" title="2.4 打印垃圾回收的日志"></a>2.4 打印垃圾回收的日志</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-verbose:gc -XX:+PrintGCDetails</span><br></pre></td></tr></table></figure>
+<h3 id="2-5-作为-GC-Roots-的对象"><a href="#2-5-作为-GC-Roots-的对象" class="headerlink" title="2.5 作为 GC Roots 的对象"></a>2.5 作为 GC Roots 的对象</h3><ol>
+<li>虚拟机栈</li>
+<li>方法区的类属性所引用的对象</li>
+<li>方法区中常量所引用的对象</li>
+<li>本地方法栈中引用的对象</li>
+</ol>
+<h3 id="2-6-局部变量表-Slot-复用"><a href="#2-6-局部变量表-Slot-复用" class="headerlink" title="2.6 局部变量表 Slot 复用"></a>2.6 局部变量表 Slot 复用</h3><p>当一个变量的 PC 寄存器的值大于 Slot 作用域时，Slot 可以复用。</p>
+<blockquote>
+<p>TIPS：在局部方法中用完对象后，建议置为null，方便GC尽快回收。</p>
+</blockquote>
+<h3 id="2-7-垃圾收集器选型"><a href="#2-7-垃圾收集器选型" class="headerlink" title="2.7 垃圾收集器选型"></a>2.7 垃圾收集器选型</h3><ol>
+<li>若应用程序的数据集较小（小于100MB），选择串行收集器</li>
+<li>若应用程序运行于单核处理器且没有暂停时间的要求，可以交由 JVM 选择收集器或选择串行收集器</li>
+<li>若需优先考虑应用程序峰值性能，没有暂停时间要求或可以接受1秒甚至更长的暂停时间，可以交由 JVM 选择收集器或选择并行收集器</li>
+<li>若应用程序响应时间比整体吞吐量更重要，垃圾回收暂停时间必须短于1秒，则可以选择并发收集器</li>
+</ol>
+<h2 id="3-类加载"><a href="#3-类加载" class="headerlink" title="3 类加载"></a>3 类加载</h2><h3 id="3-1-类加载过程"><a href="#3-1-类加载过程" class="headerlink" title="3.1 类加载过程"></a>3.1 类加载过程</h3><ol>
+<li>加载</li>
+<li>连接<ul>
+<li>验证<ul>
+<li>文件格式验证</li>
+<li>元数据验证</li>
+<li>字节码验证</li>
+<li>符号引用验证</li>
+</ul>
+</li>
+<li>准备</li>
+<li>解析</li>
+</ul>
+</li>
+<li>初始化</li>
+<li>使用</li>
+<li>卸载</li>
+</ol>
+<h3 id="3-2-类的初始化时机"><a href="#3-2-类的初始化时机" class="headerlink" title="3.2 类的初始化时机"></a>3.2 类的初始化时机</h3><ol>
+<li>使用 new 关键字实例化对象</li>
+<li>读取或设置一个类的静态字段（被 final 修饰、已在编译期将结果放入常量池的静态字段除外）</li>
+<li>调用类的静态方法时</li>
+<li>进行反射调用时</li>
+<li>初始化类时，发现其父类还未初始化时，会先初始化父类</li>
+<li>虚拟机启动时指定执行的主类</li>
+</ol>
+<h3 id="3-3-类不被初始化的情况"><a href="#3-3-类不被初始化的情况" class="headerlink" title="3.3 类不被初始化的情况"></a>3.3 类不被初始化的情况</h3><ol>
+<li>通过子类引用父类的静态字段，子类不需初始化</li>
+<li>通过数组定义引用类</li>
+<li>调用类的常量</li>
+</ol>
+<h3 id="3-4-加载源"><a href="#3-4-加载源" class="headerlink" title="3.4 加载源"></a>3.4 加载源</h3><ol>
+<li>文件</li>
+<li>网络</li>
+<li>计算生成一个二进制流</li>
+<li>数据库</li>
+</ol>
+<h3 id="3-5-类加载器"><a href="#3-5-类加载器" class="headerlink" title="3.5 类加载器"></a>3.5 类加载器</h3><ol>
+<li>启动类加载器：由C++实现，是虚拟机的一部分，用于加载Java Home下的lib目录下的类</li>
+<li>扩展类加载器：加载Java Home下/lib/ext目录中的类</li>
+<li>应用程序类加载器：加载用户类路径上所指定的类库</li>
+<li>自定义类加载器<ul>
+<li>高度的灵活性</li>
+<li>通过自定义类加载器可以实现热部署</li>
+<li>代码加密</li>
+</ul>
+</li>
+</ol>
+<h3 id="3-6-双亲委派模型"><a href="#3-6-双亲委派模型" class="headerlink" title="3.6 双亲委派模型"></a>3.6 双亲委派模型</h3><p><img src="/2019/04/06/JVM备忘及性能调优/parents_delegation_model.png" alt></p>
+<h3 id="3-7-自定义类加载器"><a href="#3-7-自定义类加载器" class="headerlink" title="3.7 自定义类加载器"></a>3.7 自定义类加载器</h3><p>示例<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.InputStream;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ClassLoaderDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> ClassNotFoundException </span>&#123;</span><br><span class="line"></span><br><span class="line">		ClassLoader classLoader = <span class="keyword">new</span> ClassLoader() &#123;</span><br><span class="line"></span><br><span class="line">			<span class="meta">@Override</span></span><br><span class="line">			<span class="keyword">public</span> Class&lt;?&gt; loadClass(String name) <span class="keyword">throws</span> ClassNotFoundException &#123;</span><br><span class="line"></span><br><span class="line">				String fileName = name.substring(name.lastIndexOf(<span class="string">"."</span>) + <span class="number">1</span>) + <span class="string">".class"</span>;</span><br><span class="line"></span><br><span class="line">				InputStream ins = getClass().getResourceAsStream(fileName);</span><br><span class="line"></span><br><span class="line">				<span class="keyword">if</span> (ins == <span class="keyword">null</span>) &#123;</span><br><span class="line">					<span class="keyword">return</span> <span class="keyword">super</span>.loadClass(name);</span><br><span class="line">				&#125;</span><br><span class="line"></span><br><span class="line">				<span class="keyword">try</span> &#123;</span><br><span class="line">					<span class="keyword">byte</span>[] buff = <span class="keyword">new</span> <span class="keyword">byte</span>[ins.available()];</span><br><span class="line">					ins.read(buff);</span><br><span class="line"></span><br><span class="line">					<span class="keyword">return</span> defineClass(name, buff, <span class="number">0</span>, buff.length);</span><br><span class="line">				&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">					<span class="keyword">throw</span> <span class="keyword">new</span> ClassNotFoundException();</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line"></span><br><span class="line">		&#125;;</span><br><span class="line"></span><br><span class="line">		Object c = classLoader.loadClass(<span class="string">"com.wise.loader.ClassLoaderDemo"</span>);</span><br><span class="line"></span><br><span class="line">		System.out.println(c.getClass()); <span class="comment">// java.lang.Class</span></span><br><span class="line"></span><br><span class="line">		<span class="comment">// 不同加载器加载的类比较</span></span><br><span class="line">		System.out.println(c <span class="keyword">instanceof</span> ClassLoaderDemo); <span class="comment">// false</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/04/06/JVM备忘及性能调优/class_load_demo.png" alt></p>
+
+    </div>
+    
+    <div class="post-footer">
+        <div class="col-sm-10">
+            <div>
+                <b>本文链接</b>：<a href="/2019/04/06/JVM备忘及性能调优/">JVM备忘</a>
+            </div>
+            <div>
+                
+                    转载声明：本博客由<trong>哲锄</strong>创作，采用 <a href="https://creativecommons.org/licenses/by-nc-nd/3.0/" target="_blank"> CC BY 3.0 CN </a> 许可协议。可自由转载、引用，但需署名作者且注明文章出处。如转载至微信公众号，请在文末添加作者公众号二维码。
+                
+            </div>
+            <div>
+                
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <img src="" width=100%/>
+        </div>
+    </div>
+</article>
+
+<div class="article-nav prev-next-wrap clearfix">
+    
+        <a href="/2019/04/07/JVM工具/" class="pre-post btn btn-default" title='JVM工具'>
+            <i class="fa fa-angle-left fa-fw"></i><span class="hidden-lg">上一篇</span>
+            <span class="hidden-xs">JVM工具</span>
+        </a>
+    
+    
+        <a href="/2019/04/06/Java8-Base64编码与解码/" class="next-post btn btn-default" title='Java8 Base64编码与解码'>
+            <span class="hidden-lg">下一篇</span>
+            <span class="hidden-xs">Java8 Base64编码与解码</span><i class="fa fa-angle-right fa-fw"></i>
+        </a>
+    
+</div>
+
+
+
+
+
+
+                </main>
+                
+                    
+    <aside class="col-md-4 sidebar">
+        
+        
+    <div class="widget">
+        <h3 class="title">搜索</h3>
+        <div id="search-form">
+            <div id="result-mask" class="hide"></div>
+            <div class="search-area">
+                
+                    <input id="search-key" type="search" autocomplete="off" placeholder="搜点什么呢？">
+                    <button type="button" class="search-form-submit" id="search-local">站内搜索</button>
+                
+                
+            </div>
+            <div id="result-wrap" class="hide">
+                <div id="search-result"></div>
+            </div>
+            <div class="hide">
+                <template id="search-tpl">
+                    <div class="item">
+                        <a href="/{path}" title="{title}">
+                            <div class="title">{title}</div>
+                            <div class="content">{content}</div>
+                        </a>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>
+
+        
+        
+    <div class="widget">
+        <h3 class="title">网站公告</h3>
+        <div class="notification">
+            <p>
+  <b>笔者微信</b>：ling-yu-wang，欢迎加我<br/>
+</p>
+        </div>
+    </div>
+
+        
+        
+    <div class="widget">
+      <h3 class="title">社交</h3> 
+        <div class="content social">
+            
+	            <a href="//github.com/zhechu" rel="external nofollow" title="GitHub" target="_blank">
+			    	<i class="github fa fa-github"></i>
+			    </a>
+            
+        </div>
+    </div>
+
+
+        
+        
+    <div class="widget">
+        <h3 class="title">分类</h3>
+        <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/ELK/"><i class="fa" aria-hidden="true">ELK</i></a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Git/"><i class="fa" aria-hidden="true">Git</i></a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/"><i class="fa" aria-hidden="true">Java</i></a><span class="category-list-count">116</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/"><i class="fa" aria-hidden="true">Linux</i></a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/"><i class="fa" aria-hidden="true">Mysql</i></a><span class="category-list-count">26</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Nginx/"><i class="fa" aria-hidden="true">Nginx</i></a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/NodeJS/"><i class="fa" aria-hidden="true">NodeJS</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Others/"><i class="fa" aria-hidden="true">Others</i></a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/"><i class="fa" aria-hidden="true">Redis</i></a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Test/"><i class="fa" aria-hidden="true">Test</i></a><span class="category-list-count">2</span></li></ul>
+    </div>
+
+
+        
+        
+  <div class="widget">
+    <h3 class="title">标签云</h3>
+    <div class="content tag-cloud">
+        
+            <a href="/tags/CentOS7/" style="font-size: 17.5px;">CentOS7</a> <a href="/tags/Docker/" style="font-size: 17.5px;">Docker</a> <a href="/tags/Gradle/" style="font-size: 10px;">Gradle</a> <a href="/tags/IDEA/" style="font-size: 10px;">IDEA</a> <a href="/tags/IO/" style="font-size: 15.83px;">IO</a> <a href="/tags/JMeter/" style="font-size: 10.83px;">JMeter</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Maven/" style="font-size: 10.83px;">Maven</a> <a href="/tags/Netty/" style="font-size: 10.83px;">Netty</a> <a href="/tags/OAuth2/" style="font-size: 10.83px;">OAuth2</a> <a href="/tags/Spring/" style="font-size: 19.17px;">Spring</a> <a href="/tags/SpringCloud/" style="font-size: 15px;">SpringCloud</a> <a href="/tags/SpringSecurity/" style="font-size: 11.67px;">SpringSecurity</a> <a href="/tags/VM/" style="font-size: 10px;">VM</a> <a href="/tags/k8s/" style="font-size: 12.5px;">k8s</a> <a href="/tags/lombok/" style="font-size: 10px;">lombok</a> <a href="/tags/代码生成/" style="font-size: 10px;">代码生成</a> <a href="/tags/分布式事务/" style="font-size: 10.83px;">分布式事务</a> <a href="/tags/加速器/" style="font-size: 10px;">加速器</a> <a href="/tags/升级回滚/" style="font-size: 10px;">升级回滚</a> <a href="/tags/反射/" style="font-size: 10px;">反射</a> <a href="/tags/图/" style="font-size: 10px;">图</a> <a href="/tags/多线程/" style="font-size: 18.33px;">多线程</a> <a href="/tags/工具/" style="font-size: 11.67px;">工具</a> <a href="/tags/序列化/" style="font-size: 10.83px;">序列化</a> <a href="/tags/异常处理/" style="font-size: 10px;">异常处理</a> <a href="/tags/异步/" style="font-size: 10px;">异步</a> <a href="/tags/微服务/" style="font-size: 16.67px;">微服务</a> <a href="/tags/性能优化/" style="font-size: 18.33px;">性能优化</a> <a href="/tags/性能测试/" style="font-size: 10.83px;">性能测试</a> <a href="/tags/搜索/" style="font-size: 12.5px;">搜索</a> <a href="/tags/数据结构/" style="font-size: 13.33px;">数据结构</a> <a href="/tags/日志/" style="font-size: 10px;">日志</a> <a href="/tags/架构/" style="font-size: 10.83px;">架构</a> <a href="/tags/池化技术/" style="font-size: 10px;">池化技术</a> <a href="/tags/注册中心/" style="font-size: 10.83px;">注册中心</a> <a href="/tags/算法/" style="font-size: 20px;">算法</a> <a href="/tags/缓存/" style="font-size: 13.33px;">缓存</a> <a href="/tags/规范/" style="font-size: 14.17px;">规范</a> <a href="/tags/设计模式/" style="font-size: 15px;">设计模式</a> <a href="/tags/资料库/" style="font-size: 10px;">资料库</a> <a href="/tags/配置中心/" style="font-size: 11.67px;">配置中心</a> <a href="/tags/锁/" style="font-size: 12.5px;">锁</a> <a href="/tags/队列/" style="font-size: 12.5px;">队列</a> <a href="/tags/集合/" style="font-size: 10.83px;">集合</a>
+        
+    </div>
+  </div>
+
+
+        
+    </aside>
+
+                
+            </div>
+        </div>
+    </section>
+    <footer class="main-footer">
+    <div class="container">
+        <div class="row">
+        </div>
+    </div>
+</footer>
+
+<a id="back-to-top" class="icon-btn hide">
+	<i class="fa fa-chevron-up"></i>
+</a>
+
+
+
+
+    <div class="copyright">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="busuanzi">
+    
+        访问量:
+        <strong id="busuanzi_value_site_pv">
+            <i class="fa fa-spinner fa-spin"></i>
+        </strong>
+        &nbsp; | &nbsp;
+        访客数:
+        <strong id="busuanzi_value_site_uv">
+            <i class="fa fa-spinner fa-spin"></i>
+        </strong>
+    
+</div>
+
+            </div>
+            <div class="col-sm-12">
+                <span>Copyright &copy; 2016
+                </span> |
+                <span>
+                    Powered by <a href="//hexo.io" class="copyright-links" target="_blank" rel="nofollow">Hexo</a>
+                </span> |
+                <span>
+                    Theme by <a href="//github.com/itmuch/hexo-theme-itmuch.git" class="copyright-links" target="_blank" rel="nofollow">ITMuch</a>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script src="/js/app.js?rev=@@hash"></script>
+
+</body>
+</html>

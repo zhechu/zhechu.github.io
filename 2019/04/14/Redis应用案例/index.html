@@ -1,0 +1,452 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!--Setting-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta name="apple-mobile-web-app-capable" content="哲锄">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no,email=no,adress=no">
+    <meta name="browsermode" content="application">
+    <meta name="screen-orientation" content="portrait">
+    <link rel="dns-prefetch" href="http://www.zhechu.top">
+    <!--SEO-->
+
+    <meta name="keywords" content="缓存,">
+
+
+    <meta name="description" content="1 用户活跃度评奖1.1 场景1亿个用户，每个用户登陆/做任意操作，记为今天活跃，否则记为不活跃。每周评出连续7天活跃的用户。
+1.2 方案每天按日期生成一个位图，用户登陆后，把 user_id （数值，主键自动增长。若 user_id 是 UUID 字符串，则可以增加一列，设置为自动增长，表...">
+
+
+<meta name="robots" content="all">
+<meta name="google" content="all">
+<meta name="googlebot" content="all">
+<meta name="verify" content="all">
+    <!--Title-->
+
+
+<title>Redis应用案例 | 哲锄</title>
+
+
+    <link rel="alternate" href="/atom.xml" title="哲锄" type="application/atom+xml">
+
+
+    <link rel="icon" href="/favicon.ico">
+
+    
+
+
+
+<link rel="stylesheet" href="/css/bootstrap.min.css?rev=3.3.7">
+<link rel="stylesheet" href="/css/font-awesome.min.css?rev=4.5.0">
+<link rel="stylesheet" href="/css/style.css?rev=@@hash">
+
+
+
+
+    
+
+
+
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?13766878cde148282622871dd245a973";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    
+
+</head>
+
+</html>
+<!--[if lte IE 8]>
+<style>
+    html{ font-size: 1em }
+</style>
+<![endif]-->
+<!--[if lte IE 9]>
+<div style="ie">你使用的浏览器版本过低，为了你更好的阅读体验，请更新浏览器的版本或者使用其他现代浏览器，比如Chrome、Firefox、Safari等。</div>
+<![endif]-->
+
+<body>
+    
+    <nav class="main-navigation">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="navbar-header"><span class="nav-toggle-button collapsed pull-right" data-toggle="collapse" data-target="#main-menu" id="mnav">
+                    <span class="sr-only"></span>
+                        <i class="fa fa-bars"></i>
+                    </span>
+                    <a class="navbar-brand" href="http://www.zhechu.top">哲锄</a>
+                </div>
+                <div class="collapse navbar-collapse" id="main-menu">
+                    <ul class="menu">
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/"><i class="fa fa-home"></i>哲锄</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/categories"><i class="fa fa-list"></i>分类</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/about"><i class="fa fa-user"></i>关于我</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/archives"><i class="fa fa-archive"></i>归档</a>
+                            </li>
+                        
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<a href="http://github.com/zhechu">
+    <img style="position: absolute; top: 0; right: 0; border: 0;"
+        src="/img/forkme.png"
+        alt="Fork me on GitHub">
+</a>
+
+    <section class="content-wrap">
+        <div class="container">
+            <div class="row">
+                <main class="col-md-8 main-content m-post">
+                    <p id="process"></p>
+<article class="post">
+    <div class="post-head">
+        <h1 id="Redis应用案例">
+            
+                Redis应用案例
+            
+        </h1>
+        <div class="post-meta">
+    
+    
+    <span class="categories-meta fa-wrap">
+        <i class="fa fa-folder-open-o"></i>
+        <a href="/categories/Redis">
+            Redis
+        </a>
+    </span>
+    
+
+    
+    <span class="fa-wrap">
+        <i class="fa fa-tags"></i>
+        <span class="tags-meta">
+            
+                
+                    <a href="/tags/缓存" title='缓存'>
+                        缓存
+                    </a>
+                
+            
+        </span>
+    </span>
+    
+
+    
+        
+        <span class="fa-wrap">
+            <i class="fa fa-clock-o"></i>
+            <span class="date-meta">2019/04/14</span>
+        </span>
+        
+            <span class="fa-wrap">
+                <i class="fa fa-eye"></i>
+                <span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    
+</div>
+
+        
+        
+    </div>
+    
+    <div class="post-body post-content">
+        <h2 id="1-用户活跃度评奖"><a href="#1-用户活跃度评奖" class="headerlink" title="1 用户活跃度评奖"></a>1 用户活跃度评奖</h2><h3 id="1-1-场景"><a href="#1-1-场景" class="headerlink" title="1.1 场景"></a>1.1 场景</h3><p><strong>1亿</strong>个用户，每个用户登陆/做任意操作，记为今天活跃，否则记为不活跃。每周评出<strong>连续7天</strong>活跃的用户。</p>
+<h3 id="1-2-方案"><a href="#1-2-方案" class="headerlink" title="1.2 方案"></a>1.2 方案</h3><p>每天按日期生成一个位图，用户登陆后，把 user_id （数值，主键自动增长。若 user_id 是 UUID 字符串，则可以增加一列，设置为自动增长，表示是第几位注册用户）位上的值设为1，把1周的位图按 and 计算, 若结果的位值为1的,即是连续7天登陆的用户。</p>
+<h3 id="1-3-位图法"><a href="#1-3-位图法" class="headerlink" title="1.3 位图法"></a>1.3 位图法</h3><table>
+<thead>
+<tr>
+<th>日期</th>
+<th>所有用户活跃数据【二进制表示】</th>
+<th>活跃人数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>log20180705</td>
+<td>1100010001…1</td>
+<td>4</td>
+</tr>
+<tr>
+<td>log20180706</td>
+<td>1011110001…0</td>
+<td>5</td>
+</tr>
+<tr>
+<td>……</td>
+<td>……</td>
+<td>……</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>TIPS：第一个位只是方便存储，不表示任何意义。从第二个位开始，1表示活跃，0表示不活跃。如：1100010001…1表示第一个用户活跃，第二个用户不活跃，最后一个用户活跃。</p>
+</blockquote>
+<h3 id="1-4-例如：统计连续三天活跃的用户【用户数为8】"><a href="#1-4-例如：统计连续三天活跃的用户【用户数为8】" class="headerlink" title="1.4 例如：统计连续三天活跃的用户【用户数为8】"></a>1.4 例如：统计连续三天活跃的用户【用户数为8】</h3><p>演示数据准备<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span> setbit log20180705 100000000 0</span><br><span class="line"><span class="meta">&gt;</span> setbit log20180705 3 1</span><br><span class="line"><span class="meta">&gt;</span> setbit log20180705 5 1</span><br><span class="line"><span class="meta">&gt;</span> setbit log20180705 7 1</span><br><span class="line"><span class="meta">&gt;</span> setbit log20180706 100000000 0</span><br><span class="line"><span class="meta">&gt;</span> setbit log20180706 3 1</span><br><span class="line"><span class="meta">&gt;</span> setbit log20180706 5 1</span><br><span class="line"><span class="meta">&gt;</span> setbit log20180706 8 1</span><br><span class="line"><span class="meta">&gt;</span> setbit log20180707 100000000 0</span><br><span class="line"><span class="meta">&gt;</span> setbit log20180707 3 1</span><br><span class="line"><span class="meta">&gt;</span> setbit log20180707 4 1</span><br><span class="line"><span class="meta">&gt;</span> setbit log20180707 6 1</span><br></pre></td></tr></table></figure></p>
+<p>统计并存储结果<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span> bitop and result log20180705 log20180706 log20180707</span><br></pre></td></tr></table></figure></p>
+<p>查看第3个用户是否连续三天活跃【1表示活跃，0表示不活跃】<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span> getbit result 3</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/04/14/Redis应用案例/getbit_result_3.png" alt></p>
+<p>查看第5个用户是否连续三天活跃<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span> getbit result 5</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/04/14/Redis应用案例/getbit_result_5.png" alt></p>
+<h3 id="1-5-总结"><a href="#1-5-总结" class="headerlink" title="1.5 总结"></a>1.5 总结</h3><p>优点</p>
+<ol>
+<li>节约空间，1亿人每天的登陆情况，用1亿 bit，约 1200WByte，约<strong>10M</strong>的字符就能表示</li>
+<li>计算方便</li>
+</ol>
+<h2 id="2-标签系统"><a href="#2-标签系统" class="headerlink" title="2 标签系统"></a>2 标签系统</h2><h3 id="2-1-场景"><a href="#2-1-场景" class="headerlink" title="2.1 场景"></a>2.1 场景</h3><p>查找同时具有 WEB 和 PHP 标签的书。</p>
+<h3 id="2-2-方案"><a href="#2-2-方案" class="headerlink" title="2.2 方案"></a>2.2 方案</h3><p>根据书的标签构建<strong>反向索引</strong>。</p>
+<h3 id="2-3-Mysql-实现"><a href="#2-3-Mysql-实现" class="headerlink" title="2.3 Mysql 实现"></a>2.3 Mysql 实现</h3><p>创建 book 表及初始化数据<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">create table book (</span><br><span class="line">bookid int,</span><br><span class="line">title char(20)</span><br><span class="line">)engine InnoDB charset utf8;</span><br><span class="line"></span><br><span class="line">insert into book values</span><br><span class="line">(5 , 'PHP圣经'),</span><br><span class="line">(6 , 'ruby实战'),</span><br><span class="line">(7 , 'mysql运维'),</span><br><span class="line">(8, 'ruby服务端编程');</span><br></pre></td></tr></table></figure></p>
+<p>创建 tags 表及初始化数据<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">create table tags (</span><br><span class="line">tid int,</span><br><span class="line">bookid int,</span><br><span class="line">content char(20)</span><br><span class="line">)engine InnoDB charset utf8;</span><br><span class="line"></span><br><span class="line">insert into tags values</span><br><span class="line">(10 , 5 , 'PHP'),</span><br><span class="line">(11 , 5 , 'WEB'),</span><br><span class="line">(12 , 6 , 'WEB'),</span><br><span class="line">(13 , 6 , 'ruby'),</span><br><span class="line">(14 , 7 , 'database'),</span><br><span class="line">(15 , 8 , 'ruby'),</span><br><span class="line">(16 , 8 , 'server');</span><br></pre></td></tr></table></figure></p>
+<p>查找同时具有 WEB 和 PHP 标签的书<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">SELECT</span><br><span class="line">	b.*</span><br><span class="line">FROM</span><br><span class="line">	tags</span><br><span class="line">INNER JOIN tags AS t ON tags.bookid = t.bookid</span><br><span class="line">LEFT JOIN book AS b ON tags.bookid = b.bookid</span><br><span class="line">WHERE</span><br><span class="line">	tags.content = 'PHP'</span><br><span class="line">AND t.content = 'WEB';</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/04/14/Redis应用案例/select_b_from_tags.png" alt></p>
+<h3 id="2-4-Redis-实现"><a href="#2-4-Redis-实现" class="headerlink" title="2.4 Redis 实现"></a>2.4 Redis 实现</h3><p>String 键值对存储 book<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span> set book:5:title 'PHP圣经'</span><br><span class="line"><span class="meta">&gt;</span> set book:6:title 'ruby实战'</span><br><span class="line"><span class="meta">&gt;</span> set book:7:title 'mysql运难'</span><br><span class="line"><span class="meta">&gt;</span> set book:8:title 'ruby server'</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>TIPS：若存储的是 book 的多个属性，建议使用 Hash 数据结构。既节省内存，又方便控制。如：方便删除，删除全部 book 数据时只删除一个 Key 即可。</p>
+</blockquote>
+<p>Set 无序集合存储 tag<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span> sadd tag:PHP 5</span><br><span class="line"><span class="meta">&gt;</span> sadd tag:WEB 5 6</span><br><span class="line"><span class="meta">&gt;</span> sadd tag:database 7</span><br><span class="line"><span class="meta">&gt;</span> sadd tag:ruby 6 8</span><br><span class="line"><span class="meta">&gt;</span> sadd tag:SERVER 8</span><br></pre></td></tr></table></figure></p>
+<p>查找同时具有 WEB 和 PHP 标签的书【求交集】<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span> sinter tag:WEB tag:PHP</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/04/14/Redis应用案例/sinter_tag_web_php.png" alt></p>
+<p>查找有 WEB 或 PHP 标签的书【求并集】<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span> sunion tag:WEB tag:PHP</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/04/14/Redis应用案例/sunion_tag_web_php.png" alt></p>
+<p>查找有 ruby 但没有 PHP 标签的书【求差集】<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span> sdiff tag:WEB tag:PHP</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/04/14/Redis应用案例/sdiff_tag_web_php.png" alt></p>
+<h3 id="2-5-总结"><a href="#2-5-总结" class="headerlink" title="2.5 总结"></a>2.5 总结</h3><p>Redis 实现的优点</p>
+<ol>
+<li>性能更高</li>
+<li>计算方便</li>
+</ol>
+<h2 id="3-缓存热门图片"><a href="#3-缓存热门图片" class="headerlink" title="3 缓存热门图片"></a>3 缓存热门图片</h2><h3 id="3-1-场景"><a href="#3-1-场景" class="headerlink" title="3.1 场景"></a>3.1 场景</h3><p>图片网站需存储大量的图片【通常存储在磁盘】，而少部分热门的图片访问频繁。</p>
+<h3 id="3-2-方案"><a href="#3-2-方案" class="headerlink" title="3.2 方案"></a>3.2 方案</h3><p>为了加快网站获取热门图片的效率，可以将热门图片缓存在 Redis 中。</p>
+<h2 id="4-缓存数据字典"><a href="#4-缓存数据字典" class="headerlink" title="4 缓存数据字典"></a>4 缓存数据字典</h2><p>示例代码</p>
+<p><a href="https://github.com/zhechu/spring-boot-redis-dict-demo/tree/master" target="_blank" rel="noopener">https://github.com/zhechu/spring-boot-redis-dict-demo/tree/master</a></p>
+<h3 id="4-1-场景"><a href="#4-1-场景" class="headerlink" title="4.1 场景"></a>4.1 场景</h3><p>数据字典一般初始化后，很少会改动。而查询又比较频繁，尤其是作为查询条件时。另外就是列表查询需展示数据字典的中文，而非编码。因此列表查询时需要查中文。</p>
+<h3 id="4-2-方案"><a href="#4-2-方案" class="headerlink" title="4.2 方案"></a>4.2 方案</h3><p>可以使用 Redis 缓存查询条件下拉框的数据（根据父编码缓存），以及单独缓存数据字典本身数据，用于列表查询是转换编码为中文，提高查询效率（不需使用数据库连表查询）。</p>
+<blockquote>
+<p>TIPS：关于列表查询编码转中文的方案，可能读者会使用 Java 的枚举类型解决。但是，若数据字典有改动，则需编程解决，这是非常忌讳的做法。</p>
+</blockquote>
+<p>使用 <strong>Hash</strong> 结构存储，优点如下：</p>
+<ol>
+<li>节省内存，Redis 对 Hash 结构存储的数据有优化，且为官方推荐做法</li>
+<li>方便操作，如：需缓存多条数据，只需执行 hmset 一条命令即可。若使用 String 类型，还得考虑批操作</li>
+</ol>
+<p>核心代码</p>
+<p><img src="/2019/04/14/Redis应用案例/cache_dict_core_code.png" alt></p>
+<p>运行 DictCacheRepositoryTest 执行测试效果</p>
+<p><img src="/2019/04/14/Redis应用案例/cache_dict_demo.png" alt></p>
+
+    </div>
+    
+    <div class="post-footer">
+        <div class="col-sm-10">
+            <div>
+                <b>本文链接</b>：<a href="/2019/04/14/Redis应用案例/">Redis应用案例</a>
+            </div>
+            <div>
+                
+                    转载声明：本博客由<trong>哲锄</strong>创作，采用 <a href="https://creativecommons.org/licenses/by-nc-nd/3.0/" target="_blank"> CC BY 3.0 CN </a> 许可协议。可自由转载、引用，但需署名作者且注明文章出处。如转载至微信公众号，请在文末添加作者公众号二维码。
+                
+            </div>
+            <div>
+                
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <img src="" width=100%/>
+        </div>
+    </div>
+</article>
+
+<div class="article-nav prev-next-wrap clearfix">
+    
+        <a href="/2019/04/15/Redis完整缓存架构/" class="pre-post btn btn-default" title='Redis完整缓存架构'>
+            <i class="fa fa-angle-left fa-fw"></i><span class="hidden-lg">上一篇</span>
+            <span class="hidden-xs">Redis完整缓存架构</span>
+        </a>
+    
+    
+        <a href="/2019/04/14/Markdown使用手册/" class="next-post btn btn-default" title='Markdown使用手册'>
+            <span class="hidden-lg">下一篇</span>
+            <span class="hidden-xs">Markdown使用手册</span><i class="fa fa-angle-right fa-fw"></i>
+        </a>
+    
+</div>
+
+
+
+
+
+
+                </main>
+                
+                    
+    <aside class="col-md-4 sidebar">
+        
+        
+    <div class="widget">
+        <h3 class="title">搜索</h3>
+        <div id="search-form">
+            <div id="result-mask" class="hide"></div>
+            <div class="search-area">
+                
+                    <input id="search-key" type="search" autocomplete="off" placeholder="搜点什么呢？">
+                    <button type="button" class="search-form-submit" id="search-local">站内搜索</button>
+                
+                
+            </div>
+            <div id="result-wrap" class="hide">
+                <div id="search-result"></div>
+            </div>
+            <div class="hide">
+                <template id="search-tpl">
+                    <div class="item">
+                        <a href="/{path}" title="{title}">
+                            <div class="title">{title}</div>
+                            <div class="content">{content}</div>
+                        </a>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>
+
+        
+        
+    <div class="widget">
+        <h3 class="title">网站公告</h3>
+        <div class="notification">
+            <p>
+  <b>笔者微信</b>：ling-yu-wang，欢迎加我<br/>
+</p>
+        </div>
+    </div>
+
+        
+        
+    <div class="widget">
+      <h3 class="title">社交</h3> 
+        <div class="content social">
+            
+	            <a href="//github.com/zhechu" rel="external nofollow" title="GitHub" target="_blank">
+			    	<i class="github fa fa-github"></i>
+			    </a>
+            
+        </div>
+    </div>
+
+
+        
+        
+    <div class="widget">
+        <h3 class="title">分类</h3>
+        <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/ELK/"><i class="fa" aria-hidden="true">ELK</i></a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Git/"><i class="fa" aria-hidden="true">Git</i></a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/"><i class="fa" aria-hidden="true">Java</i></a><span class="category-list-count">116</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/"><i class="fa" aria-hidden="true">Linux</i></a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/"><i class="fa" aria-hidden="true">Mysql</i></a><span class="category-list-count">26</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Nginx/"><i class="fa" aria-hidden="true">Nginx</i></a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/NodeJS/"><i class="fa" aria-hidden="true">NodeJS</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Others/"><i class="fa" aria-hidden="true">Others</i></a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/"><i class="fa" aria-hidden="true">Redis</i></a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Test/"><i class="fa" aria-hidden="true">Test</i></a><span class="category-list-count">2</span></li></ul>
+    </div>
+
+
+        
+        
+  <div class="widget">
+    <h3 class="title">标签云</h3>
+    <div class="content tag-cloud">
+        
+            <a href="/tags/CentOS7/" style="font-size: 17.5px;">CentOS7</a> <a href="/tags/Docker/" style="font-size: 17.5px;">Docker</a> <a href="/tags/Gradle/" style="font-size: 10px;">Gradle</a> <a href="/tags/IDEA/" style="font-size: 10px;">IDEA</a> <a href="/tags/IO/" style="font-size: 15.83px;">IO</a> <a href="/tags/JMeter/" style="font-size: 10.83px;">JMeter</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Maven/" style="font-size: 10.83px;">Maven</a> <a href="/tags/Netty/" style="font-size: 10.83px;">Netty</a> <a href="/tags/OAuth2/" style="font-size: 10.83px;">OAuth2</a> <a href="/tags/Spring/" style="font-size: 19.17px;">Spring</a> <a href="/tags/SpringCloud/" style="font-size: 15px;">SpringCloud</a> <a href="/tags/SpringSecurity/" style="font-size: 11.67px;">SpringSecurity</a> <a href="/tags/VM/" style="font-size: 10px;">VM</a> <a href="/tags/k8s/" style="font-size: 12.5px;">k8s</a> <a href="/tags/lombok/" style="font-size: 10px;">lombok</a> <a href="/tags/代码生成/" style="font-size: 10px;">代码生成</a> <a href="/tags/分布式事务/" style="font-size: 10.83px;">分布式事务</a> <a href="/tags/加速器/" style="font-size: 10px;">加速器</a> <a href="/tags/升级回滚/" style="font-size: 10px;">升级回滚</a> <a href="/tags/反射/" style="font-size: 10px;">反射</a> <a href="/tags/图/" style="font-size: 10px;">图</a> <a href="/tags/多线程/" style="font-size: 18.33px;">多线程</a> <a href="/tags/工具/" style="font-size: 11.67px;">工具</a> <a href="/tags/序列化/" style="font-size: 10.83px;">序列化</a> <a href="/tags/异常处理/" style="font-size: 10px;">异常处理</a> <a href="/tags/异步/" style="font-size: 10px;">异步</a> <a href="/tags/微服务/" style="font-size: 16.67px;">微服务</a> <a href="/tags/性能优化/" style="font-size: 18.33px;">性能优化</a> <a href="/tags/性能测试/" style="font-size: 10.83px;">性能测试</a> <a href="/tags/搜索/" style="font-size: 12.5px;">搜索</a> <a href="/tags/数据结构/" style="font-size: 13.33px;">数据结构</a> <a href="/tags/日志/" style="font-size: 10px;">日志</a> <a href="/tags/架构/" style="font-size: 10.83px;">架构</a> <a href="/tags/池化技术/" style="font-size: 10px;">池化技术</a> <a href="/tags/注册中心/" style="font-size: 10.83px;">注册中心</a> <a href="/tags/算法/" style="font-size: 20px;">算法</a> <a href="/tags/缓存/" style="font-size: 13.33px;">缓存</a> <a href="/tags/规范/" style="font-size: 14.17px;">规范</a> <a href="/tags/设计模式/" style="font-size: 15px;">设计模式</a> <a href="/tags/资料库/" style="font-size: 10px;">资料库</a> <a href="/tags/配置中心/" style="font-size: 11.67px;">配置中心</a> <a href="/tags/锁/" style="font-size: 12.5px;">锁</a> <a href="/tags/队列/" style="font-size: 12.5px;">队列</a> <a href="/tags/集合/" style="font-size: 10.83px;">集合</a>
+        
+    </div>
+  </div>
+
+
+        
+    </aside>
+
+                
+            </div>
+        </div>
+    </section>
+    <footer class="main-footer">
+    <div class="container">
+        <div class="row">
+        </div>
+    </div>
+</footer>
+
+<a id="back-to-top" class="icon-btn hide">
+	<i class="fa fa-chevron-up"></i>
+</a>
+
+
+
+
+    <div class="copyright">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="busuanzi">
+    
+        访问量:
+        <strong id="busuanzi_value_site_pv">
+            <i class="fa fa-spinner fa-spin"></i>
+        </strong>
+        &nbsp; | &nbsp;
+        访客数:
+        <strong id="busuanzi_value_site_uv">
+            <i class="fa fa-spinner fa-spin"></i>
+        </strong>
+    
+</div>
+
+            </div>
+            <div class="col-sm-12">
+                <span>Copyright &copy; 2016
+                </span> |
+                <span>
+                    Powered by <a href="//hexo.io" class="copyright-links" target="_blank" rel="nofollow">Hexo</a>
+                </span> |
+                <span>
+                    Theme by <a href="//github.com/itmuch/hexo-theme-itmuch.git" class="copyright-links" target="_blank" rel="nofollow">ITMuch</a>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script src="/js/app.js?rev=@@hash"></script>
+
+</body>
+</html>

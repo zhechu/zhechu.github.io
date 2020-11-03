@@ -1,0 +1,456 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!--Setting-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta name="apple-mobile-web-app-capable" content="哲锄">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no,email=no,adress=no">
+    <meta name="browsermode" content="application">
+    <meta name="screen-orientation" content="portrait">
+    <link rel="dns-prefetch" href="http://www.zhechu.top">
+    <!--SEO-->
+
+    <meta name="keywords" content="Spring,微服务,SpringCloud,OAuth2,SpringSecurity,">
+
+
+    <meta name="description" content="1 参考资料https://stackoverflow.com/questions/30327269/spring-oauth-authorization-server-behind-spring-cloud-zuul-proxy
+https://github.com/spring-guide...">
+
+
+<meta name="robots" content="all">
+<meta name="google" content="all">
+<meta name="googlebot" content="all">
+<meta name="verify" content="all">
+    <!--Title-->
+
+
+<title>SpringCloud集成OAuth2实现身份认证 | 哲锄</title>
+
+
+    <link rel="alternate" href="/atom.xml" title="哲锄" type="application/atom+xml">
+
+
+    <link rel="icon" href="/favicon.ico">
+
+    
+
+
+
+<link rel="stylesheet" href="/css/bootstrap.min.css?rev=3.3.7">
+<link rel="stylesheet" href="/css/font-awesome.min.css?rev=4.5.0">
+<link rel="stylesheet" href="/css/style.css?rev=@@hash">
+
+
+
+
+    
+
+
+
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?13766878cde148282622871dd245a973";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    
+
+</head>
+
+</html>
+<!--[if lte IE 8]>
+<style>
+    html{ font-size: 1em }
+</style>
+<![endif]-->
+<!--[if lte IE 9]>
+<div style="ie">你使用的浏览器版本过低，为了你更好的阅读体验，请更新浏览器的版本或者使用其他现代浏览器，比如Chrome、Firefox、Safari等。</div>
+<![endif]-->
+
+<body>
+    
+    <nav class="main-navigation">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="navbar-header"><span class="nav-toggle-button collapsed pull-right" data-toggle="collapse" data-target="#main-menu" id="mnav">
+                    <span class="sr-only"></span>
+                        <i class="fa fa-bars"></i>
+                    </span>
+                    <a class="navbar-brand" href="http://www.zhechu.top">哲锄</a>
+                </div>
+                <div class="collapse navbar-collapse" id="main-menu">
+                    <ul class="menu">
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/"><i class="fa fa-home"></i>哲锄</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/categories"><i class="fa fa-list"></i>分类</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/about"><i class="fa fa-user"></i>关于我</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/archives"><i class="fa fa-archive"></i>归档</a>
+                            </li>
+                        
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<a href="http://github.com/zhechu">
+    <img style="position: absolute; top: 0; right: 0; border: 0;"
+        src="/img/forkme.png"
+        alt="Fork me on GitHub">
+</a>
+
+    <section class="content-wrap">
+        <div class="container">
+            <div class="row">
+                <main class="col-md-8 main-content m-post">
+                    <p id="process"></p>
+<article class="post">
+    <div class="post-head">
+        <h1 id="SpringCloud集成OAuth2实现身份认证">
+            
+                SpringCloud集成OAuth2实现身份认证
+            
+        </h1>
+        <div class="post-meta">
+    
+    
+    <span class="categories-meta fa-wrap">
+        <i class="fa fa-folder-open-o"></i>
+        <a href="/categories/Java">
+            Java
+        </a>
+    </span>
+    
+
+    
+    <span class="fa-wrap">
+        <i class="fa fa-tags"></i>
+        <span class="tags-meta">
+            
+                
+                    <a href="/tags/Spring" title='Spring'>
+                        Spring
+                    </a>
+                
+                    <a href="/tags/微服务" title='微服务'>
+                        微服务
+                    </a>
+                
+                    <a href="/tags/SpringCloud" title='SpringCloud'>
+                        SpringCloud
+                    </a>
+                
+            
+        </span>
+    </span>
+    
+
+    
+        
+        <span class="fa-wrap">
+            <i class="fa fa-clock-o"></i>
+            <span class="date-meta">2019/05/04</span>
+        </span>
+        
+            <span class="fa-wrap">
+                <i class="fa fa-eye"></i>
+                <span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    
+</div>
+
+        
+        
+    </div>
+    
+    <div class="post-body post-content">
+        <h2 id="1-参考资料"><a href="#1-参考资料" class="headerlink" title="1 参考资料"></a>1 参考资料</h2><p><a href="https://stackoverflow.com/questions/30327269/spring-oauth-authorization-server-behind-spring-cloud-zuul-proxy" target="_blank" rel="noopener">https://stackoverflow.com/questions/30327269/spring-oauth-authorization-server-behind-spring-cloud-zuul-proxy</a></p>
+<p><a href="https://github.com/spring-guides/tut-spring-security-and-angular-js/blob/master/oauth2-vanilla/README.adoc" target="_blank" rel="noopener">https://github.com/spring-guides/tut-spring-security-and-angular-js/blob/master/oauth2-vanilla/README.adoc</a></p>
+<p><a href="https://github.com/wiselyman/uaa-zuul" target="_blank" rel="noopener">https://github.com/wiselyman/uaa-zuul</a></p>
+<p><a href="https://github.com/spring-projects/spring-security-oauth" target="_blank" rel="noopener">https://github.com/spring-projects/spring-security-oauth</a></p>
+<p><a href="http://blog.didispace.com/spring-security-oauth2-xjf-3/" target="_blank" rel="noopener">http://blog.didispace.com/spring-security-oauth2-xjf-3/</a></p>
+<p><a href="http://www.spring4all.com/article/833" target="_blank" rel="noopener">http://www.spring4all.com/article/833</a></p>
+<h2 id="2-推荐书籍"><a href="#2-推荐书籍" class="headerlink" title="2 推荐书籍"></a>2 推荐书籍</h2><p><img src="/2019/05/04/SpringCloud集成OAuth2实现身份认证/oauth_2_actual_combat.jpg" alt></p>
+<h2 id="3-OAuth2"><a href="#3-OAuth2" class="headerlink" title="3 OAuth2"></a>3 OAuth2</h2><h3 id="3-1-凭据类型"><a href="#3-1-凭据类型" class="headerlink" title="3.1 凭据类型"></a>3.1 凭据类型</h3><ol>
+<li>凭据共享（SSO）</li>
+<li>全局密钥（开发者密钥）</li>
+<li>特殊凭据（用户的特殊密钥）</li>
+<li>授权访问（OAuth2）</li>
+</ol>
+<h3 id="3-2-授权许可类型"><a href="#3-2-授权许可类型" class="headerlink" title="3.2 授权许可类型"></a>3.2 授权许可类型</h3><ol>
+<li>隐式许可<pre><code>a.只使用前端信道和授权服务器通信
+b.只使用授权端点而不使用令牌端点，不要求客户端在授权端点上进行身份认证，客户端不需也无法持有客户端密钥
+c.不可用于获取刷新令牌
+b.适合完全运行在浏览器中的 JavaScript 应用
+</code></pre></li>
+<li>客户端凭据许可<pre><code>a.客户端代表自身从令牌端点获取令牌
+b.适合后端系统之间直接通信
+</code></pre></li>
+<li>资源拥有者凭据许可<pre><code>a.缓解明文传输密码的风险
+b.适合于客户端在每一个请求中直接向受保护资源使用用户凭据情况的优化
+</code></pre></li>
+<li>断言许可</li>
+<li>授权码许可</li>
+</ol>
+<h3 id="3-3-refresh-token-的作用"><a href="#3-3-refresh-token-的作用" class="headerlink" title="3.3 refresh_token 的作用"></a>3.3 refresh_token 的作用</h3><p>总的来说是提高应用的<strong>安全性</strong>。</p>
+<p>若 <strong>access_token</strong> 受到劫持，其存在是短时间的（可以设置有效时间），因此对其的滥用是控制在一定范围内的。</p>
+<p>但 <strong>refresh_token</strong> 被劫持，基本上无害的，攻击者需要得到 <strong>client_id</strong> 和 <strong>secrect_id</strong> (通常存储在服务器上)，再加上 <strong>refresh_token</strong> 才可以获取 <strong>access_token</strong>。</p>
+<h3 id="3-4-授权码许可中-code-的作用"><a href="#3-4-授权码许可中-code-的作用" class="headerlink" title="3.4 授权码许可中 code 的作用"></a>3.4 授权码许可中 code 的作用</h3><p>与 <strong>refresh_token</strong> 类似，提高安全性。若直接在重定向时返回的是 <strong>access_token</strong>（即隐式许可类型），则很容易被劫持（<strong>code</strong> 是直接通过重定向的查询参数返回的）。而返回 <strong>code</strong>，因其有效期非常短，且须结合 <strong>client_id</strong> 和 <strong>secrect_id</strong> (通常存储在服务器上)才能获取 <strong>access_token</strong>，即提高劫持 <strong>access_token</strong> 的成本，进而提高安全性。</p>
+<h3 id="3-5-授权码许可中-state-参数的作用"><a href="#3-5-授权码许可中-state-参数的作用" class="headerlink" title="3.5 授权码许可中 state 参数的作用"></a>3.5 授权码许可中 state 参数的作用</h3><p>防止<strong>跨站请求攻击</strong>，如：会话固化攻击、授权码暴力搜索（攻击者可能会用客户端向授权服务器暴力搜索有效的授权码，浪费客户端和授权服务器资源，而且还有可能导致客户端获取一个从未请求过的令牌）。</p>
+<h3 id="3-6-发送-bearer-令牌的方法"><a href="#3-6-发送-bearer-令牌的方法" class="headerlink" title="3.6 发送 bearer 令牌的方法"></a>3.6 发送 bearer 令牌的方法</h3><ol>
+<li>使用 HTTP Authorization 头部（官方推荐）</li>
+<li>使用表单格式的请求体参数</li>
+<li>使用 URL 编码的查询参数</li>
+</ol>
+<h3 id="3-7-客户端常见攻击"><a href="#3-7-客户端常见攻击" class="headerlink" title="3.7 客户端常见攻击"></a>3.7 客户端常见攻击</h3><h4 id="3-7-1-CSRF-攻击"><a href="#3-7-1-CSRF-攻击" class="headerlink" title="3.7.1 CSRF 攻击"></a>3.7.1 CSRF 攻击</h4><p>方案：获取授权码时使用 state 参数。</p>
+<h4 id="3-7-2-凭据失窃"><a href="#3-7-2-凭据失窃" class="headerlink" title="3.7.2 凭据失窃"></a>3.7.2 凭据失窃</h4><p>方案：客户端动态注册，使得每个客户端实例的凭据都不一样。</p>
+<h4 id="3-7-3-重定向-URI-注册"><a href="#3-7-3-重定向-URI-注册" class="headerlink" title="3.7.3 重定向 URI 注册"></a>3.7.3 重定向 URI 注册</h4><p>方案</p>
+<ol>
+<li>精确匹配 redirect_uri。</li>
+<li>客户端为每一个授权服务器注册不同的 redirect_uri。</li>
+</ol>
+<h4 id="3-7-4-授权码失窃"><a href="#3-7-4-授权码失窃" class="headerlink" title="3.7.4 授权码失窃"></a>3.7.4 授权码失窃</h4><h4 id="3-7-5-令牌失窃"><a href="#3-7-5-令牌失窃" class="headerlink" title="3.7.5 令牌失窃"></a>3.7.5 令牌失窃</h4><p>方案：避免在查询参数传递 access_token。</p>
+<h3 id="3-8-受保护资源常见攻击"><a href="#3-8-受保护资源常见攻击" class="headerlink" title="3.8 受保护资源常见攻击"></a>3.8 受保护资源常见攻击</h3><h4 id="3-8-1-XSS-攻击"><a href="#3-8-1-XSS-攻击" class="headerlink" title="3.8.1 XSS 攻击"></a>3.8.1 XSS 攻击</h4><p>方案</p>
+<ol>
+<li>选择合适的 Content-Type，如： application/json。避免使用 text/html。</li>
+<li>入参出参需转义。</li>
+<li>使用内容安全策略（content security policy，CSP），但存在浏览器兼容性问题。</li>
+</ol>
+<h3 id="3-9-授权服务器常见攻击"><a href="#3-9-授权服务器常见攻击" class="headerlink" title="3.9 授权服务器常见攻击"></a>3.9 授权服务器常见攻击</h3><h4 id="3-9-1-会话劫持"><a href="#3-9-1-会话劫持" class="headerlink" title="3.9.1 会话劫持"></a>3.9.1 会话劫持</h4><p>方案</p>
+<ol>
+<li>使用 302 http 状态码，避免使用 307 状态码，导致用户凭据泄露。</li>
+<li>授权码需绑定 client_id。</li>
+</ol>
+<h4 id="3-9-2-客户端假冒"><a href="#3-9-2-客户端假冒" class="headerlink" title="3.9.2 客户端假冒"></a>3.9.2 客户端假冒</h4><p>方案：获取访问令牌时也需带上 redirect_uri，并且与授权请求的 redirect_uri 的值必须相同（授权服务器在接收到获取访问令牌时也需判断其俩值是否一致）。</p>
+<h4 id="3-9-3-开放重定向器"><a href="#3-9-3-开放重定向器" class="headerlink" title="3.9.3 开放重定向器"></a>3.9.3 开放重定向器</h4><p>方案：授权码获取失败时，返回 http 400 状态码。</p>
+<h3 id="3-10-防止-OAuth-令牌攻击"><a href="#3-10-防止-OAuth-令牌攻击" class="headerlink" title="3.10 防止 OAuth 令牌攻击"></a>3.10 防止 OAuth 令牌攻击</h3><p>方案</p>
+<ol>
+<li>使用 TLS</li>
+<li>在权限范围的设置上尽量保守</li>
+<li>授权服务器应该存储访问令牌的散列值，而不是令牌明文</li>
+<li>授权服务器应该保持较短的访问令牌生命周期，以最小化因单个令牌泄露而导致的风险</li>
+<li>资源服务器应该将访问令牌存储在瞬态内存中</li>
+<li>PKCE 可用于提高授权码的安全性</li>
+</ol>
+<h3 id="3-11-避免授权服务器与受保护资源服务器共享数据"><a href="#3-11-避免授权服务器与受保护资源服务器共享数据" class="headerlink" title="3.11 避免授权服务器与受保护资源服务器共享数据"></a>3.11 避免授权服务器与受保护资源服务器共享数据</h3><p>方案：使用结构化令牌：JWT。</p>
+<p>JWT 签名方式</p>
+<ol>
+<li>HS256 对称签名</li>
+<li>RS256 非对称签名</li>
+</ol>
+<h3 id="3-12-令牌失效原因"><a href="#3-12-令牌失效原因" class="headerlink" title="3.12 令牌失效原因"></a>3.12 令牌失效原因</h3><ol>
+<li>令牌到期</li>
+<li>令牌被撤回</li>
+</ol>
+
+    </div>
+    
+    <div class="post-footer">
+        <div class="col-sm-10">
+            <div>
+                <b>本文链接</b>：<a href="/2019/05/04/SpringCloud集成OAuth2实现身份认证/">SpringCloud集成OAuth2实现身份认证</a>
+            </div>
+            <div>
+                
+                    转载声明：本博客由<trong>哲锄</strong>创作，采用 <a href="https://creativecommons.org/licenses/by-nc-nd/3.0/" target="_blank"> CC BY 3.0 CN </a> 许可协议。可自由转载、引用，但需署名作者且注明文章出处。如转载至微信公众号，请在文末添加作者公众号二维码。
+                
+            </div>
+            <div>
+                
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <img src="" width=100%/>
+        </div>
+    </div>
+</article>
+
+<div class="article-nav prev-next-wrap clearfix">
+    
+        <a href="/2019/05/06/异步监听队列提高系统吞吐率/" class="pre-post btn btn-default" title='异步监听队列提高系统吞吐率'>
+            <i class="fa fa-angle-left fa-fw"></i><span class="hidden-lg">上一篇</span>
+            <span class="hidden-xs">异步监听队列提高系统吞吐率</span>
+        </a>
+    
+    
+        <a href="/2019/04/29/Maven自动更新Snapshots依赖包方案/" class="next-post btn btn-default" title='Maven自动更新Snapshots依赖包方案'>
+            <span class="hidden-lg">下一篇</span>
+            <span class="hidden-xs">Maven自动更新Snapshots依赖包方案</span><i class="fa fa-angle-right fa-fw"></i>
+        </a>
+    
+</div>
+
+
+
+
+
+
+                </main>
+                
+                    
+    <aside class="col-md-4 sidebar">
+        
+        
+    <div class="widget">
+        <h3 class="title">搜索</h3>
+        <div id="search-form">
+            <div id="result-mask" class="hide"></div>
+            <div class="search-area">
+                
+                    <input id="search-key" type="search" autocomplete="off" placeholder="搜点什么呢？">
+                    <button type="button" class="search-form-submit" id="search-local">站内搜索</button>
+                
+                
+            </div>
+            <div id="result-wrap" class="hide">
+                <div id="search-result"></div>
+            </div>
+            <div class="hide">
+                <template id="search-tpl">
+                    <div class="item">
+                        <a href="/{path}" title="{title}">
+                            <div class="title">{title}</div>
+                            <div class="content">{content}</div>
+                        </a>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>
+
+        
+        
+    <div class="widget">
+        <h3 class="title">网站公告</h3>
+        <div class="notification">
+            <p>
+  <b>笔者微信</b>：ling-yu-wang，欢迎加我<br/>
+</p>
+        </div>
+    </div>
+
+        
+        
+    <div class="widget">
+      <h3 class="title">社交</h3> 
+        <div class="content social">
+            
+	            <a href="//github.com/zhechu" rel="external nofollow" title="GitHub" target="_blank">
+			    	<i class="github fa fa-github"></i>
+			    </a>
+            
+        </div>
+    </div>
+
+
+        
+        
+    <div class="widget">
+        <h3 class="title">分类</h3>
+        <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/ELK/"><i class="fa" aria-hidden="true">ELK</i></a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Git/"><i class="fa" aria-hidden="true">Git</i></a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/"><i class="fa" aria-hidden="true">Java</i></a><span class="category-list-count">116</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/"><i class="fa" aria-hidden="true">Linux</i></a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/"><i class="fa" aria-hidden="true">Mysql</i></a><span class="category-list-count">26</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Nginx/"><i class="fa" aria-hidden="true">Nginx</i></a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/NodeJS/"><i class="fa" aria-hidden="true">NodeJS</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Others/"><i class="fa" aria-hidden="true">Others</i></a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/"><i class="fa" aria-hidden="true">Redis</i></a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Test/"><i class="fa" aria-hidden="true">Test</i></a><span class="category-list-count">2</span></li></ul>
+    </div>
+
+
+        
+        
+  <div class="widget">
+    <h3 class="title">标签云</h3>
+    <div class="content tag-cloud">
+        
+            <a href="/tags/CentOS7/" style="font-size: 17.5px;">CentOS7</a> <a href="/tags/Docker/" style="font-size: 17.5px;">Docker</a> <a href="/tags/Gradle/" style="font-size: 10px;">Gradle</a> <a href="/tags/IDEA/" style="font-size: 10px;">IDEA</a> <a href="/tags/IO/" style="font-size: 15.83px;">IO</a> <a href="/tags/JMeter/" style="font-size: 10.83px;">JMeter</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Maven/" style="font-size: 10.83px;">Maven</a> <a href="/tags/Netty/" style="font-size: 10.83px;">Netty</a> <a href="/tags/OAuth2/" style="font-size: 10.83px;">OAuth2</a> <a href="/tags/Spring/" style="font-size: 19.17px;">Spring</a> <a href="/tags/SpringCloud/" style="font-size: 15px;">SpringCloud</a> <a href="/tags/SpringSecurity/" style="font-size: 11.67px;">SpringSecurity</a> <a href="/tags/VM/" style="font-size: 10px;">VM</a> <a href="/tags/k8s/" style="font-size: 12.5px;">k8s</a> <a href="/tags/lombok/" style="font-size: 10px;">lombok</a> <a href="/tags/代码生成/" style="font-size: 10px;">代码生成</a> <a href="/tags/分布式事务/" style="font-size: 10.83px;">分布式事务</a> <a href="/tags/加速器/" style="font-size: 10px;">加速器</a> <a href="/tags/升级回滚/" style="font-size: 10px;">升级回滚</a> <a href="/tags/反射/" style="font-size: 10px;">反射</a> <a href="/tags/图/" style="font-size: 10px;">图</a> <a href="/tags/多线程/" style="font-size: 18.33px;">多线程</a> <a href="/tags/工具/" style="font-size: 11.67px;">工具</a> <a href="/tags/序列化/" style="font-size: 10.83px;">序列化</a> <a href="/tags/异常处理/" style="font-size: 10px;">异常处理</a> <a href="/tags/异步/" style="font-size: 10px;">异步</a> <a href="/tags/微服务/" style="font-size: 16.67px;">微服务</a> <a href="/tags/性能优化/" style="font-size: 18.33px;">性能优化</a> <a href="/tags/性能测试/" style="font-size: 10.83px;">性能测试</a> <a href="/tags/搜索/" style="font-size: 12.5px;">搜索</a> <a href="/tags/数据结构/" style="font-size: 13.33px;">数据结构</a> <a href="/tags/日志/" style="font-size: 10px;">日志</a> <a href="/tags/架构/" style="font-size: 10.83px;">架构</a> <a href="/tags/池化技术/" style="font-size: 10px;">池化技术</a> <a href="/tags/注册中心/" style="font-size: 10.83px;">注册中心</a> <a href="/tags/算法/" style="font-size: 20px;">算法</a> <a href="/tags/缓存/" style="font-size: 13.33px;">缓存</a> <a href="/tags/规范/" style="font-size: 14.17px;">规范</a> <a href="/tags/设计模式/" style="font-size: 15px;">设计模式</a> <a href="/tags/资料库/" style="font-size: 10px;">资料库</a> <a href="/tags/配置中心/" style="font-size: 11.67px;">配置中心</a> <a href="/tags/锁/" style="font-size: 12.5px;">锁</a> <a href="/tags/队列/" style="font-size: 12.5px;">队列</a> <a href="/tags/集合/" style="font-size: 10.83px;">集合</a>
+        
+    </div>
+  </div>
+
+
+        
+    </aside>
+
+                
+            </div>
+        </div>
+    </section>
+    <footer class="main-footer">
+    <div class="container">
+        <div class="row">
+        </div>
+    </div>
+</footer>
+
+<a id="back-to-top" class="icon-btn hide">
+	<i class="fa fa-chevron-up"></i>
+</a>
+
+
+
+
+    <div class="copyright">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="busuanzi">
+    
+        访问量:
+        <strong id="busuanzi_value_site_pv">
+            <i class="fa fa-spinner fa-spin"></i>
+        </strong>
+        &nbsp; | &nbsp;
+        访客数:
+        <strong id="busuanzi_value_site_uv">
+            <i class="fa fa-spinner fa-spin"></i>
+        </strong>
+    
+</div>
+
+            </div>
+            <div class="col-sm-12">
+                <span>Copyright &copy; 2016
+                </span> |
+                <span>
+                    Powered by <a href="//hexo.io" class="copyright-links" target="_blank" rel="nofollow">Hexo</a>
+                </span> |
+                <span>
+                    Theme by <a href="//github.com/itmuch/hexo-theme-itmuch.git" class="copyright-links" target="_blank" rel="nofollow">ITMuch</a>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script src="/js/app.js?rev=@@hash"></script>
+
+</body>
+</html>
