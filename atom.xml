@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.zhechu.top/"/>
-  <updated>2020-11-03T13:31:46.354Z</updated>
+  <updated>2020-11-03T13:32:15.959Z</updated>
   <id>http://www.zhechu.top/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="http://www.zhechu.top/2020/11/03/Github%E5%85%8B%E9%9A%86%E5%8A%A0%E9%80%9F/"/>
     <id>http://www.zhechu.top/2020/11/03/Github克隆加速/</id>
     <published>2020-11-03T13:29:39.000Z</published>
-    <updated>2020-11-03T13:31:46.354Z</updated>
+    <updated>2020-11-03T13:32:15.959Z</updated>
     
     <content type="html"><![CDATA[<p>问题：墙内 clone github 上的项目到本地非常慢</p><p>方案：本地 git 配置 Shadowsocks 代理（<strong>前置条件是本地有 Shadowsocks 代理</strong>）</p><h2 id="1-socks5"><a href="#1-socks5" class="headerlink" title="1 socks5"></a>1 socks5</h2><p>需要确定安装的 Shadowsocks 是基于 socks5 协议代理的，需将 1080 端口修改成本地代理端口<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> git config --global http.proxy socks5://127.0.0.1:1080</span><br><span class="line"><span class="meta">$</span> git config --global https.proxy socks5://127.0.0.1:1080</span><br></pre></td></tr></table></figure></p><h2 id="2-http"><a href="#2-http" class="headerlink" title="2 http"></a>2 http</h2><p>需要确定安装的 Shadowsocks 是基于 http 协议代理的，需将 1081 端口修改成本地代理端口<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> git config --global http.proxy http://127.0.0.1:1081</span><br><span class="line"><span class="meta">$</span> git config --global https.proxy https://127.0.0.1:1081</span><br></pre></td></tr></table></figure></p><h2 id="3-验证"><a href="#3-验证" class="headerlink" title="3 验证"></a>3 验证</h2><p>查看 git 配置<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> git config http.proxy</span><br><span class="line"><span class="meta">$</span> git config https.proxy</span><br></pre></td></tr></table></figure></p><blockquote><p>TIPS：可执行 <code>git clone https://github.com/zhechu/spring-cloud-dubbo-demo.git</code> 验证是否有加速效果</p></blockquote><h2 id="4-重置-git-配置"><a href="#4-重置-git-配置" class="headerlink" title="4 重置 git 配置"></a>4 重置 git 配置</h2><p>在不需要代理时，可以重置代理设置<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> git config --global --unset http.proxy</span><br><span class="line"><span class="meta">$</span> git config --global --unset https.proxy</span><br></pre></td></tr></table></figure></p><p>查看 git 配置<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> git config http.proxy</span><br><span class="line"><span class="meta">$</span> git config https.proxy</span><br></pre></td></tr></table></figure></p><blockquote><p>TIPS：没有输出表示重置成功（本质是 ~/.gitconfig 配置文件删除了这两项配置）</p></blockquote>]]></content>
     
