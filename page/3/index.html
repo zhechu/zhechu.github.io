@@ -123,6 +123,170 @@
 
 <article class="post">
     
+        <div class="post-media">
+            <a href="/2020/06/21/Mysql闪回方案/">
+                <img class="img-ajax" src="/img/loading.gif"  data-src="/2020/06/21/Mysql闪回方案/show_binlog_events.png"   alt="Mysql闪回方案">
+            </a>
+        </div>
+    
+    <div class="post-content">
+        <div class="post-head home-post-head">
+            <h1 class="post-title">
+                <a href="/2020/06/21/Mysql闪回方案/">Mysql闪回方案</a>
+            </h1>
+            <div class="post-meta">  &bull;
+                <time class="post-date" datetime="" title="">
+                    2020年06月21日
+                </time>
+            </div>
+        </div>
+        <p class="brief">
+            
+                环境说明
+
+
+
+环境
+说明
+
+
+
+
+Mysql-5.6.46
+关系型数据库
+
+
+binlog2sql
+从 MySQL binlog 解析得到逆向 SQL，仅支持 Mysql 5.6, 5.7
+
+
+MyFlash
+回滚 DML 操作工具，仅支持 Mysql 5.6, 5.7
+
+
+CentOS7
+操作系统
+
+
+
+Mysql 安装请看
+CentOS7安装Mysql
+或
+Docker安装Mysql
+1 binlog2sql官方文档
+https://github.com/danf...
+            
+        </p>
+    </div>
+    
+        <footer class="post-footer clearfix">
+            <div class="pull-left tag-list">
+                <div class="post-meta">
+    
+    
+    <span class="categories-meta fa-wrap">
+        <i class="fa fa-folder-open-o"></i>
+        <a href="/categories/Mysql">
+            Mysql
+        </a>
+    </span>
+    
+
+    
+    <span class="fa-wrap">
+        <i class="fa fa-tags"></i>
+        <span class="tags-meta">
+            
+                
+                    <a href="/tags/升级回滚" title='升级回滚'>
+                        升级回滚
+                    </a>
+                
+            
+        </span>
+    </span>
+    
+
+    
+</div>
+
+            </div>
+
+            <div class="post-permalink">
+                <a href="/2020/06/21/Mysql闪回方案/" class="btn btn-default">阅读全文</a>
+            </div>
+        </footer>
+    
+</article>
+
+
+<article class="post">
+    
+    <div class="post-content">
+        <div class="post-head home-post-head">
+            <h1 class="post-title">
+                <a href="/2020/05/31/Guava布隆过滤器的应用/">Guava布隆过滤器的应用</a>
+            </h1>
+            <div class="post-meta">  &bull;
+                <time class="post-date" datetime="" title="">
+                    2020年05月31日
+                </time>
+            </div>
+        </div>
+        <p class="brief">
+            
+                com.google.common.hash.BloomFilter的应用
+1 示例示例代码
+https://github.com/zhechu/algorithm-demo/blob/master/src/main/java/com/wise/algorithm/apply/bitmap/BloomFilterByGuava.java
+问题：有1亿个随机数，其范围在1到1亿之间。要求将1到1亿之间没有在随机数中的数求出来？
+思路：将随机数存储到布隆过滤器中，依次遍历判...
+            
+        </p>
+    </div>
+    
+        <footer class="post-footer clearfix">
+            <div class="pull-left tag-list">
+                <div class="post-meta">
+    
+    
+    <span class="categories-meta fa-wrap">
+        <i class="fa fa-folder-open-o"></i>
+        <a href="/categories/Java">
+            Java
+        </a>
+    </span>
+    
+
+    
+    <span class="fa-wrap">
+        <i class="fa fa-tags"></i>
+        <span class="tags-meta">
+            
+                
+                    <a href="/tags/算法" title='算法'>
+                        算法
+                    </a>
+                
+            
+        </span>
+    </span>
+    
+
+    
+</div>
+
+            </div>
+
+            <div class="post-permalink">
+                <a href="/2020/05/31/Guava布隆过滤器的应用/" class="btn btn-default">阅读全文</a>
+            </div>
+        </footer>
+    
+</article>
+
+
+<article class="post">
+    
     <div class="post-content">
         <div class="post-head home-post-head">
             <h1 class="post-title">
@@ -333,170 +497,6 @@ https://github.com/zhechu/algorithm-demo/blob/master/src/main/java/com/wise/algo
 </article>
 
 
-<article class="post">
-    
-        <div class="post-media">
-            <a href="/2020/05/26/动态规划求矩阵两点间最短路径/">
-                <img class="img-ajax" src="/img/loading.gif"  data-src="/2020/05/26/动态规划求矩阵两点间最短路径/dp_question.png"   alt="动态规划求矩阵两点间最短路径">
-            </a>
-        </div>
-    
-    <div class="post-content">
-        <div class="post-head home-post-head">
-            <h1 class="post-title">
-                <a href="/2020/05/26/动态规划求矩阵两点间最短路径/">动态规划求矩阵两点间最短路径</a>
-            </h1>
-            <div class="post-meta">  &bull;
-                <time class="post-date" datetime="" title="">
-                    2020年05月26日
-                </time>
-            </div>
-        </div>
-        <p class="brief">
-            
-                假设我们有一个 n 乘以 n 的矩阵 w[n][n]。矩阵存储的都是正整数。棋子起始位置在左上角，终止位置在右下角。我们将棋子从左上角移动到右下角。每次只能向右或者向下移动一位。从左上角到右下角，会有很多不同的路径可以走。我们把每条路径经过的数字加起来看作路径的长度。那从左上角移动到右下角的最短路径长度是多少？
-
-1 回溯法示例代码
-https://github.com/zhechu/algorithm-demo/blob/master/src/main/java/co...
-            
-        </p>
-    </div>
-    
-        <footer class="post-footer clearfix">
-            <div class="pull-left tag-list">
-                <div class="post-meta">
-    
-    
-    <span class="categories-meta fa-wrap">
-        <i class="fa fa-folder-open-o"></i>
-        <a href="/categories/Java">
-            Java
-        </a>
-    </span>
-    
-
-    
-    <span class="fa-wrap">
-        <i class="fa fa-tags"></i>
-        <span class="tags-meta">
-            
-                
-                    <a href="/tags/算法" title='算法'>
-                        算法
-                    </a>
-                
-            
-        </span>
-    </span>
-    
-
-    
-</div>
-
-            </div>
-
-            <div class="post-permalink">
-                <a href="/2020/05/26/动态规划求矩阵两点间最短路径/" class="btn btn-default">阅读全文</a>
-            </div>
-        </footer>
-    
-</article>
-
-
-<article class="post">
-    
-        <div class="post-media">
-            <a href="/2020/05/23/SonarQube使用手册/">
-                <img class="img-ajax" src="/img/loading.gif"  data-src="/2020/05/23/SonarQube使用手册/permission_template.png"   alt="SonarQube使用手册">
-            </a>
-        </div>
-    
-    <div class="post-content">
-        <div class="post-head home-post-head">
-            <h1 class="post-title">
-                <a href="/2020/05/23/SonarQube使用手册/">SonarQube使用手册</a>
-            </h1>
-            <div class="post-meta">  &bull;
-                <time class="post-date" datetime="" title="">
-                    2020年05月23日
-                </time>
-            </div>
-        </div>
-        <p class="brief">
-            
-                安装篇
-Docker安装SonarQube
-
-
-
-组件
-版本
-
-
-
-
-postgres
-12.3
-
-
-SonarQube
-8.3.1-community
-
-
-
-官方文档
-https://docs.sonarqube.org/latest/user-guide/clean-as-you-code/
-1 基本使用推荐使用步骤
-
-创建质量配置，为质量配置激活代码规则
-创建质量阈，为质量阈添加检查指标
-创建权限模板，方便项目授权
-根据 maven 项目的 artifactId ...
-            
-        </p>
-    </div>
-    
-        <footer class="post-footer clearfix">
-            <div class="pull-left tag-list">
-                <div class="post-meta">
-    
-    
-    <span class="categories-meta fa-wrap">
-        <i class="fa fa-folder-open-o"></i>
-        <a href="/categories/Others">
-            Others
-        </a>
-    </span>
-    
-
-    
-    <span class="fa-wrap">
-        <i class="fa fa-tags"></i>
-        <span class="tags-meta">
-            
-                
-                    <a href="/tags/工具" title='工具'>
-                        工具
-                    </a>
-                
-            
-        </span>
-    </span>
-    
-
-    
-</div>
-
-            </div>
-
-            <div class="post-permalink">
-                <a href="/2020/05/23/SonarQube使用手册/" class="btn btn-default">阅读全文</a>
-            </div>
-        </footer>
-    
-</article>
-
-
 
 
     <nav class="pagination" role="navigation">
@@ -569,7 +569,7 @@ https://docs.sonarqube.org/latest/user-guide/clean-as-you-code/
         
     <div class="widget">
         <h3 class="title">分类</h3>
-        <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/ELK/"><i class="fa" aria-hidden="true">ELK</i></a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Git/"><i class="fa" aria-hidden="true">Git</i></a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/"><i class="fa" aria-hidden="true">Java</i></a><span class="category-list-count">116</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/"><i class="fa" aria-hidden="true">Linux</i></a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/"><i class="fa" aria-hidden="true">Mysql</i></a><span class="category-list-count">26</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Nginx/"><i class="fa" aria-hidden="true">Nginx</i></a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/NodeJS/"><i class="fa" aria-hidden="true">NodeJS</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Others/"><i class="fa" aria-hidden="true">Others</i></a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/"><i class="fa" aria-hidden="true">Redis</i></a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Test/"><i class="fa" aria-hidden="true">Test</i></a><span class="category-list-count">2</span></li></ul>
+        <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/ELK/"><i class="fa" aria-hidden="true">ELK</i></a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Git/"><i class="fa" aria-hidden="true">Git</i></a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/"><i class="fa" aria-hidden="true">Java</i></a><span class="category-list-count">118</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/"><i class="fa" aria-hidden="true">Linux</i></a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/"><i class="fa" aria-hidden="true">Mysql</i></a><span class="category-list-count">26</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Nginx/"><i class="fa" aria-hidden="true">Nginx</i></a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/NodeJS/"><i class="fa" aria-hidden="true">NodeJS</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Others/"><i class="fa" aria-hidden="true">Others</i></a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/"><i class="fa" aria-hidden="true">Redis</i></a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Test/"><i class="fa" aria-hidden="true">Test</i></a><span class="category-list-count">2</span></li></ul>
     </div>
 
 
@@ -579,7 +579,7 @@ https://docs.sonarqube.org/latest/user-guide/clean-as-you-code/
     <h3 class="title">标签云</h3>
     <div class="content tag-cloud">
         
-            <a href="/tags/CentOS7/" style="font-size: 17.5px;">CentOS7</a> <a href="/tags/Docker/" style="font-size: 17.5px;">Docker</a> <a href="/tags/Gradle/" style="font-size: 10px;">Gradle</a> <a href="/tags/IDEA/" style="font-size: 10px;">IDEA</a> <a href="/tags/IO/" style="font-size: 15.83px;">IO</a> <a href="/tags/JMeter/" style="font-size: 10.83px;">JMeter</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Maven/" style="font-size: 10.83px;">Maven</a> <a href="/tags/Netty/" style="font-size: 10.83px;">Netty</a> <a href="/tags/OAuth2/" style="font-size: 10.83px;">OAuth2</a> <a href="/tags/Spring/" style="font-size: 19.17px;">Spring</a> <a href="/tags/SpringCloud/" style="font-size: 15px;">SpringCloud</a> <a href="/tags/SpringSecurity/" style="font-size: 11.67px;">SpringSecurity</a> <a href="/tags/VM/" style="font-size: 10px;">VM</a> <a href="/tags/k8s/" style="font-size: 12.5px;">k8s</a> <a href="/tags/lombok/" style="font-size: 10px;">lombok</a> <a href="/tags/代码生成/" style="font-size: 10px;">代码生成</a> <a href="/tags/分布式事务/" style="font-size: 10.83px;">分布式事务</a> <a href="/tags/加速器/" style="font-size: 10px;">加速器</a> <a href="/tags/升级回滚/" style="font-size: 10px;">升级回滚</a> <a href="/tags/反射/" style="font-size: 10px;">反射</a> <a href="/tags/图/" style="font-size: 10px;">图</a> <a href="/tags/多线程/" style="font-size: 18.33px;">多线程</a> <a href="/tags/工具/" style="font-size: 11.67px;">工具</a> <a href="/tags/序列化/" style="font-size: 10.83px;">序列化</a> <a href="/tags/异常处理/" style="font-size: 10px;">异常处理</a> <a href="/tags/异步/" style="font-size: 10px;">异步</a> <a href="/tags/微服务/" style="font-size: 16.67px;">微服务</a> <a href="/tags/性能优化/" style="font-size: 18.33px;">性能优化</a> <a href="/tags/性能测试/" style="font-size: 10.83px;">性能测试</a> <a href="/tags/搜索/" style="font-size: 12.5px;">搜索</a> <a href="/tags/数据结构/" style="font-size: 13.33px;">数据结构</a> <a href="/tags/日志/" style="font-size: 10px;">日志</a> <a href="/tags/架构/" style="font-size: 10.83px;">架构</a> <a href="/tags/池化技术/" style="font-size: 10px;">池化技术</a> <a href="/tags/注册中心/" style="font-size: 10.83px;">注册中心</a> <a href="/tags/算法/" style="font-size: 20px;">算法</a> <a href="/tags/缓存/" style="font-size: 13.33px;">缓存</a> <a href="/tags/规范/" style="font-size: 14.17px;">规范</a> <a href="/tags/设计模式/" style="font-size: 15px;">设计模式</a> <a href="/tags/资料库/" style="font-size: 10px;">资料库</a> <a href="/tags/配置中心/" style="font-size: 11.67px;">配置中心</a> <a href="/tags/锁/" style="font-size: 12.5px;">锁</a> <a href="/tags/队列/" style="font-size: 12.5px;">队列</a> <a href="/tags/集合/" style="font-size: 10.83px;">集合</a>
+            <a href="/tags/CentOS7/" style="font-size: 17.27px;">CentOS7</a> <a href="/tags/Docker/" style="font-size: 17.27px;">Docker</a> <a href="/tags/Gradle/" style="font-size: 10px;">Gradle</a> <a href="/tags/IDEA/" style="font-size: 10px;">IDEA</a> <a href="/tags/IO/" style="font-size: 15.45px;">IO</a> <a href="/tags/JMeter/" style="font-size: 10.91px;">JMeter</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Maven/" style="font-size: 10.91px;">Maven</a> <a href="/tags/Netty/" style="font-size: 10.91px;">Netty</a> <a href="/tags/OAuth2/" style="font-size: 10.91px;">OAuth2</a> <a href="/tags/Spring/" style="font-size: 19.09px;">Spring</a> <a href="/tags/SpringCloud/" style="font-size: 14.55px;">SpringCloud</a> <a href="/tags/SpringSecurity/" style="font-size: 11.82px;">SpringSecurity</a> <a href="/tags/VM/" style="font-size: 10px;">VM</a> <a href="/tags/k8s/" style="font-size: 12.73px;">k8s</a> <a href="/tags/lombok/" style="font-size: 10px;">lombok</a> <a href="/tags/代码生成/" style="font-size: 10px;">代码生成</a> <a href="/tags/分布式事务/" style="font-size: 10.91px;">分布式事务</a> <a href="/tags/加速器/" style="font-size: 10px;">加速器</a> <a href="/tags/升级回滚/" style="font-size: 10px;">升级回滚</a> <a href="/tags/反射/" style="font-size: 10px;">反射</a> <a href="/tags/图/" style="font-size: 10px;">图</a> <a href="/tags/多线程/" style="font-size: 18.18px;">多线程</a> <a href="/tags/安全/" style="font-size: 10px;">安全</a> <a href="/tags/工具/" style="font-size: 11.82px;">工具</a> <a href="/tags/序列化/" style="font-size: 11.82px;">序列化</a> <a href="/tags/异常处理/" style="font-size: 10px;">异常处理</a> <a href="/tags/异步/" style="font-size: 10px;">异步</a> <a href="/tags/微服务/" style="font-size: 16.36px;">微服务</a> <a href="/tags/性能优化/" style="font-size: 18.18px;">性能优化</a> <a href="/tags/性能测试/" style="font-size: 10.91px;">性能测试</a> <a href="/tags/搜索/" style="font-size: 12.73px;">搜索</a> <a href="/tags/数据结构/" style="font-size: 13.64px;">数据结构</a> <a href="/tags/日志/" style="font-size: 10px;">日志</a> <a href="/tags/架构/" style="font-size: 10.91px;">架构</a> <a href="/tags/池化技术/" style="font-size: 10px;">池化技术</a> <a href="/tags/注册中心/" style="font-size: 10.91px;">注册中心</a> <a href="/tags/算法/" style="font-size: 20px;">算法</a> <a href="/tags/缓存/" style="font-size: 13.64px;">缓存</a> <a href="/tags/规范/" style="font-size: 14.55px;">规范</a> <a href="/tags/设计模式/" style="font-size: 14.55px;">设计模式</a> <a href="/tags/资料库/" style="font-size: 10px;">资料库</a> <a href="/tags/配置中心/" style="font-size: 11.82px;">配置中心</a> <a href="/tags/锁/" style="font-size: 12.73px;">锁</a> <a href="/tags/队列/" style="font-size: 12.73px;">队列</a> <a href="/tags/集合/" style="font-size: 10.91px;">集合</a>
         
     </div>
   </div>

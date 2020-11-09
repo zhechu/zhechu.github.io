@@ -1,0 +1,313 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!--Setting-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta name="apple-mobile-web-app-capable" content="哲锄">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no,email=no,adress=no">
+    <meta name="browsermode" content="application">
+    <meta name="screen-orientation" content="portrait">
+    <link rel="dns-prefetch" href="http://www.zhechu.top">
+    <!--SEO-->
+
+    <meta name="keywords" content="规范,序列化,">
+
+
+    <meta name="description" content="问题：
+
+服务端接口出参返回值为 null 的参数，接口调用方难以处理（有些编程语言处理起来很复杂）
+服务端接口出参返回值为大数值，接口调用方对应的编程语言丢失精度
+
+方案：
+
+将返回 null 的参数过滤或赋默认值（如：空字符串）
+将大数值的参数转为字符串
+
+代码示例
+https://git...">
+
+
+<meta name="robots" content="all">
+<meta name="google" content="all">
+<meta name="googlebot" content="all">
+<meta name="verify" content="all">
+    <!--Title-->
+
+
+<title>Jackson序列化优雅处理 | 哲锄</title>
+
+
+    <link rel="alternate" href="/atom.xml" title="哲锄" type="application/atom+xml">
+
+
+    <link rel="icon" href="/favicon.ico">
+
+    
+
+
+
+<link rel="stylesheet" href="/css/bootstrap.min.css?rev=3.3.7">
+<link rel="stylesheet" href="/css/font-awesome.min.css?rev=4.5.0">
+<link rel="stylesheet" href="/css/style.css?rev=@@hash">
+
+
+
+
+    
+
+
+
+
+
+    
+
+</head>
+
+</html>
+<!--[if lte IE 8]>
+<style>
+    html{ font-size: 1em }
+</style>
+<![endif]-->
+<!--[if lte IE 9]>
+<div style="ie">你使用的浏览器版本过低，为了你更好的阅读体验，请更新浏览器的版本或者使用其他现代浏览器，比如Chrome、Firefox、Safari等。</div>
+<![endif]-->
+
+<body>
+    
+    <nav class="main-navigation">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="navbar-header"><span class="nav-toggle-button collapsed pull-right" data-toggle="collapse" data-target="#main-menu" id="mnav">
+                    <span class="sr-only"></span>
+                        <i class="fa fa-bars"></i>
+                    </span>
+                    <a class="navbar-brand" href="http://www.zhechu.top">哲锄</a>
+                </div>
+                <div class="collapse navbar-collapse" id="main-menu">
+                    <ul class="menu">
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/"><i class="fa fa-home"></i>哲锄</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/categories"><i class="fa fa-list"></i>分类</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/about"><i class="fa fa-user"></i>关于我</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/archives"><i class="fa fa-archive"></i>归档</a>
+                            </li>
+                        
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<a href="http://github.com/zhechu">
+    <img style="position: absolute; top: 0; right: 0; border: 0;"
+        src="/img/forkme.png"
+        alt="Fork me on GitHub">
+</a>
+
+    <section class="content-wrap">
+        <div class="container">
+            <div class="row">
+                <main class="col-md-8 main-content m-post">
+                    <p id="process"></p>
+<article class="post">
+    <div class="post-head">
+        <h1 id="Jackson序列化优雅处理">
+            
+                Jackson序列化优雅处理
+            
+        </h1>
+        <div class="post-meta">
+    
+    
+    <span class="categories-meta fa-wrap">
+        <i class="fa fa-folder-open-o"></i>
+        <a href="/categories/Java">
+            Java
+        </a>
+    </span>
+    
+
+    
+    <span class="fa-wrap">
+        <i class="fa fa-tags"></i>
+        <span class="tags-meta">
+            
+                
+                    <a href="/tags/规范" title='规范'>
+                        规范
+                    </a>
+                
+                    <a href="/tags/序列化" title='序列化'>
+                        序列化
+                    </a>
+                
+            
+        </span>
+    </span>
+    
+
+    
+        
+        <span class="fa-wrap">
+            <i class="fa fa-clock-o"></i>
+            <span class="date-meta">2020/11/09</span>
+        </span>
+        
+            <span class="fa-wrap">
+                <i class="fa fa-eye"></i>
+                <span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    
+</div>
+
+        
+        
+    </div>
+    
+    <div class="post-body post-content">
+        <p>问题：</p>
+<ol>
+<li>服务端接口出参返回值为 null 的参数，接口调用方难以处理（有些编程语言处理起来很复杂）</li>
+<li>服务端接口出参返回值为大数值，接口调用方对应的编程语言丢失精度</li>
+</ol>
+<p>方案：</p>
+<ol>
+<li>将返回 null 的参数过滤或赋默认值（如：空字符串）</li>
+<li>将大数值的参数转为字符串</li>
+</ol>
+<p>代码示例</p>
+<p><a href="https://github.com/zhechu/spring-boot-rest-demo/tree/master/src/main/java/com/wise/rest/demo/config/jackson" target="_blank" rel="noopener">https://github.com/zhechu/spring-boot-rest-demo/tree/master/src/main/java/com/wise/rest/demo/config/jackson</a></p>
+<h2 id="1-序列化修改器"><a href="#1-序列化修改器" class="headerlink" title="1 序列化修改器"></a>1 序列化修改器</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> com.fasterxml.jackson.core.JsonGenerator;</span><br><span class="line"><span class="keyword">import</span> com.fasterxml.jackson.databind.BeanDescription;</span><br><span class="line"><span class="keyword">import</span> com.fasterxml.jackson.databind.JavaType;</span><br><span class="line"><span class="keyword">import</span> com.fasterxml.jackson.databind.JsonSerializer;</span><br><span class="line"><span class="keyword">import</span> com.fasterxml.jackson.databind.SerializationConfig;</span><br><span class="line"><span class="keyword">import</span> com.fasterxml.jackson.databind.SerializerProvider;</span><br><span class="line"><span class="keyword">import</span> com.fasterxml.jackson.databind.ser.BeanPropertyWriter;</span><br><span class="line"><span class="keyword">import</span> com.fasterxml.jackson.databind.ser.BeanSerializerModifier;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.time.OffsetDateTime;</span><br><span class="line"><span class="keyword">import</span> java.time.temporal.TemporalAccessor;</span><br><span class="line"><span class="keyword">import</span> java.util.Collection;</span><br><span class="line"><span class="keyword">import</span> java.util.Date;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WiseBeanSerializerModifier</span> <span class="keyword">extends</span> <span class="title">BeanSerializerModifier</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> List&lt;BeanPropertyWriter&gt; <span class="title">changeProperties</span><span class="params">(SerializationConfig config, BeanDescription beanDesc, List&lt;BeanPropertyWriter&gt; beanProperties)</span> </span>&#123;</span><br><span class="line">    beanProperties.forEach((writer) -&gt; &#123;</span><br><span class="line">      <span class="keyword">if</span> (!writer.hasNullSerializer()) &#123;</span><br><span class="line">        JavaType type = writer.getType();</span><br><span class="line">        Class&lt;?&gt; clazz = type.getRawClass();</span><br><span class="line">        <span class="keyword">if</span> (type.isTypeOrSubTypeOf(Number<span class="class">.<span class="keyword">class</span>)) </span>&#123;</span><br><span class="line">          writer.assignNullSerializer(WiseBeanSerializerModifier.NullJsonSerializers.STRING_JSON_SERIALIZER);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (type.isTypeOrSubTypeOf(Boolean<span class="class">.<span class="keyword">class</span>)) </span>&#123;</span><br><span class="line">          writer.assignNullSerializer(WiseBeanSerializerModifier.NullJsonSerializers.BOOLEAN_JSON_SERIALIZER);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (type.isTypeOrSubTypeOf(Character<span class="class">.<span class="keyword">class</span>)) </span>&#123;</span><br><span class="line">          writer.assignNullSerializer(WiseBeanSerializerModifier.NullJsonSerializers.STRING_JSON_SERIALIZER);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (type.isTypeOrSubTypeOf(String<span class="class">.<span class="keyword">class</span>)) </span>&#123;</span><br><span class="line">          writer.assignNullSerializer(WiseBeanSerializerModifier.NullJsonSerializers.STRING_JSON_SERIALIZER);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (!type.isArrayType() &amp;&amp; !clazz.isArray() &amp;&amp; !type.isTypeOrSubTypeOf(Collection<span class="class">.<span class="keyword">class</span>)) </span>&#123;</span><br><span class="line">          <span class="keyword">if</span> (type.isTypeOrSubTypeOf(OffsetDateTime<span class="class">.<span class="keyword">class</span>)) </span>&#123;</span><br><span class="line">            writer.assignNullSerializer(WiseBeanSerializerModifier.NullJsonSerializers.STRING_JSON_SERIALIZER);</span><br><span class="line">          &#125; <span class="keyword">else</span> <span class="keyword">if</span> (!type.isTypeOrSubTypeOf(Date<span class="class">.<span class="keyword">class</span>) &amp;&amp; !<span class="title">type</span>.<span class="title">isTypeOrSubTypeOf</span>(<span class="title">TemporalAccessor</span>.<span class="title">class</span>)) </span>&#123;</span><br><span class="line">            writer.assignNullSerializer(WiseBeanSerializerModifier.NullJsonSerializers.OBJECT_JSON_SERIALIZER);</span><br><span class="line">          &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            writer.assignNullSerializer(WiseBeanSerializerModifier.NullJsonSerializers.STRING_JSON_SERIALIZER);</span><br><span class="line">          &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          writer.assignNullSerializer(WiseBeanSerializerModifier.NullJsonSerializers.ARRAY_JSON_SERIALIZER);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">super</span>.changeProperties(config, beanDesc, beanProperties);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">NullJsonSerializers</span> </span>&#123;</span><br><span class="line">    JsonSerializer&lt;Object&gt; STRING_JSON_SERIALIZER = <span class="keyword">new</span> JsonSerializer&lt;Object&gt;() &#123;</span><br><span class="line">      <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">serialize</span><span class="params">(Object value, JsonGenerator gen, SerializerProvider serializers)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        gen.writeString(<span class="string">""</span>);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    JsonSerializer&lt;Object&gt; NUMBER_JSON_SERIALIZER = <span class="keyword">new</span> JsonSerializer&lt;Object&gt;() &#123;</span><br><span class="line">      <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">serialize</span><span class="params">(Object value, JsonGenerator gen, SerializerProvider serializers)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        gen.writeNumber(-<span class="number">1</span>);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    JsonSerializer&lt;Object&gt; BOOLEAN_JSON_SERIALIZER = <span class="keyword">new</span> JsonSerializer&lt;Object&gt;() &#123;</span><br><span class="line">      <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">serialize</span><span class="params">(Object value, JsonGenerator gen, SerializerProvider serializers)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        gen.writeObject(Boolean.FALSE);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    JsonSerializer&lt;Object&gt; ARRAY_JSON_SERIALIZER = <span class="keyword">new</span> JsonSerializer&lt;Object&gt;() &#123;</span><br><span class="line">      <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">serialize</span><span class="params">(Object value, JsonGenerator gen, SerializerProvider serializers)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        gen.writeStartArray();</span><br><span class="line">        gen.writeEndArray();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    JsonSerializer&lt;Object&gt; OBJECT_JSON_SERIALIZER = <span class="keyword">new</span> JsonSerializer&lt;Object&gt;() &#123;</span><br><span class="line">      <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">serialize</span><span class="params">(Object value, JsonGenerator gen, SerializerProvider serializers)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        gen.writeStartObject();</span><br><span class="line">        gen.writeEndObject();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="2-大数值转字符串"><a href="#2-大数值转字符串" class="headerlink" title="2 大数值转字符串"></a>2 大数值转字符串</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> com.fasterxml.jackson.core.JsonGenerator;</span><br><span class="line"><span class="keyword">import</span> com.fasterxml.jackson.databind.SerializerProvider;</span><br><span class="line"><span class="keyword">import</span> com.fasterxml.jackson.databind.annotation.JacksonStdImpl;</span><br><span class="line"><span class="keyword">import</span> com.fasterxml.jackson.databind.ser.std.NumberSerializer;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"></span><br><span class="line"><span class="meta">@JacksonStdImpl</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BigNumberSerializer</span> <span class="keyword">extends</span> <span class="title">NumberSerializer</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> JS_NUM_MAX = <span class="number">9007199254740992L</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> JS_NUM_MIN = -<span class="number">9007199254740992L</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> BigNumberSerializer instance = <span class="keyword">new</span> BigNumberSerializer(Number<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">BigNumberSerializer</span><span class="params">(Class&lt;? extends Number&gt; rawType)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>(rawType);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">serialize</span><span class="params">(Number value, JsonGenerator gen, SerializerProvider provider)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">    <span class="keyword">long</span> longValue = value.longValue();</span><br><span class="line">    <span class="keyword">if</span> (longValue &gt;= JS_NUM_MIN &amp;&amp; longValue &lt;= JS_NUM_MAX) &#123;</span><br><span class="line">      <span class="keyword">super</span>.serialize(value, gen, provider);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      gen.writeString(value.toString());</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    </div>
+    
+    <div class="post-footer">
+        <div class="col-sm-10">
+            <div>
+                <b>本文链接</b>：<a href="/2020/11/09/Jackson序列化优雅处理/">Jackson序列化优雅处理</a>
+            </div>
+            <div>
+                
+                    转载声明：本博客由<strong>哲锄</strong>创作，采用 <a href="https://creativecommons.org/licenses/by-nc-nd/3.0/" target="_blank"> CC BY 3.0 CN </a> 许可协议。可自由转载、引用，但需署名作者且注明文章出处。如转载至微信公众号，请在文末添加作者公众号二维码。
+                
+            </div>
+            <div>
+                
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <img src="" width=100%/>
+        </div>
+    </div>
+</article>
+
+<div class="article-nav prev-next-wrap clearfix">
+    
+    
+        <a href="/2020/11/09/RSA加密防破解/" class="next-post btn btn-default" title='RSA加密防破解'>
+            <span class="hidden-lg">下一篇</span>
+            <span class="hidden-xs">RSA加密防破解</span><i class="fa fa-angle-right fa-fw"></i>
+        </a>
+    
+</div>
+
+
+
+
+
+
+                </main>
+                
+                    <aside id="article-toc" role="navigation" class="col-md-4">
+    <div class="widget">
+        <h3 class="title">文章目录</h3>
+        
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-序列化修改器"><span class="toc-text">1 序列化修改器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-大数值转字符串"><span class="toc-text">2 大数值转字符串</span></a></li></ol>
+        
+    </div>
+</aside>
+
+                
+            </div>
+        </div>
+    </section>
+    <footer class="main-footer">
+    <div class="container">
+        <div class="row">
+        </div>
+    </div>
+</footer>
+
+<a id="back-to-top" class="icon-btn hide">
+	<i class="fa fa-chevron-up"></i>
+</a>
+
+
+
+
+    <div class="copyright">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="busuanzi">
+    
+        访问量:
+        <strong id="busuanzi_value_site_pv">
+            <i class="fa fa-spinner fa-spin"></i>
+        </strong>
+        &nbsp; | &nbsp;
+        访客数:
+        <strong id="busuanzi_value_site_uv">
+            <i class="fa fa-spinner fa-spin"></i>
+        </strong>
+    
+</div>
+
+            </div>
+            <div class="col-sm-12">
+                <span>Copyright &copy; 2016
+                </span> |
+                <span>
+                    Powered by <a href="//hexo.io" class="copyright-links" target="_blank" rel="nofollow">Hexo</a>
+                </span> |
+                <span>
+                    Theme by <a href="//github.com/itmuch/hexo-theme-itmuch.git" class="copyright-links" target="_blank" rel="nofollow">ITMuch</a>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script src="/js/app.js?rev=@@hash"></script>
+
+</body>
+</html>

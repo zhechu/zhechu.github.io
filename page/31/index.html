@@ -123,9 +123,142 @@
 
 <article class="post">
     
+    <div class="post-content">
+        <div class="post-head home-post-head">
+            <h1 class="post-title">
+                <a href="/2019/04/05/CentOS7安装JDK/">CentOS7安装JDK</a>
+            </h1>
+            <div class="post-meta">  &bull;
+                <time class="post-date" datetime="" title="">
+                    2019年04月05日
+                </time>
+            </div>
+        </div>
+        <p class="brief">
+            
+                卸载 JDK若已装有 JDK，需先卸载12$ rpm -qa | grep java$ yum -y remove java*
+安装 JDK-1.8通过 RPM 方式安装 JDK-1.8123$ rpm -ih jdk-8u11-linux-x64.rpm$ java -version$ javac -version
+配置环境变量12345$ vi /etc/profileexport JAVA_HOME=/usr/java/jdk1.8.0_11/export JRE...
+            
+        </p>
+    </div>
+    
+        <footer class="post-footer clearfix">
+            <div class="pull-left tag-list">
+                <div class="post-meta">
+    
+    
+    <span class="categories-meta fa-wrap">
+        <i class="fa fa-folder-open-o"></i>
+        <a href="/categories/Linux">
+            Linux
+        </a>
+    </span>
+    
+
+    
+    <span class="fa-wrap">
+        <i class="fa fa-tags"></i>
+        <span class="tags-meta">
+            
+                
+                    <a href="/tags/CentOS7" title='CentOS7'>
+                        CentOS7
+                    </a>
+                
+            
+        </span>
+    </span>
+    
+
+    
+</div>
+
+            </div>
+
+            <div class="post-permalink">
+                <a href="/2019/04/05/CentOS7安装JDK/" class="btn btn-default">阅读全文</a>
+            </div>
+        </footer>
+    
+</article>
+
+
+<article class="post">
+    
+        <div class="post-media">
+            <a href="/2019/04/05/Mysql5-7报连接数超数异常的解决方案/">
+                <img class="img-ajax" src="/img/loading.gif"  data-src="/2019/04/05/Mysql5-7报连接数超数异常的解决方案/translate_english_1.png"   alt="Mysql5.7报连接数超数异常的解决方案">
+            </a>
+        </div>
+    
+    <div class="post-content">
+        <div class="post-head home-post-head">
+            <h1 class="post-title">
+                <a href="/2019/04/05/Mysql5-7报连接数超数异常的解决方案/">Mysql5.7报连接数超数异常的解决方案</a>
+            </h1>
+            <div class="post-meta">  &bull;
+                <time class="post-date" datetime="" title="">
+                    2019年04月05日
+                </time>
+            </div>
+        </div>
+        <p class="brief">
+            
+                问题描述：Mysql5.7 报连接数超数异常，表示连接已达上限。具体报错信息“Can not connect to MySQL server. Too many connections”。
+解决方案：Mysql5.7 默认的连接数上限是 151，可以将此值配到合适的值，如：1000。
+由于笔者是使用 Docker 部署的 Mysql5.7 环境，如下皆为 Docker 环境下的解决步骤。Docker 安装 Mysql 请参考 Docker安装Mysql。
+解决步骤在主机...
+            
+        </p>
+    </div>
+    
+        <footer class="post-footer clearfix">
+            <div class="pull-left tag-list">
+                <div class="post-meta">
+    
+    
+    <span class="categories-meta fa-wrap">
+        <i class="fa fa-folder-open-o"></i>
+        <a href="/categories/Mysql">
+            Mysql
+        </a>
+    </span>
+    
+
+    
+    <span class="fa-wrap">
+        <i class="fa fa-tags"></i>
+        <span class="tags-meta">
+            
+                
+                    <a href="/tags/Docker" title='Docker'>
+                        Docker
+                    </a>
+                
+            
+        </span>
+    </span>
+    
+
+    
+</div>
+
+            </div>
+
+            <div class="post-permalink">
+                <a href="/2019/04/05/Mysql5-7报连接数超数异常的解决方案/" class="btn btn-default">阅读全文</a>
+            </div>
+        </footer>
+    
+</article>
+
+
+<article class="post">
+    
         <div class="post-media">
             <a href="/2019/04/05/CentOS7安装Harbor/">
-                <img class="img-ajax" src="/img/loading.gif"  data-src="/2019/04/05/CentOS7安装Harbor/ui_index.png"   alt="CentOS7安装Harbor">
+                <img class="img-ajax" src="/img/loading.gif"  data-src="/2019/04/05/CentOS7安装Harbor/docker_ps.png"   alt="CentOS7安装Harbor">
             </a>
         </div>
     
@@ -197,7 +330,7 @@ https://github.com/goharbor/harbor/blob/release-1.5.0/docs/installation_guide.md
     
         <div class="post-media">
             <a href="/2019/04/05/VMware安装CentOS7/">
-                <img class="img-ajax" src="/img/loading.gif"  data-src="/2019/04/05/VMware安装CentOS7/new_vm_4.png"   alt="VMware安装CentOS7">
+                <img class="img-ajax" src="/img/loading.gif"  data-src="/2019/04/05/VMware安装CentOS7/start_vm_21.png"   alt="VMware安装CentOS7">
             </a>
         </div>
     
@@ -298,7 +431,7 @@ CentOS-7.0-1406-x86_64-DVD.iso
     
         <div class="post-media">
             <a href="/2019/04/05/CentOS7安装Docker/">
-                <img class="img-ajax" src="/img/loading.gif"  data-src="/2019/04/05/CentOS7安装Docker/search_docker_engine.png"   alt="CentOS7安装Docker">
+                <img class="img-ajax" src="/img/loading.gif"  data-src="/2019/04/05/CentOS7安装Docker/search_docker_package.png"   alt="CentOS7安装Docker">
             </a>
         </div>
     
@@ -365,172 +498,6 @@ CentOS-7.0-1406-x86_64-DVD.iso
 
             <div class="post-permalink">
                 <a href="/2019/04/05/CentOS7安装Docker/" class="btn btn-default">阅读全文</a>
-            </div>
-        </footer>
-    
-</article>
-
-
-<article class="post">
-    
-        <div class="post-media">
-            <a href="/2019/04/05/VMware克隆VM修改MAC地址和IP/">
-                <img class="img-ajax" src="/img/loading.gif"  data-src="/2019/04/05/VMware克隆VM修改MAC地址和IP/modify_ip.png"   alt="VMware克隆VM修改MAC地址和IP">
-            </a>
-        </div>
-    
-    <div class="post-content">
-        <div class="post-head home-post-head">
-            <h1 class="post-title">
-                <a href="/2019/04/05/VMware克隆VM修改MAC地址和IP/">VMware克隆VM修改MAC地址和IP</a>
-            </h1>
-            <div class="post-meta">  &bull;
-                <time class="post-date" datetime="" title="">
-                    2019年04月05日
-                </time>
-            </div>
-        </div>
-        <p class="brief">
-            
-                VMware 克隆虚拟机需要修改物理地址和IP地址，否则物理地址会与原虚拟机的冲突，而IP地址笔者使用的是静态分配模式，因此需要手工配置（更有可控性）。
-
-
-
-环境
-说明
-
-
-
-
-VMware Workstation Pro 12.1.0
-桌面虚拟计算机软件
-
-
-CentOS-7.0-1406-x86_64-DVD.iso
-操作系统镜像
-
-
-
-查看 MAC 地址1$ ip addr
-
-
-TIPS：此主机的 MAC 地址为：00:0c:29:df:89:b9
-
-修改 MA...
-            
-        </p>
-    </div>
-    
-        <footer class="post-footer clearfix">
-            <div class="pull-left tag-list">
-                <div class="post-meta">
-    
-    
-    <span class="categories-meta fa-wrap">
-        <i class="fa fa-folder-open-o"></i>
-        <a href="/categories/Linux">
-            Linux
-        </a>
-    </span>
-    
-
-    
-    <span class="fa-wrap">
-        <i class="fa fa-tags"></i>
-        <span class="tags-meta">
-            
-                
-                    <a href="/tags/VM" title='VM'>
-                        VM
-                    </a>
-                
-            
-        </span>
-    </span>
-    
-
-    
-</div>
-
-            </div>
-
-            <div class="post-permalink">
-                <a href="/2019/04/05/VMware克隆VM修改MAC地址和IP/" class="btn btn-default">阅读全文</a>
-            </div>
-        </footer>
-    
-</article>
-
-
-<article class="post">
-    
-        <div class="post-media">
-            <a href="/2019/04/02/Docker安装Nexus3/">
-                <img class="img-ajax" src="/img/loading.gif"  data-src="/2019/04/02/Docker安装Nexus3/remove_nexus_container.png"   alt="Docker安装Nexus3">
-            </a>
-        </div>
-    
-    <div class="post-content">
-        <div class="post-head home-post-head">
-            <h1 class="post-title">
-                <a href="/2019/04/02/Docker安装Nexus3/">Docker安装Nexus3</a>
-            </h1>
-            <div class="post-meta">  &bull;
-                <time class="post-date" datetime="" title="">
-                    2019年04月02日
-                </time>
-            </div>
-        </div>
-        <p class="brief">
-            
-                Docker Volume 官方文档
-https://docs.docker.com/storage/volumes/
-Alpine 镜像官方文档
-https://hub.docker.com/_/alpine/
-Nexus3 镜像文档
-https://hub.docker.com/r/sonatype/nexus3
-
-1 准备下载 Alpine 镜像，其容量5M左右，适合用于数据卷备份1$ docker pull alpine:3.9
-下载 Nexus3 镜像1$ d...
-            
-        </p>
-    </div>
-    
-        <footer class="post-footer clearfix">
-            <div class="pull-left tag-list">
-                <div class="post-meta">
-    
-    
-    <span class="categories-meta fa-wrap">
-        <i class="fa fa-folder-open-o"></i>
-        <a href="/categories/Java">
-            Java
-        </a>
-    </span>
-    
-
-    
-    <span class="fa-wrap">
-        <i class="fa fa-tags"></i>
-        <span class="tags-meta">
-            
-                
-                    <a href="/tags/Docker" title='Docker'>
-                        Docker
-                    </a>
-                
-            
-        </span>
-    </span>
-    
-
-    
-</div>
-
-            </div>
-
-            <div class="post-permalink">
-                <a href="/2019/04/02/Docker安装Nexus3/" class="btn btn-default">阅读全文</a>
             </div>
         </footer>
     
@@ -609,7 +576,7 @@ https://hub.docker.com/r/sonatype/nexus3
         
     <div class="widget">
         <h3 class="title">分类</h3>
-        <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/ELK/"><i class="fa" aria-hidden="true">ELK</i></a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Git/"><i class="fa" aria-hidden="true">Git</i></a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/"><i class="fa" aria-hidden="true">Java</i></a><span class="category-list-count">116</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/"><i class="fa" aria-hidden="true">Linux</i></a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/"><i class="fa" aria-hidden="true">Mysql</i></a><span class="category-list-count">26</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Nginx/"><i class="fa" aria-hidden="true">Nginx</i></a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/NodeJS/"><i class="fa" aria-hidden="true">NodeJS</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Others/"><i class="fa" aria-hidden="true">Others</i></a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/"><i class="fa" aria-hidden="true">Redis</i></a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Test/"><i class="fa" aria-hidden="true">Test</i></a><span class="category-list-count">2</span></li></ul>
+        <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/ELK/"><i class="fa" aria-hidden="true">ELK</i></a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Git/"><i class="fa" aria-hidden="true">Git</i></a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/"><i class="fa" aria-hidden="true">Java</i></a><span class="category-list-count">118</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/"><i class="fa" aria-hidden="true">Linux</i></a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/"><i class="fa" aria-hidden="true">Mysql</i></a><span class="category-list-count">26</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Nginx/"><i class="fa" aria-hidden="true">Nginx</i></a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/NodeJS/"><i class="fa" aria-hidden="true">NodeJS</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Others/"><i class="fa" aria-hidden="true">Others</i></a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/"><i class="fa" aria-hidden="true">Redis</i></a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Test/"><i class="fa" aria-hidden="true">Test</i></a><span class="category-list-count">2</span></li></ul>
     </div>
 
 
@@ -619,7 +586,7 @@ https://hub.docker.com/r/sonatype/nexus3
     <h3 class="title">标签云</h3>
     <div class="content tag-cloud">
         
-            <a href="/tags/CentOS7/" style="font-size: 17.5px;">CentOS7</a> <a href="/tags/Docker/" style="font-size: 17.5px;">Docker</a> <a href="/tags/Gradle/" style="font-size: 10px;">Gradle</a> <a href="/tags/IDEA/" style="font-size: 10px;">IDEA</a> <a href="/tags/IO/" style="font-size: 15.83px;">IO</a> <a href="/tags/JMeter/" style="font-size: 10.83px;">JMeter</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Maven/" style="font-size: 10.83px;">Maven</a> <a href="/tags/Netty/" style="font-size: 10.83px;">Netty</a> <a href="/tags/OAuth2/" style="font-size: 10.83px;">OAuth2</a> <a href="/tags/Spring/" style="font-size: 19.17px;">Spring</a> <a href="/tags/SpringCloud/" style="font-size: 15px;">SpringCloud</a> <a href="/tags/SpringSecurity/" style="font-size: 11.67px;">SpringSecurity</a> <a href="/tags/VM/" style="font-size: 10px;">VM</a> <a href="/tags/k8s/" style="font-size: 12.5px;">k8s</a> <a href="/tags/lombok/" style="font-size: 10px;">lombok</a> <a href="/tags/代码生成/" style="font-size: 10px;">代码生成</a> <a href="/tags/分布式事务/" style="font-size: 10.83px;">分布式事务</a> <a href="/tags/加速器/" style="font-size: 10px;">加速器</a> <a href="/tags/升级回滚/" style="font-size: 10px;">升级回滚</a> <a href="/tags/反射/" style="font-size: 10px;">反射</a> <a href="/tags/图/" style="font-size: 10px;">图</a> <a href="/tags/多线程/" style="font-size: 18.33px;">多线程</a> <a href="/tags/工具/" style="font-size: 11.67px;">工具</a> <a href="/tags/序列化/" style="font-size: 10.83px;">序列化</a> <a href="/tags/异常处理/" style="font-size: 10px;">异常处理</a> <a href="/tags/异步/" style="font-size: 10px;">异步</a> <a href="/tags/微服务/" style="font-size: 16.67px;">微服务</a> <a href="/tags/性能优化/" style="font-size: 18.33px;">性能优化</a> <a href="/tags/性能测试/" style="font-size: 10.83px;">性能测试</a> <a href="/tags/搜索/" style="font-size: 12.5px;">搜索</a> <a href="/tags/数据结构/" style="font-size: 13.33px;">数据结构</a> <a href="/tags/日志/" style="font-size: 10px;">日志</a> <a href="/tags/架构/" style="font-size: 10.83px;">架构</a> <a href="/tags/池化技术/" style="font-size: 10px;">池化技术</a> <a href="/tags/注册中心/" style="font-size: 10.83px;">注册中心</a> <a href="/tags/算法/" style="font-size: 20px;">算法</a> <a href="/tags/缓存/" style="font-size: 13.33px;">缓存</a> <a href="/tags/规范/" style="font-size: 14.17px;">规范</a> <a href="/tags/设计模式/" style="font-size: 15px;">设计模式</a> <a href="/tags/资料库/" style="font-size: 10px;">资料库</a> <a href="/tags/配置中心/" style="font-size: 11.67px;">配置中心</a> <a href="/tags/锁/" style="font-size: 12.5px;">锁</a> <a href="/tags/队列/" style="font-size: 12.5px;">队列</a> <a href="/tags/集合/" style="font-size: 10.83px;">集合</a>
+            <a href="/tags/CentOS7/" style="font-size: 17.27px;">CentOS7</a> <a href="/tags/Docker/" style="font-size: 17.27px;">Docker</a> <a href="/tags/Gradle/" style="font-size: 10px;">Gradle</a> <a href="/tags/IDEA/" style="font-size: 10px;">IDEA</a> <a href="/tags/IO/" style="font-size: 15.45px;">IO</a> <a href="/tags/JMeter/" style="font-size: 10.91px;">JMeter</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Maven/" style="font-size: 10.91px;">Maven</a> <a href="/tags/Netty/" style="font-size: 10.91px;">Netty</a> <a href="/tags/OAuth2/" style="font-size: 10.91px;">OAuth2</a> <a href="/tags/Spring/" style="font-size: 19.09px;">Spring</a> <a href="/tags/SpringCloud/" style="font-size: 14.55px;">SpringCloud</a> <a href="/tags/SpringSecurity/" style="font-size: 11.82px;">SpringSecurity</a> <a href="/tags/VM/" style="font-size: 10px;">VM</a> <a href="/tags/k8s/" style="font-size: 12.73px;">k8s</a> <a href="/tags/lombok/" style="font-size: 10px;">lombok</a> <a href="/tags/代码生成/" style="font-size: 10px;">代码生成</a> <a href="/tags/分布式事务/" style="font-size: 10.91px;">分布式事务</a> <a href="/tags/加速器/" style="font-size: 10px;">加速器</a> <a href="/tags/升级回滚/" style="font-size: 10px;">升级回滚</a> <a href="/tags/反射/" style="font-size: 10px;">反射</a> <a href="/tags/图/" style="font-size: 10px;">图</a> <a href="/tags/多线程/" style="font-size: 18.18px;">多线程</a> <a href="/tags/安全/" style="font-size: 10px;">安全</a> <a href="/tags/工具/" style="font-size: 11.82px;">工具</a> <a href="/tags/序列化/" style="font-size: 11.82px;">序列化</a> <a href="/tags/异常处理/" style="font-size: 10px;">异常处理</a> <a href="/tags/异步/" style="font-size: 10px;">异步</a> <a href="/tags/微服务/" style="font-size: 16.36px;">微服务</a> <a href="/tags/性能优化/" style="font-size: 18.18px;">性能优化</a> <a href="/tags/性能测试/" style="font-size: 10.91px;">性能测试</a> <a href="/tags/搜索/" style="font-size: 12.73px;">搜索</a> <a href="/tags/数据结构/" style="font-size: 13.64px;">数据结构</a> <a href="/tags/日志/" style="font-size: 10px;">日志</a> <a href="/tags/架构/" style="font-size: 10.91px;">架构</a> <a href="/tags/池化技术/" style="font-size: 10px;">池化技术</a> <a href="/tags/注册中心/" style="font-size: 10.91px;">注册中心</a> <a href="/tags/算法/" style="font-size: 20px;">算法</a> <a href="/tags/缓存/" style="font-size: 13.64px;">缓存</a> <a href="/tags/规范/" style="font-size: 14.55px;">规范</a> <a href="/tags/设计模式/" style="font-size: 14.55px;">设计模式</a> <a href="/tags/资料库/" style="font-size: 10px;">资料库</a> <a href="/tags/配置中心/" style="font-size: 11.82px;">配置中心</a> <a href="/tags/锁/" style="font-size: 12.73px;">锁</a> <a href="/tags/队列/" style="font-size: 12.73px;">队列</a> <a href="/tags/集合/" style="font-size: 10.91px;">集合</a>
         
     </div>
   </div>
