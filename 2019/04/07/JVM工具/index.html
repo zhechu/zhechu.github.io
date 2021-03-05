@@ -328,8 +328,8 @@ m
 <blockquote>
 <p>TIPS：<code>-x 2</code>表示指定输出结果的属性遍历深度为2</p>
 </blockquote>
-<h4 id="15-3-2-耗时过滤"><a href="#15-3-2-耗时过滤" class="headerlink" title="15.3.2 耗时过滤"></a>15.3.2 耗时过滤</h4><p>满足耗时大于200毫秒才捕获<br><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> watch service.impl.OauthServiceImpl oauthToken "&#123;params,target,returnObj&#125;" '#cost&gt;200' -x 2</span><br></pre></td></tr></table></figure></p>
-<h4 id="15-3-3-异常过滤"><a href="#15-3-3-异常过滤" class="headerlink" title="15.3.3 异常过滤"></a>15.3.3 异常过滤</h4><p>异常时才捕获<br><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> watch service.impl.OauthServiceImpl oauthToken "&#123;params,target,throwExp&#125;" -e</span><br></pre></td></tr></table></figure></p>
+<h4 id="15-3-2-耗时过滤"><a href="#15-3-2-耗时过滤" class="headerlink" title="15.3.2 耗时过滤"></a>15.3.2 耗时过滤</h4><p>满足耗时大于<strong>200毫秒</strong>才捕获<br><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> watch service.impl.OauthServiceImpl oauthToken "&#123;params,target,returnObj&#125;" '#cost&gt;200' -x 2</span><br></pre></td></tr></table></figure></p>
+<h4 id="15-3-3-异常过滤"><a href="#15-3-3-异常过滤" class="headerlink" title="15.3.3 异常过滤"></a>15.3.3 异常过滤</h4><p><strong>异常时</strong>才捕获<br><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> watch service.impl.OauthServiceImpl oauthToken "&#123;params,target,throwExp&#125;" -e</span><br></pre></td></tr></table></figure></p>
 <blockquote>
 <p>TIPS：<code>-e</code>表示在方法异常之后观察</p>
 </blockquote>

@@ -1,0 +1,333 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!--Setting-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta name="apple-mobile-web-app-capable" content="哲锄">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no,email=no,adress=no">
+    <meta name="browsermode" content="application">
+    <meta name="screen-orientation" content="portrait">
+    <link rel="dns-prefetch" href="http://www.zhechu.top">
+    <!--SEO-->
+
+    <meta name="keywords" content="规范,日志,">
+
+
+    <meta name="description" content="问题：如何在日志文件或ELK日志平台快速搜索某次请求的相关日志
+方案：封装请求唯一ID，并打印在每条日志记录中，且通过请求头或出参返回（方便拿到请求唯一ID）
+
+
+
+环境
+说明
+
+
+
+
+spring-boot-1.5.x
+企业应用程序框架
+
+
+log4j2
+日志框架
+
+
+
+1 添加过滤器请求唯...">
+
+
+<meta name="robots" content="all">
+<meta name="google" content="all">
+<meta name="googlebot" content="all">
+<meta name="verify" content="all">
+    <!--Title-->
+
+
+<title>封装请求唯一ID | 哲锄</title>
+
+
+    <link rel="alternate" href="/atom.xml" title="哲锄" type="application/atom+xml">
+
+
+    <link rel="icon" href="/favicon.ico">
+
+    
+
+
+
+<link rel="stylesheet" href="/css/bootstrap.min.css?rev=3.3.7">
+<link rel="stylesheet" href="/css/font-awesome.min.css?rev=4.5.0">
+<link rel="stylesheet" href="/css/style.css?rev=@@hash">
+
+
+
+
+    
+
+
+
+
+
+    
+
+</head>
+
+</html>
+<!--[if lte IE 8]>
+<style>
+    html{ font-size: 1em }
+</style>
+<![endif]-->
+<!--[if lte IE 9]>
+<div style="ie">你使用的浏览器版本过低，为了你更好的阅读体验，请更新浏览器的版本或者使用其他现代浏览器，比如Chrome、Firefox、Safari等。</div>
+<![endif]-->
+
+<body>
+    
+    <nav class="main-navigation">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="navbar-header"><span class="nav-toggle-button collapsed pull-right" data-toggle="collapse" data-target="#main-menu" id="mnav">
+                    <span class="sr-only"></span>
+                        <i class="fa fa-bars"></i>
+                    </span>
+                    <a class="navbar-brand" href="http://www.zhechu.top">哲锄</a>
+                </div>
+                <div class="collapse navbar-collapse" id="main-menu">
+                    <ul class="menu">
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/"><i class="fa fa-home"></i>哲锄</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/categories"><i class="fa fa-list"></i>分类</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/about"><i class="fa fa-user"></i>关于我</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/archives"><i class="fa fa-archive"></i>归档</a>
+                            </li>
+                        
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<a href="http://github.com/zhechu">
+    <img style="position: absolute; top: 0; right: 0; border: 0;"
+        src="/img/forkme.png"
+        alt="Fork me on GitHub">
+</a>
+
+    <section class="content-wrap">
+        <div class="container">
+            <div class="row">
+                <main class="col-md-8 main-content m-post">
+                    <p id="process"></p>
+<article class="post">
+    <div class="post-head">
+        <h1 id="封装请求唯一ID">
+            
+                封装请求唯一ID
+            
+        </h1>
+        <div class="post-meta">
+    
+    
+    <span class="categories-meta fa-wrap">
+        <i class="fa fa-folder-open-o"></i>
+        <a href="/categories/Java">
+            Java
+        </a>
+    </span>
+    
+
+    
+    <span class="fa-wrap">
+        <i class="fa fa-tags"></i>
+        <span class="tags-meta">
+            
+                
+                    <a href="/tags/规范" title='规范'>
+                        规范
+                    </a>
+                
+                    <a href="/tags/日志" title='日志'>
+                        日志
+                    </a>
+                
+            
+        </span>
+    </span>
+    
+
+    
+        
+        <span class="fa-wrap">
+            <i class="fa fa-clock-o"></i>
+            <span class="date-meta">2021/03/05</span>
+        </span>
+        
+            <span class="fa-wrap">
+                <i class="fa fa-eye"></i>
+                <span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    
+</div>
+
+        
+        
+    </div>
+    
+    <div class="post-body post-content">
+        <p>问题：如何在日志文件或ELK日志平台快速搜索某次请求的相关日志</p>
+<p>方案：封装请求唯一ID，并打印在每条日志记录中，且通过请求头或出参返回（方便拿到请求唯一ID）</p>
+<table>
+<thead>
+<tr>
+<th>环境</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>spring-boot-1.5.x</td>
+<td>企业应用程序框架</td>
+</tr>
+<tr>
+<td>log4j2</td>
+<td>日志框架</td>
+</tr>
+</tbody>
+</table>
+<h2 id="1-添加过滤器"><a href="#1-添加过滤器" class="headerlink" title="1 添加过滤器"></a>1 添加过滤器</h2><p>请求唯一ID过滤器，用于生成唯一ID并放入日志上下文<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> com.alibaba.fastjson.JSONObject;</span><br><span class="line"><span class="keyword">import</span> com.alibaba.fastjson.serializer.SerializerFeature;</span><br><span class="line"><span class="keyword">import</span> domain.ResultMsg;</span><br><span class="line"><span class="keyword">import</span> util.UUIDUtil;</span><br><span class="line"><span class="keyword">import</span> lombok.extern.slf4j.Slf4j;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.MDC;</span><br><span class="line"><span class="keyword">import</span> org.springframework.core.annotation.Order;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Component;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.servlet.*;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.annotation.WebFilter;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServletRequest;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServletResponse;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.nio.charset.StandardCharsets;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Order</span>(<span class="number">0</span>) <span class="comment">// 在所有自定义过滤器前面</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="meta">@WebFilter</span>(urlPatterns = <span class="string">"/*"</span>, filterName = <span class="string">"requestIdFilter"</span>)</span><br><span class="line"><span class="meta">@Slf</span>4j</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RequestIdFilter</span> <span class="keyword">implements</span> <span class="title">Filter</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String REQUEST_ID = <span class="string">"RequestId"</span>;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">(FilterConfig filterConfig)</span> <span class="keyword">throws</span> ServletException </span>&#123;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doFilter</span><span class="params">(ServletRequest request, ServletResponse response, FilterChain chain)</span> <span class="keyword">throws</span> IOException, ServletException </span>&#123;</span><br><span class="line">    HttpServletRequest httpRequest = (HttpServletRequest) request;</span><br><span class="line">    HttpServletResponse httpResponse = (HttpServletResponse) response;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 防止上游已存在请求唯一ID</span></span><br><span class="line">    String requestId = httpRequest.getHeader(REQUEST_ID);</span><br><span class="line">    <span class="keyword">if</span> (requestId == <span class="keyword">null</span>) &#123;</span><br><span class="line">      requestId = UUIDUtil.getUUID();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 将请求唯一ID放入日志上下文</span></span><br><span class="line">    MDC.put(REQUEST_ID, requestId);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 放入请求头（冗余）</span></span><br><span class="line">    httpResponse.setHeader(REQUEST_ID, requestId);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      RequestIdHttpServletResponseWrapper responseWrapper = <span class="keyword">new</span> RequestIdHttpServletResponseWrapper(httpResponse);</span><br><span class="line">      chain.doFilter(httpRequest, responseWrapper);</span><br><span class="line"></span><br><span class="line">      <span class="keyword">byte</span>[] content = responseWrapper.getContent();</span><br><span class="line">      <span class="keyword">if</span> (content.length &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        String resultJson = <span class="keyword">new</span> String(content, StandardCharsets.UTF_8);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">          ResultMsg resultMsg = JSONObject.parseObject(resultJson, ResultMsg<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">          resultMsg.setRequestId(requestId);</span><br><span class="line">          resultJson = JSONObject.toJSONString(resultMsg, SerializerFeature.WriteMapNullValue);</span><br><span class="line">          content = resultJson.getBytes(StandardCharsets.UTF_8);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">          <span class="comment">// JSON 转换异常，表示返回的 body 不是 ResultMsg 类型格式，原封返回即可</span></span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 写入到原始的响应</span></span><br><span class="line">      ServletOutputStream output = httpResponse.getOutputStream();</span><br><span class="line">      output.write(content);</span><br><span class="line">      output.flush();</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">      MDC.clear();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">destroy</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>定义请求响应代理，用于截获下游响应并将请求ID写入出参<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> javax.servlet.ServletOutputStream;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.WriteListener;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServletResponse;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServletResponseWrapper;</span><br><span class="line"><span class="keyword">import</span> java.io.ByteArrayOutputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.io.PrintWriter;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RequestIdHttpServletResponseWrapper</span> <span class="keyword">extends</span> <span class="title">HttpServletResponseWrapper</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> ByteArrayOutputStream output;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">RequestIdHttpServletResponseWrapper</span><span class="params">(HttpServletResponse httpServletResponse)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>(httpServletResponse);</span><br><span class="line">    output = <span class="keyword">new</span> ByteArrayOutputStream();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> ServletOutputStream <span class="title">getOutputStream</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> ServletOutputStream() &#123;</span><br><span class="line"></span><br><span class="line">      <span class="meta">@Override</span></span><br><span class="line">      <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isReady</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="meta">@Override</span></span><br><span class="line">      <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setWriteListener</span><span class="params">(WriteListener listener)</span> </span>&#123; &#125;</span><br><span class="line"></span><br><span class="line">      <span class="meta">@Override</span></span><br><span class="line">      <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">write</span><span class="params">(<span class="keyword">int</span> b)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        output.write(b);</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="meta">@Override</span></span><br><span class="line">      <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">write</span><span class="params">(<span class="keyword">byte</span>[] b, <span class="keyword">int</span> off, <span class="keyword">int</span> len)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        output.write(b, off, len);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> PrintWriter <span class="title">getWriter</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> PrintWriter(output, <span class="keyword">true</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">byte</span>[] getContent() <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">    <span class="keyword">return</span> output.toByteArray();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="2-修改日志配置"><a href="#2-修改日志配置" class="headerlink" title="2 修改日志配置"></a>2 修改日志配置</h2><p>log4j2.xml 文件的 pattern 添加 <code>[%X{RequestId}]</code><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span><br><span class="line">&lt;configuration status="ERROR" monitorInterval="10"&gt;</span><br><span class="line">    &lt;Properties&gt;</span><br><span class="line">        &lt;property name="LOG_PATTERN" value="[%d&#123;HH:mm:ss:SSS&#125;] [%X&#123;RequestId&#125;] [%p] [%thread] - %l - %m%n" /&gt;</span><br><span class="line">    &lt;/Properties&gt;</span><br><span class="line">    &lt;appenders&gt;</span><br><span class="line">        &lt;console name="Console" target="SYSTEM_OUT"&gt;</span><br><span class="line">            &lt;PatternLayout pattern="$&#123;LOG_PATTERN&#125;" /&gt;</span><br><span class="line">             &lt;ThresholdFilter level="TRACE" onMatch="ACCEPT" onMismatch="DENY" /&gt;</span><br><span class="line">        &lt;/console&gt;</span><br><span class="line">        &lt;RollingFile name="RollingFileInfo" fileName="../logs/university-info.log"</span><br><span class="line">                     filePattern="../logs/$$&#123;date:yyyy-MM&#125;/university-%d&#123;yyyy-MM-dd&#125;-info-%i.log"&gt;</span><br><span class="line">            &lt;!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch） --&gt;</span><br><span class="line">            &lt;ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY" /&gt;</span><br><span class="line">            &lt;PatternLayout pattern="$&#123;LOG_PATTERN&#125;" /&gt;</span><br><span class="line">            &lt;Policies&gt;</span><br><span class="line">                &lt;TimeBasedTriggeringPolicy /&gt;</span><br><span class="line">                &lt;SizeBasedTriggeringPolicy size="100 MB" /&gt;</span><br><span class="line">            &lt;/Policies&gt;</span><br><span class="line">        &lt;/RollingFile&gt;</span><br><span class="line">        &lt;Async name="Async" includeLocation="true" bufferSize="1024"&gt;</span><br><span class="line">            &lt;appender-ref ref="Console" /&gt;</span><br><span class="line">            &lt;appender-ref ref="RollingFileInfo"/&gt;</span><br><span class="line">        &lt;/Async&gt;</span><br><span class="line">    &lt;/appenders&gt;</span><br><span class="line">    &lt;loggers&gt;</span><br><span class="line">        &lt;logger name="org.springframework" level="ERROR"/&gt;</span><br><span class="line">        &lt;root level="ERROR"&gt;</span><br><span class="line">            &lt;appender-ref ref="Async" /&gt;</span><br><span class="line">        &lt;/root&gt;</span><br><span class="line">    &lt;/loggers&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure></p>
+<h2 id="3-测试验证"><a href="#3-测试验证" class="headerlink" title="3 测试验证"></a>3 测试验证</h2><p>日志打印示例<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[17:46:02:683] [af665c8d2653422c9bf6f775ead27bea] [INFO] [http-nio-8888-exec-2] - core.aspect.WebLogAspect.around(WebLogAspect.java:60) -</span><br><span class="line">开始-------------------------------------------------------</span><br><span class="line">	耗时: 20ms</span><br><span class="line">	链路: http://127.0.0.1:8080/test controller.TestController.test</span><br><span class="line">	参数: [hello]</span><br><span class="line">结束-------------------------------------------------------</span><br></pre></td></tr></table></figure></p>
+<p>请求出参示例<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"code"</span>: <span class="number">200</span>,</span><br><span class="line">  <span class="attr">"msg"</span>: <span class="string">"操作成功!"</span>,</span><br><span class="line">  <span class="attr">"requestId"</span>: <span class="string">"d27965161b4a4796bde15ebe205d62de"</span>,</span><br><span class="line">  <span class="attr">"data"</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">"id"</span>: <span class="string">"f627243077214e69b62a1b60be075d81"</span>,</span><br><span class="line">      <span class="attr">"createDate"</span>: <span class="number">1614760334000</span></span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+    </div>
+    
+    <div class="post-footer">
+        <div class="col-sm-10">
+            <div>
+                <b>本文链接</b>：<a href="/2021/03/05/封装请求唯一ID/">封装请求唯一ID</a>
+            </div>
+            <div>
+                
+                    转载声明：本博客由<strong>哲锄</strong>创作，采用 <a href="https://creativecommons.org/licenses/by-nc-nd/3.0/" target="_blank"> CC BY 3.0 CN </a> 许可协议。可自由转载、引用，但需署名作者且注明文章出处。如转载至微信公众号，请在文末添加作者公众号二维码。
+                
+            </div>
+            <div>
+                
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <img src="" width=100%/>
+        </div>
+    </div>
+</article>
+
+<div class="article-nav prev-next-wrap clearfix">
+    
+    
+        <a href="/2020/11/09/Jackson序列化优雅处理/" class="next-post btn btn-default" title='Jackson序列化优雅处理'>
+            <span class="hidden-lg">下一篇</span>
+            <span class="hidden-xs">Jackson序列化优雅处理</span><i class="fa fa-angle-right fa-fw"></i>
+        </a>
+    
+</div>
+
+
+
+
+
+
+                </main>
+                
+                    <aside id="article-toc" role="navigation" class="col-md-4">
+    <div class="widget">
+        <h3 class="title">文章目录</h3>
+        
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-添加过滤器"><span class="toc-text">1 添加过滤器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-修改日志配置"><span class="toc-text">2 修改日志配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-测试验证"><span class="toc-text">3 测试验证</span></a></li></ol>
+        
+    </div>
+</aside>
+
+                
+            </div>
+        </div>
+    </section>
+    <footer class="main-footer">
+    <div class="container">
+        <div class="row">
+        </div>
+    </div>
+</footer>
+
+<a id="back-to-top" class="icon-btn hide">
+	<i class="fa fa-chevron-up"></i>
+</a>
+
+
+
+
+    <div class="copyright">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="busuanzi">
+    
+        访问量:
+        <strong id="busuanzi_value_site_pv">
+            <i class="fa fa-spinner fa-spin"></i>
+        </strong>
+        &nbsp; | &nbsp;
+        访客数:
+        <strong id="busuanzi_value_site_uv">
+            <i class="fa fa-spinner fa-spin"></i>
+        </strong>
+    
+</div>
+
+            </div>
+            <div class="col-sm-12">
+                <span>Copyright &copy; 2016
+                </span> |
+                <span>
+                    Powered by <a href="//hexo.io" class="copyright-links" target="_blank" rel="nofollow">Hexo</a>
+                </span> |
+                <span>
+                    Theme by <a href="//github.com/itmuch/hexo-theme-itmuch.git" class="copyright-links" target="_blank" rel="nofollow">ITMuch</a>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script src="/js/app.js?rev=@@hash"></script>
+
+</body>
+</html>
