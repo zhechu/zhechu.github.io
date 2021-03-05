@@ -1,0 +1,339 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!--Setting-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta name="apple-mobile-web-app-capable" content="哲锄">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no,email=no,adress=no">
+    <meta name="browsermode" content="application">
+    <meta name="screen-orientation" content="portrait">
+    <link rel="dns-prefetch" href="http://www.zhechu.top">
+    <!--SEO-->
+
+    <meta name="keywords" content="设计模式,">
+
+
+    <meta name="description" content="1 定义定义一个操作中的算法骨架，将部分步骤延迟到子类中实现；使得子类可以不改变一个算法的结构即可重定义该算法的某些特定步骤。本质是固定算法骨架。
+2 结构
+
+
+角色
+说明
+
+
+
+
+AbstractClass
+抽象类，定义算法骨架和原语操作并提供算法中部分步骤的通用实现
+
+
+ConcreteC...">
+
+
+<meta name="robots" content="all">
+<meta name="google" content="all">
+<meta name="googlebot" content="all">
+<meta name="verify" content="all">
+    <!--Title-->
+
+
+<title>行为型-模板方法模式 | 哲锄</title>
+
+
+    <link rel="alternate" href="/atom.xml" title="哲锄" type="application/atom+xml">
+
+
+    <link rel="icon" href="/favicon.ico">
+
+    
+
+
+
+<link rel="stylesheet" href="/css/bootstrap.min.css?rev=3.3.7">
+<link rel="stylesheet" href="/css/font-awesome.min.css?rev=4.5.0">
+<link rel="stylesheet" href="/css/style.css?rev=@@hash">
+
+
+
+
+    
+
+
+
+
+
+    
+
+</head>
+
+</html>
+<!--[if lte IE 8]>
+<style>
+    html{ font-size: 1em }
+</style>
+<![endif]-->
+<!--[if lte IE 9]>
+<div style="ie">你使用的浏览器版本过低，为了你更好的阅读体验，请更新浏览器的版本或者使用其他现代浏览器，比如Chrome、Firefox、Safari等。</div>
+<![endif]-->
+
+<body>
+    
+    <nav class="main-navigation">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="navbar-header"><span class="nav-toggle-button collapsed pull-right" data-toggle="collapse" data-target="#main-menu" id="mnav">
+                    <span class="sr-only"></span>
+                        <i class="fa fa-bars"></i>
+                    </span>
+                    <a class="navbar-brand" href="http://www.zhechu.top">哲锄</a>
+                </div>
+                <div class="collapse navbar-collapse" id="main-menu">
+                    <ul class="menu">
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/"><i class="fa fa-home"></i>哲锄</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/categories"><i class="fa fa-list"></i>分类</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/about"><i class="fa fa-user"></i>关于我</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/archives"><i class="fa fa-archive"></i>归档</a>
+                            </li>
+                        
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<a href="http://github.com/zhechu">
+    <img style="position: absolute; top: 0; right: 0; border: 0;"
+        src="/img/forkme.png"
+        alt="Fork me on GitHub">
+</a>
+
+    <section class="content-wrap">
+        <div class="container">
+            <div class="row">
+                <main class="col-md-8 main-content m-post">
+                    <p id="process"></p>
+<article class="post">
+    <div class="post-head">
+        <h1 id="行为型-模板方法模式">
+            
+                行为型-模板方法模式
+            
+        </h1>
+        <div class="post-meta">
+    
+    
+    <span class="categories-meta fa-wrap">
+        <i class="fa fa-folder-open-o"></i>
+        <a href="/categories/Java">
+            Java
+        </a>
+    </span>
+    
+
+    
+    <span class="fa-wrap">
+        <i class="fa fa-tags"></i>
+        <span class="tags-meta">
+            
+                
+                    <a href="/tags/设计模式" title='设计模式'>
+                        设计模式
+                    </a>
+                
+            
+        </span>
+    </span>
+    
+
+    
+        
+        <span class="fa-wrap">
+            <i class="fa fa-clock-o"></i>
+            <span class="date-meta">2021/03/05</span>
+        </span>
+        
+            <span class="fa-wrap">
+                <i class="fa fa-eye"></i>
+                <span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    
+</div>
+
+        
+        
+    </div>
+    
+    <div class="post-body post-content">
+        <h2 id="1-定义"><a href="#1-定义" class="headerlink" title="1 定义"></a>1 定义</h2><p>定义一个操作中的算法骨架，将部分步骤延迟到子类中实现；使得子类可以不改变一个算法的结构即可重定义该算法的某些特定步骤。本质是<strong>固定算法骨架</strong>。</p>
+<h2 id="2-结构"><a href="#2-结构" class="headerlink" title="2 结构"></a>2 结构</h2><table>
+<thead>
+<tr>
+<th>角色</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AbstractClass</td>
+<td>抽象类，定义算法骨架和原语操作并提供算法中部分步骤的通用实现</td>
+</tr>
+<tr>
+<td>ConcreteClass</td>
+<td>实现类，实现算法骨架中的某些步骤，完成跟特定子类相关的功能</td>
+</tr>
+</tbody>
+</table>
+<h2 id="3-体现的-GRASP-设计原则"><a href="#3-体现的-GRASP-设计原则" class="headerlink" title="3 体现的 GRASP 设计原则"></a>3 体现的 GRASP 设计原则</h2><ol>
+<li>间接</li>
+</ol>
+<h2 id="4-优缺点"><a href="#4-优缺点" class="headerlink" title="4 优缺点"></a>4 优缺点</h2><p>优点</p>
+<ol>
+<li>代码复用</li>
+</ol>
+<p>缺点</p>
+<ol>
+<li>算法骨架不易升级</li>
+</ol>
+<h2 id="5-使用场景"><a href="#5-使用场景" class="headerlink" title="5 使用场景"></a>5 使用场景</h2><ol>
+<li>需固定算法骨架，实现一个算法不变的部分，并将可变的行为由其子类实现</li>
+<li>各个子类中具有公共行为，应该抽取出来，集中到公共类中实现，从而实现代码复用</li>
+<li>需控制子类扩展的情况，模板方法模式会在特定时刻调用子类的方法，这样只允许在扩展这些方法</li>
+</ol>
+<h2 id="6-示例"><a href="#6-示例" class="headerlink" title="6 示例"></a>6 示例</h2><h3 id="6-1-回调技术"><a href="#6-1-回调技术" class="headerlink" title="6.1 回调技术"></a>6.1 回调技术</h3><p>示例：字符串转大小写（JDK1.8回调方式）<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CallbackDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">adapter</span><span class="params">(Function&lt;String, String&gt; function)</span> </span>&#123;</span><br><span class="line">		String message = <span class="string">"Hello World"</span>;</span><br><span class="line">		System.out.println(function.apply(message));</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		Function&lt;String, String&gt; function1 = (str) -&gt; &#123;</span><br><span class="line">			<span class="keyword">return</span> str.toUpperCase();</span><br><span class="line">		&#125;;</span><br><span class="line">		Function&lt;String, String&gt; function2 = (str) -&gt; &#123;</span><br><span class="line">			<span class="keyword">return</span> str.toLowerCase();</span><br><span class="line">		&#125;;</span><br><span class="line">		adapter(function1);</span><br><span class="line">		adapter(function2);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="6-2-封装分页模板"><a href="#6-2-封装分页模板" class="headerlink" title="6.2 封装分页模板"></a>6.2 封装分页模板</h3><h4 id="6-2-1-普通分页"><a href="#6-2-1-普通分页" class="headerlink" title="6.2.1 普通分页"></a>6.2.1 普通分页</h4><p>定义分页模板，一般用于循环批量查询操作，如：缓存分批重建<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.springframework.util.CollectionUtils;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">PageTemplate</span>&lt;<span class="title">E</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 获取分页数据</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@param</span> page</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@param</span> pageSize</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">protected</span> <span class="keyword">abstract</span> List&lt;E&gt; <span class="title">select</span><span class="params">(<span class="keyword">int</span> page, <span class="keyword">int</span> pageSize)</span></span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 每页显示条数</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">protected</span> <span class="keyword">abstract</span> <span class="keyword">int</span> <span class="title">getPageSize</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 分页处理</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handle</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> page = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">int</span> pageSize = getPageSize();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (;;) &#123;</span><br><span class="line">      List&lt;E&gt; list = select(page, pageSize);</span><br><span class="line">      <span class="keyword">if</span> (CollectionUtils.isEmpty(list)) &#123;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">int</span> size = list.size();</span><br><span class="line"></span><br><span class="line">      doHandle(list);</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 若不满足每页条数，则为最后一页</span></span><br><span class="line">      <span class="keyword">if</span> (size &lt; pageSize) &#123;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 只要每次分页查出来的数据不为空，那就页数+1 继续查询并转换</span></span><br><span class="line">      page ++;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 执行具体业务逻辑</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@param</span> list</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">protected</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">doHandle</span><span class="params">(List&lt;E&gt; list)</span></span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>同步用户缓存<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">syncUserToCache</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="comment">// 分页处理</span></span><br><span class="line">  PageTemplate&lt;User&gt; pageTemplate = <span class="keyword">new</span> PageTemplate&lt;User&gt;() &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> List&lt;User&gt; <span class="title">select</span><span class="params">(<span class="keyword">int</span> page, <span class="keyword">int</span> pageSize)</span> </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> userService.select(page, pageSize);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">int</span> <span class="title">getPageSize</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">500</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doHandle</span><span class="params">(List&lt;User&gt; list)</span> </span>&#123;</span><br><span class="line">      <span class="comment">// TODO 具体同步逻辑</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line">  pageTemplate.handle();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="6-2-2-按索引分页"><a href="#6-2-2-按索引分页" class="headerlink" title="6.2.2 按索引分页"></a>6.2.2 按索引分页</h4><p><strong>按索引（数值类型）在数据库本身的存储顺序进行分页查询，效率比普通分页要高，尤其是页数超10000+时</strong></p>
+<p>定义分页模板，一般用于循环批量查询操作，如：缓存分批重建<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.commons.collections4.CollectionUtils;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 基于上一批索引分页模板类</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">IndexPageTemplate</span>&lt;<span class="title">E</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 基于上一批索引获取分页数据</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@param</span> lastBatchMaxId 最后一批最大ID</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@param</span> batchSize 每批数量</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">protected</span> <span class="keyword">abstract</span> List&lt;E&gt; <span class="title">select</span><span class="params">(Long lastBatchMaxId, <span class="keyword">int</span> batchSize)</span></span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 每批数量</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">protected</span> <span class="keyword">abstract</span> <span class="keyword">int</span> <span class="title">getBatchSize</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 分页处理</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handle</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 分批更新</span></span><br><span class="line">    Long lastBatchMaxId = <span class="number">0L</span>;</span><br><span class="line">    <span class="keyword">int</span> batchSize = getBatchSize();</span><br><span class="line">    <span class="keyword">for</span> (;;) &#123;</span><br><span class="line">      List&lt;E&gt; list = select(</span><br><span class="line">        lastBatchMaxId,</span><br><span class="line">        batchSize</span><br><span class="line">      );</span><br><span class="line">      <span class="keyword">if</span> (CollectionUtils.isEmpty(list)) &#123;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      doHandle(list);</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 检查是否为最后一批请求，若是则结束（减少处理最后一批后又去数据库取数据判断是否结束的开销）</span></span><br><span class="line">      <span class="keyword">int</span> size = list.size();</span><br><span class="line">      <span class="keyword">if</span> (size &lt; batchSize) &#123;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      lastBatchMaxId = getId(list.get(size - <span class="number">1</span>));</span><br><span class="line">      <span class="keyword">if</span> (lastBatchMaxId == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 执行具体业务逻辑</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@param</span> list</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">protected</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">doHandle</span><span class="params">(List&lt;E&gt; list)</span></span>;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">protected</span> <span class="keyword">abstract</span> Long <span class="title">getId</span><span class="params">(E e)</span></span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>使用<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">syncUserToCache</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    IndexPageTemplate&lt;User&gt; indexPageTemplate = <span class="keyword">new</span> IndexPageTemplate&lt;User&gt;() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">protected</span> List&lt;User&gt; <span class="title">select</span><span class="params">(Long lastBatchMaxId, <span class="keyword">int</span> batchSize)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> userService.select(lastBatchMaxId, batchSize);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">protected</span> <span class="keyword">int</span> <span class="title">getBatchSize</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">500</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doHandle</span><span class="params">(List&lt;User&gt; list)</span> </span>&#123;</span><br><span class="line">            <span class="comment">// TODO 具体同步逻辑</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">protected</span> Long <span class="title">getId</span><span class="params">(User user)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> user.getUserId();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    indexPageTemplate.handle();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+    </div>
+    
+    <div class="post-footer">
+        <div class="col-sm-10">
+            <div>
+                <b>本文链接</b>：<a href="/2021/03/05/行为型-模板方法模式/">行为型-模板方法模式</a>
+            </div>
+            <div>
+                
+                    转载声明：本博客由<strong>哲锄</strong>创作，采用 <a href="https://creativecommons.org/licenses/by-nc-nd/3.0/" target="_blank"> CC BY 3.0 CN </a> 许可协议。可自由转载、引用，但需署名作者且注明文章出处。如转载至微信公众号，请在文末添加作者公众号二维码。
+                
+            </div>
+            <div>
+                
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <img src="" width=100%/>
+        </div>
+    </div>
+</article>
+
+<div class="article-nav prev-next-wrap clearfix">
+    
+    
+        <a href="/2021/03/05/封装请求唯一ID/" class="next-post btn btn-default" title='封装请求唯一ID'>
+            <span class="hidden-lg">下一篇</span>
+            <span class="hidden-xs">封装请求唯一ID</span><i class="fa fa-angle-right fa-fw"></i>
+        </a>
+    
+</div>
+
+
+
+
+
+
+                </main>
+                
+                    <aside id="article-toc" role="navigation" class="col-md-4">
+    <div class="widget">
+        <h3 class="title">文章目录</h3>
+        
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-定义"><span class="toc-text">1 定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-结构"><span class="toc-text">2 结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-体现的-GRASP-设计原则"><span class="toc-text">3 体现的 GRASP 设计原则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-优缺点"><span class="toc-text">4 优缺点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-使用场景"><span class="toc-text">5 使用场景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-示例"><span class="toc-text">6 示例</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-回调技术"><span class="toc-text">6.1 回调技术</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-封装分页模板"><span class="toc-text">6.2 封装分页模板</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#6-2-1-普通分页"><span class="toc-text">6.2.1 普通分页</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-2-2-按索引分页"><span class="toc-text">6.2.2 按索引分页</span></a></li></ol></li></ol></li></ol>
+        
+    </div>
+</aside>
+
+                
+            </div>
+        </div>
+    </section>
+    <footer class="main-footer">
+    <div class="container">
+        <div class="row">
+        </div>
+    </div>
+</footer>
+
+<a id="back-to-top" class="icon-btn hide">
+	<i class="fa fa-chevron-up"></i>
+</a>
+
+
+
+
+    <div class="copyright">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="busuanzi">
+    
+        访问量:
+        <strong id="busuanzi_value_site_pv">
+            <i class="fa fa-spinner fa-spin"></i>
+        </strong>
+        &nbsp; | &nbsp;
+        访客数:
+        <strong id="busuanzi_value_site_uv">
+            <i class="fa fa-spinner fa-spin"></i>
+        </strong>
+    
+</div>
+
+            </div>
+            <div class="col-sm-12">
+                <span>Copyright &copy; 2016
+                </span> |
+                <span>
+                    Powered by <a href="//hexo.io" class="copyright-links" target="_blank" rel="nofollow">Hexo</a>
+                </span> |
+                <span>
+                    Theme by <a href="//github.com/itmuch/hexo-theme-itmuch.git" class="copyright-links" target="_blank" rel="nofollow">ITMuch</a>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script src="/js/app.js?rev=@@hash"></script>
+
+</body>
+</html>
