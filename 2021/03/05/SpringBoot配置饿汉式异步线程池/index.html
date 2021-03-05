@@ -1,0 +1,315 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!--Setting-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta name="apple-mobile-web-app-capable" content="哲锄">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no,email=no,adress=no">
+    <meta name="browsermode" content="application">
+    <meta name="screen-orientation" content="portrait">
+    <link rel="dns-prefetch" href="http://www.zhechu.top">
+    <!--SEO-->
+
+    <meta name="keywords" content="Spring,异步,线程池,">
+
+
+    <meta name="description" content="问题：普通线程池在线程池队列满时，才开始从核心线程池个数增加到最大线程池个数。一个核心的矛盾则是，若线程池的队列已满，说明待处理的任务很多（客户端发送任务的速度可能也很快），即便在队列满后线程池个数增加到最大值，那也为时已晚，因为此时请求可能更多，将队列和线程占满后只能被丢弃
+方案：引入饿汉式...">
+
+
+<meta name="robots" content="all">
+<meta name="google" content="all">
+<meta name="googlebot" content="all">
+<meta name="verify" content="all">
+    <!--Title-->
+
+
+<title>SpringBoot配置饿汉式异步线程池 | 哲锄</title>
+
+
+    <link rel="alternate" href="/atom.xml" title="哲锄" type="application/atom+xml">
+
+
+    <link rel="icon" href="/favicon.ico">
+
+    
+
+
+
+<link rel="stylesheet" href="/css/bootstrap.min.css?rev=3.3.7">
+<link rel="stylesheet" href="/css/font-awesome.min.css?rev=4.5.0">
+<link rel="stylesheet" href="/css/style.css?rev=@@hash">
+
+
+
+
+    
+
+
+
+
+
+    
+
+</head>
+
+</html>
+<!--[if lte IE 8]>
+<style>
+    html{ font-size: 1em }
+</style>
+<![endif]-->
+<!--[if lte IE 9]>
+<div style="ie">你使用的浏览器版本过低，为了你更好的阅读体验，请更新浏览器的版本或者使用其他现代浏览器，比如Chrome、Firefox、Safari等。</div>
+<![endif]-->
+
+<body>
+    
+    <nav class="main-navigation">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="navbar-header"><span class="nav-toggle-button collapsed pull-right" data-toggle="collapse" data-target="#main-menu" id="mnav">
+                    <span class="sr-only"></span>
+                        <i class="fa fa-bars"></i>
+                    </span>
+                    <a class="navbar-brand" href="http://www.zhechu.top">哲锄</a>
+                </div>
+                <div class="collapse navbar-collapse" id="main-menu">
+                    <ul class="menu">
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/"><i class="fa fa-home"></i>哲锄</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/categories"><i class="fa fa-list"></i>分类</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/about"><i class="fa fa-user"></i>关于我</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/archives"><i class="fa fa-archive"></i>归档</a>
+                            </li>
+                        
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<a href="http://github.com/zhechu">
+    <img style="position: absolute; top: 0; right: 0; border: 0;"
+        src="/img/forkme.png"
+        alt="Fork me on GitHub">
+</a>
+
+    <section class="content-wrap">
+        <div class="container">
+            <div class="row">
+                <main class="col-md-8 main-content m-post">
+                    <p id="process"></p>
+<article class="post">
+    <div class="post-head">
+        <h1 id="SpringBoot配置饿汉式异步线程池">
+            
+                SpringBoot配置饿汉式异步线程池
+            
+        </h1>
+        <div class="post-meta">
+    
+    
+    <span class="categories-meta fa-wrap">
+        <i class="fa fa-folder-open-o"></i>
+        <a href="/categories/Java">
+            Java
+        </a>
+    </span>
+    
+
+    
+    <span class="fa-wrap">
+        <i class="fa fa-tags"></i>
+        <span class="tags-meta">
+            
+                
+                    <a href="/tags/Spring" title='Spring'>
+                        Spring
+                    </a>
+                
+                    <a href="/tags/异步" title='异步'>
+                        异步
+                    </a>
+                
+                    <a href="/tags/线程池" title='线程池'>
+                        线程池
+                    </a>
+                
+            
+        </span>
+    </span>
+    
+
+    
+        
+        <span class="fa-wrap">
+            <i class="fa fa-clock-o"></i>
+            <span class="date-meta">2021/03/05</span>
+        </span>
+        
+            <span class="fa-wrap">
+                <i class="fa fa-eye"></i>
+                <span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    
+</div>
+
+        
+        
+    </div>
+    
+    <div class="post-body post-content">
+        <p>问题：普通线程池在线程池队列满时，才开始从核心线程池个数增加到最大线程池个数。一个核心的矛盾则是，若线程池的队列已满，说明待处理的任务很多（客户端发送任务的速度可能也很快），即便在队列满后线程池个数增加到最大值，那也为时已晚，因为此时请求可能更多，将队列和线程占满后只能被丢弃</p>
+<p>方案：引入饿汉式线程池，当线程池核心线程个数达到设置的阈值时，新来的任务不会被放入线程池队列，而是会开启新线程来处理任务（前提是当前线程个数没有超过线程池最大线程个数），当线程个数达到最大线程个数时，才会把任务放入线程池队列</p>
+<p>环境说明</p>
+<table>
+<thead>
+<tr>
+<th>环境</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>spring-boot-1.5.x</td>
+<td>企业应用程序框架</td>
+</tr>
+</tbody>
+</table>
+<h2 id="1-定义饿汉式线程池"><a href="#1-定义饿汉式线程池" class="headerlink" title="1 定义饿汉式线程池"></a>1 定义饿汉式线程池</h2><p>饿汉式线程池<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.concurrent.*;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.atomic.AtomicInteger;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 饿汉式线程池</span></span><br><span class="line"><span class="comment"> * 当线程数达到 max size 后再放入队列</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">EagerThreadPoolExecutor</span> <span class="keyword">extends</span> <span class="title">ThreadPoolExecutor</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> AtomicInteger submittedTaskCount = <span class="keyword">new</span> AtomicInteger(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">EagerThreadPoolExecutor</span><span class="params">(<span class="keyword">int</span> corePoolSize,</span></span></span><br><span class="line"><span class="function"><span class="params">                                 <span class="keyword">int</span> maximumPoolSize,</span></span></span><br><span class="line"><span class="function"><span class="params">                                 <span class="keyword">long</span> keepAliveTime,</span></span></span><br><span class="line"><span class="function"><span class="params">                                 TimeUnit unit, TaskQueue&lt;Runnable&gt; workQueue,</span></span></span><br><span class="line"><span class="function"><span class="params">                                 ThreadFactory threadFactory,</span></span></span><br><span class="line"><span class="function"><span class="params">                                 RejectedExecutionHandler handler)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue, threadFactory, handler);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getSubmittedTaskCount</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> submittedTaskCount.get();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">afterExecute</span><span class="params">(Runnable r, Throwable t)</span> </span>&#123;</span><br><span class="line">    submittedTaskCount.decrementAndGet();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 当线程池核心线程个数达到设置的阈值时，新来的任务不会被放入线程池队列，</span></span><br><span class="line"><span class="comment">   * 而是会开启新线程来处理任务（前提是当前线程个数没有超过线程池最大线程个数），</span></span><br><span class="line"><span class="comment">   * 当线程个数达到最大线程个数时，才会把任务放入线程池队列</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@param</span> command</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">(Runnable command)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (command == <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();</span><br><span class="line">    &#125;</span><br><span class="line">    submittedTaskCount.incrementAndGet();</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="keyword">super</span>.execute(command);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (RejectedExecutionException rx) &#123;</span><br><span class="line">      <span class="keyword">final</span> TaskQueue queue = (TaskQueue) <span class="keyword">super</span>.getQueue();</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (!queue.retryOffer(command, <span class="number">0</span>, TimeUnit.MILLISECONDS)) &#123;</span><br><span class="line">          submittedTaskCount.decrementAndGet();</span><br><span class="line">          <span class="keyword">throw</span> <span class="keyword">new</span> RejectedExecutionException(<span class="string">"Queue capacity is full."</span>, rx);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125; <span class="keyword">catch</span> (InterruptedException x) &#123;</span><br><span class="line">        submittedTaskCount.decrementAndGet();</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> RejectedExecutionException(x);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Throwable t) &#123;</span><br><span class="line">      submittedTaskCount.decrementAndGet();</span><br><span class="line">      <span class="keyword">throw</span> t;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>支持定义线程池名称的线程工厂<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.concurrent.ThreadFactory;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.atomic.AtomicInteger;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NamedThreadFactory</span> <span class="keyword">implements</span> <span class="title">ThreadFactory</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">protected</span> <span class="keyword">static</span> <span class="keyword">final</span> AtomicInteger POOL_SEQ = <span class="keyword">new</span> AtomicInteger(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">protected</span> <span class="keyword">final</span> AtomicInteger mThreadNum = <span class="keyword">new</span> AtomicInteger(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">protected</span> <span class="keyword">final</span> String mPrefix;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">protected</span> <span class="keyword">final</span> <span class="keyword">boolean</span> mDaemon;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">protected</span> <span class="keyword">final</span> ThreadGroup mGroup;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">NamedThreadFactory</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>(<span class="string">"pool-"</span> + POOL_SEQ.getAndIncrement(), <span class="keyword">false</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">NamedThreadFactory</span><span class="params">(String prefix)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>(prefix, <span class="keyword">false</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">NamedThreadFactory</span><span class="params">(String prefix, <span class="keyword">boolean</span> daemon)</span> </span>&#123;</span><br><span class="line">    mPrefix = prefix + <span class="string">"-thread-"</span>;</span><br><span class="line">    mDaemon = daemon;</span><br><span class="line">    SecurityManager s = System.getSecurityManager();</span><br><span class="line">    mGroup = (s == <span class="keyword">null</span>) ? Thread.currentThread().getThreadGroup() : s.getThreadGroup();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> Thread <span class="title">newThread</span><span class="params">(Runnable runnable)</span> </span>&#123;</span><br><span class="line">    String name = mPrefix + mThreadNum.getAndIncrement();</span><br><span class="line">    Thread ret = <span class="keyword">new</span> Thread(mGroup, runnable, name, <span class="number">0</span>);</span><br><span class="line">    ret.setDaemon(mDaemon);</span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> ThreadGroup <span class="title">getThreadGroup</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> mGroup;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>线程池任务队列<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.concurrent.LinkedBlockingQueue;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.RejectedExecutionException;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.TimeUnit;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TaskQueue</span>&lt;<span class="title">R</span> <span class="keyword">extends</span> <span class="title">Runnable</span>&gt; <span class="keyword">extends</span> <span class="title">LinkedBlockingQueue</span>&lt;<span class="title">Runnable</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = -<span class="number">2635853580887179627L</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> EagerThreadPoolExecutor executor;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">TaskQueue</span><span class="params">(<span class="keyword">int</span> capacity)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>(capacity);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setExecutor</span><span class="params">(EagerThreadPoolExecutor exec)</span> </span>&#123;</span><br><span class="line">    executor = exec;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">offer</span><span class="params">(Runnable runnable)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (executor == <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> RejectedExecutionException(<span class="string">"The task queue does not have executor!"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> currentPoolThreadSize = executor.getPoolSize();</span><br><span class="line">    <span class="comment">// have free worker. put task into queue to let the worker deal with task.</span></span><br><span class="line">    <span class="keyword">if</span> (executor.getSubmittedTaskCount() &lt; currentPoolThreadSize) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">super</span>.offer(runnable);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// return false to let executor create new worker.</span></span><br><span class="line">    <span class="keyword">if</span> (currentPoolThreadSize &lt; executor.getMaximumPoolSize()) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// currentPoolThreadSize &gt;= max</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">super</span>.offer(runnable);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * retry offer task</span></span><br><span class="line"><span class="comment">   *</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@param</span> o task</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@return</span> offer success or not</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@throws</span> RejectedExecutionException if executor is terminated.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">retryOffer</span><span class="params">(Runnable o, <span class="keyword">long</span> timeout, TimeUnit unit)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (executor.isShutdown()) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> RejectedExecutionException(<span class="string">"Executor is shutdown!"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">super</span>.offer(o, timeout, unit);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="2-定义异步线程池属性"><a href="#2-定义异步线程池属性" class="headerlink" title="2 定义异步线程池属性"></a>2 定义异步线程池属性</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> lombok.AccessLevel;</span><br><span class="line"><span class="keyword">import</span> lombok.Data;</span><br><span class="line"><span class="keyword">import</span> lombok.experimental.FieldDefaults;</span><br><span class="line"><span class="keyword">import</span> org.springframework.boot.context.properties.ConfigurationProperties;</span><br><span class="line"></span><br><span class="line"><span class="meta">@ConfigurationProperties</span>(prefix = <span class="string">"spring.async.pool"</span>)</span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@FieldDefaults</span>(level = AccessLevel.PRIVATE)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AsyncThreadPoolProperties</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 核心线程数 线程池维护线程的最少数量，默认为1</span></span><br><span class="line"><span class="comment">   * 若配置值等于或小于0，则使用当前可用线程数减1（最小为1）</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="keyword">int</span> corePoolSize = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 线程池维护线程的最大数量</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="keyword">int</span> maxPoolSize = <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 线程池维护线程所允许的空闲时间</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="keyword">int</span> keepAliveSeconds = <span class="number">60</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 线程池所使用的缓冲队列容量</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="keyword">int</span> queueCapacity = <span class="number">1000</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="3-配置异步线程池"><a href="#3-配置异步线程池" class="headerlink" title="3 配置异步线程池"></a>3 配置异步线程池</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> core.config.properties.AsyncThreadPoolProperties;</span><br><span class="line"><span class="keyword">import</span> core.thread.EagerThreadPoolExecutor;</span><br><span class="line"><span class="keyword">import</span> core.thread.NamedThreadFactory;</span><br><span class="line"><span class="keyword">import</span> core.thread.TaskQueue;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line"><span class="keyword">import</span> org.springframework.boot.context.properties.EnableConfigurationProperties;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Bean;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Configuration;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.Executor;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.ThreadPoolExecutor;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.TimeUnit;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 异步线程池配置</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@EnableConfigurationProperties</span>(AsyncThreadPoolProperties<span class="class">.<span class="keyword">class</span>)</span></span><br><span class="line"><span class="class"><span class="title">public</span> <span class="title">class</span> <span class="title">AsyncConfig</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Autowired</span></span><br><span class="line">  <span class="keyword">private</span> AsyncThreadPoolProperties asyncThreadPoolProperties;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Bean</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> Executor <span class="title">asyncExecutor</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 线程池中线程的名称前缀</span></span><br><span class="line">    String name = <span class="string">"asyncExecutor"</span>;</span><br><span class="line">    <span class="comment">// 核心线程的个数，如果没有设置，则使用默认的数值0</span></span><br><span class="line">    <span class="keyword">int</span> cores = Math.max(<span class="number">0</span>, asyncThreadPoolProperties.getCorePoolSize());</span><br><span class="line">    <span class="comment">// 线程池中最大线程的个数</span></span><br><span class="line">    <span class="keyword">int</span> threads = Math.max(<span class="number">1</span>, Math.max(Runtime.getRuntime().availableProcessors() &gt;&gt; <span class="number">1</span>, asyncThreadPoolProperties.getMaxPoolSize()));</span><br><span class="line">    <span class="comment">// 线程池阻塞队列大小，如果没有设置，则使用默认的数值1</span></span><br><span class="line">    <span class="keyword">int</span> queues = Math.max(<span class="number">1</span>, asyncThreadPoolProperties.getQueueCapacity());</span><br><span class="line">    <span class="comment">// 线程被回收的空闲时间值，如果没有设置，则使用默认的数值60</span></span><br><span class="line">    <span class="keyword">int</span> alive = Math.max(<span class="number">60</span>, asyncThreadPoolProperties.getKeepAliveSeconds());</span><br><span class="line"></span><br><span class="line">    TaskQueue&lt;Runnable&gt; taskQueue = <span class="keyword">new</span> TaskQueue&lt;&gt;(queues);</span><br><span class="line">    EagerThreadPoolExecutor executor = <span class="keyword">new</span> EagerThreadPoolExecutor(cores,</span><br><span class="line">        threads,</span><br><span class="line">        alive,</span><br><span class="line">        TimeUnit.SECONDS,</span><br><span class="line">        taskQueue,</span><br><span class="line">        <span class="keyword">new</span> NamedThreadFactory(name),</span><br><span class="line">        <span class="keyword">new</span> ThreadPoolExecutor.CallerRunsPolicy());</span><br><span class="line">    taskQueue.setExecutor(executor);</span><br><span class="line">    <span class="keyword">return</span> executor;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    </div>
+    
+    <div class="post-footer">
+        <div class="col-sm-10">
+            <div>
+                <b>本文链接</b>：<a href="/2021/03/05/SpringBoot配置饿汉式异步线程池/">SpringBoot配置饿汉式异步线程池</a>
+            </div>
+            <div>
+                
+                    转载声明：本博客由<strong>哲锄</strong>创作，采用 <a href="https://creativecommons.org/licenses/by-nc-nd/3.0/" target="_blank"> CC BY 3.0 CN </a> 许可协议。可自由转载、引用，但需署名作者且注明文章出处。如转载至微信公众号，请在文末添加作者公众号二维码。
+                
+            </div>
+            <div>
+                
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <img src="" width=100%/>
+        </div>
+    </div>
+</article>
+
+<div class="article-nav prev-next-wrap clearfix">
+    
+    
+        <a href="/2021/03/05/行为型-模板方法模式/" class="next-post btn btn-default" title='行为型-模板方法模式'>
+            <span class="hidden-lg">下一篇</span>
+            <span class="hidden-xs">行为型-模板方法模式</span><i class="fa fa-angle-right fa-fw"></i>
+        </a>
+    
+</div>
+
+
+
+
+
+
+                </main>
+                
+                    <aside id="article-toc" role="navigation" class="col-md-4">
+    <div class="widget">
+        <h3 class="title">文章目录</h3>
+        
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-定义饿汉式线程池"><span class="toc-text">1 定义饿汉式线程池</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-定义异步线程池属性"><span class="toc-text">2 定义异步线程池属性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-配置异步线程池"><span class="toc-text">3 配置异步线程池</span></a></li></ol>
+        
+    </div>
+</aside>
+
+                
+            </div>
+        </div>
+    </section>
+    <footer class="main-footer">
+    <div class="container">
+        <div class="row">
+        </div>
+    </div>
+</footer>
+
+<a id="back-to-top" class="icon-btn hide">
+	<i class="fa fa-chevron-up"></i>
+</a>
+
+
+
+
+    <div class="copyright">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="busuanzi">
+    
+        访问量:
+        <strong id="busuanzi_value_site_pv">
+            <i class="fa fa-spinner fa-spin"></i>
+        </strong>
+        &nbsp; | &nbsp;
+        访客数:
+        <strong id="busuanzi_value_site_uv">
+            <i class="fa fa-spinner fa-spin"></i>
+        </strong>
+    
+</div>
+
+            </div>
+            <div class="col-sm-12">
+                <span>Copyright &copy; 2016
+                </span> |
+                <span>
+                    Powered by <a href="//hexo.io" class="copyright-links" target="_blank" rel="nofollow">Hexo</a>
+                </span> |
+                <span>
+                    Theme by <a href="//github.com/itmuch/hexo-theme-itmuch.git" class="copyright-links" target="_blank" rel="nofollow">ITMuch</a>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script src="/js/app.js?rev=@@hash"></script>
+
+</body>
+</html>
