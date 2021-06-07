@@ -126,6 +126,93 @@
     <div class="post-content">
         <div class="post-head home-post-head">
             <h1 class="post-title">
+                <a href="/2021/06/07/Mysql日志/">Mysql日志</a>
+            </h1>
+            <div class="post-meta">  &bull;
+                <time class="post-date" datetime="" title="">
+                    2021年06月07日
+                </time>
+            </div>
+        </div>
+        <p class="brief">
+            
+                环境说明
+
+
+
+环境
+说明
+
+
+
+
+Mysql-5.7.30
+关系型数据库
+
+
+general_log
+MySQL 执行日志
+
+
+CentOS7
+操作系统
+
+
+
+查看日志是否开启1show variables like &amp;apos;general_log&amp;apos;;
+开启日志功能1set global general_log=on;
+查看日志文件保存位置1show variables like &amp;apos;general_log_file&amp;apos;;
+设置日志文件保...
+            
+        </p>
+    </div>
+    
+        <footer class="post-footer clearfix">
+            <div class="pull-left tag-list">
+                <div class="post-meta">
+    
+    
+    <span class="categories-meta fa-wrap">
+        <i class="fa fa-folder-open-o"></i>
+        <a href="/categories/Mysql">
+            Mysql
+        </a>
+    </span>
+    
+
+    
+    <span class="fa-wrap">
+        <i class="fa fa-tags"></i>
+        <span class="tags-meta">
+            
+                
+                    <a href="/tags/日志" title='日志'>
+                        日志
+                    </a>
+                
+            
+        </span>
+    </span>
+    
+
+    
+</div>
+
+            </div>
+
+            <div class="post-permalink">
+                <a href="/2021/06/07/Mysql日志/" class="btn btn-default">阅读全文</a>
+            </div>
+        </footer>
+    
+</article>
+
+
+<article class="post">
+    
+    <div class="post-content">
+        <div class="post-head home-post-head">
+            <h1 class="post-title">
                 <a href="/2021/03/05/SpringBoot配置饿汉式异步线程池/">SpringBoot配置饿汉式异步线程池</a>
             </h1>
             <div class="post-meta">  &bull;
@@ -136,8 +223,8 @@
         </div>
         <p class="brief">
             
-                问题：普通线程池在线程池队列满时，才开始从核心线程池个数增加到最大线程池个数。一个核心的矛盾则是，若线程池的队列已满，说明待处理的任务很多（客户端发送任务的速度可能也很快），即便在队列满后线程池个数增加到最大值，那也为时已晚，因为此时请求可能更多，将队列和线程占满后只能被丢弃
-方案：引入饿汉式线程池，当线程池核心线程个数达到设置的阈值时，新来的任务不会被放入线程池队列，而是会开启新线程来处理任务（前提是当前线程个数没有超过线程池最大线程个数），当线程个数达到最大线程个数...
+                问题：普通线程池在线程池队列满时，才开始从核心线程池个数增加到最大线程池个数。一个核心的矛盾则是，若线程池的队列已满，说明待处理的任务很多（客户端发送任务的速度可能也很快），即便在队列满后线程池个数增加到最大值，那也为时已晚，因为此时请求可能更多，将队列和线程占满后只能被丢弃（如此，那配置线程池最大阈值，只能在极限场景使用；而在任务队列未满时，maxPoolSize-corePoolSize 个隐藏可用的线程只能被搁置）
+方案：引入饿汉式线程池，当线程池核心线程个数达到...
             
         </p>
     </div>
@@ -441,74 +528,6 @@ https://github.com/zhechu/spring-boot-rest-demo/tree/master/src/main/java/com/wi
 </article>
 
 
-<article class="post">
-    
-    <div class="post-content">
-        <div class="post-head home-post-head">
-            <h1 class="post-title">
-                <a href="/2020/11/09/RSA加密防破解/">RSA加密防破解</a>
-            </h1>
-            <div class="post-meta">  &bull;
-                <time class="post-date" datetime="" title="">
-                    2020年11月09日
-                </time>
-            </div>
-        </div>
-        <p class="brief">
-            
-                问题：敏感接口不能暴露参数，并防篡改，如：登录接口
-方案：通过非对称算法 RSA，由接口调用端通过公钥将参数进行加密，服务端接受参数通过私钥进行解密
-原理：攻击者只有审查代码，才能知晓接口入参，目的是增加其攻击成本。而且可以防止中间人篡改入参（私钥是存在服务端，不容易泄露）
-1 非对称加密工具类12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849...
-            
-        </p>
-    </div>
-    
-        <footer class="post-footer clearfix">
-            <div class="pull-left tag-list">
-                <div class="post-meta">
-    
-    
-    <span class="categories-meta fa-wrap">
-        <i class="fa fa-folder-open-o"></i>
-        <a href="/categories/Java">
-            Java
-        </a>
-    </span>
-    
-
-    
-    <span class="fa-wrap">
-        <i class="fa fa-tags"></i>
-        <span class="tags-meta">
-            
-                
-                    <a href="/tags/算法" title='算法'>
-                        算法
-                    </a>
-                
-                    <a href="/tags/安全" title='安全'>
-                        安全
-                    </a>
-                
-            
-        </span>
-    </span>
-    
-
-    
-</div>
-
-            </div>
-
-            <div class="post-permalink">
-                <a href="/2020/11/09/RSA加密防破解/" class="btn btn-default">阅读全文</a>
-            </div>
-        </footer>
-    
-</article>
-
-
 
 
     <nav class="pagination" role="navigation">
@@ -581,7 +600,7 @@ https://github.com/zhechu/spring-boot-rest-demo/tree/master/src/main/java/com/wi
         
     <div class="widget">
         <h3 class="title">分类</h3>
-        <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/ELK/"><i class="fa" aria-hidden="true">ELK</i></a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Git/"><i class="fa" aria-hidden="true">Git</i></a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/"><i class="fa" aria-hidden="true">Java</i></a><span class="category-list-count">121</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/"><i class="fa" aria-hidden="true">Linux</i></a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/"><i class="fa" aria-hidden="true">Mysql</i></a><span class="category-list-count">26</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Nginx/"><i class="fa" aria-hidden="true">Nginx</i></a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/NodeJS/"><i class="fa" aria-hidden="true">NodeJS</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Others/"><i class="fa" aria-hidden="true">Others</i></a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/"><i class="fa" aria-hidden="true">Redis</i></a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Test/"><i class="fa" aria-hidden="true">Test</i></a><span class="category-list-count">2</span></li></ul>
+        <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/ELK/"><i class="fa" aria-hidden="true">ELK</i></a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Git/"><i class="fa" aria-hidden="true">Git</i></a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/"><i class="fa" aria-hidden="true">Java</i></a><span class="category-list-count">121</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/"><i class="fa" aria-hidden="true">Linux</i></a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/"><i class="fa" aria-hidden="true">Mysql</i></a><span class="category-list-count">27</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Nginx/"><i class="fa" aria-hidden="true">Nginx</i></a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/NodeJS/"><i class="fa" aria-hidden="true">NodeJS</i></a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Others/"><i class="fa" aria-hidden="true">Others</i></a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/"><i class="fa" aria-hidden="true">Redis</i></a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Test/"><i class="fa" aria-hidden="true">Test</i></a><span class="category-list-count">2</span></li></ul>
     </div>
 
 
@@ -591,7 +610,7 @@ https://github.com/zhechu/spring-boot-rest-demo/tree/master/src/main/java/com/wi
     <h3 class="title">标签云</h3>
     <div class="content tag-cloud">
         
-            <a href="/tags/CentOS7/" style="font-size: 17.27px;">CentOS7</a> <a href="/tags/Docker/" style="font-size: 17.27px;">Docker</a> <a href="/tags/Gradle/" style="font-size: 10px;">Gradle</a> <a href="/tags/IDEA/" style="font-size: 10px;">IDEA</a> <a href="/tags/IO/" style="font-size: 15.45px;">IO</a> <a href="/tags/JMeter/" style="font-size: 10.91px;">JMeter</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Maven/" style="font-size: 10.91px;">Maven</a> <a href="/tags/Netty/" style="font-size: 10.91px;">Netty</a> <a href="/tags/OAuth2/" style="font-size: 10.91px;">OAuth2</a> <a href="/tags/Spring/" style="font-size: 19.09px;">Spring</a> <a href="/tags/SpringCloud/" style="font-size: 14.55px;">SpringCloud</a> <a href="/tags/SpringSecurity/" style="font-size: 11.82px;">SpringSecurity</a> <a href="/tags/VM/" style="font-size: 10px;">VM</a> <a href="/tags/k8s/" style="font-size: 12.73px;">k8s</a> <a href="/tags/lombok/" style="font-size: 10px;">lombok</a> <a href="/tags/代码生成/" style="font-size: 10px;">代码生成</a> <a href="/tags/分布式事务/" style="font-size: 10.91px;">分布式事务</a> <a href="/tags/加速器/" style="font-size: 10px;">加速器</a> <a href="/tags/升级回滚/" style="font-size: 10px;">升级回滚</a> <a href="/tags/反射/" style="font-size: 10px;">反射</a> <a href="/tags/图/" style="font-size: 10px;">图</a> <a href="/tags/多线程/" style="font-size: 18.18px;">多线程</a> <a href="/tags/安全/" style="font-size: 10px;">安全</a> <a href="/tags/工具/" style="font-size: 11.82px;">工具</a> <a href="/tags/序列化/" style="font-size: 11.82px;">序列化</a> <a href="/tags/异常处理/" style="font-size: 10px;">异常处理</a> <a href="/tags/异步/" style="font-size: 10.91px;">异步</a> <a href="/tags/微服务/" style="font-size: 16.36px;">微服务</a> <a href="/tags/性能优化/" style="font-size: 18.18px;">性能优化</a> <a href="/tags/性能测试/" style="font-size: 10.91px;">性能测试</a> <a href="/tags/搜索/" style="font-size: 12.73px;">搜索</a> <a href="/tags/数据结构/" style="font-size: 13.64px;">数据结构</a> <a href="/tags/日志/" style="font-size: 10.91px;">日志</a> <a href="/tags/架构/" style="font-size: 10.91px;">架构</a> <a href="/tags/池化技术/" style="font-size: 10px;">池化技术</a> <a href="/tags/注册中心/" style="font-size: 10.91px;">注册中心</a> <a href="/tags/算法/" style="font-size: 20px;">算法</a> <a href="/tags/线程池/" style="font-size: 10px;">线程池</a> <a href="/tags/缓存/" style="font-size: 13.64px;">缓存</a> <a href="/tags/规范/" style="font-size: 15.45px;">规范</a> <a href="/tags/设计模式/" style="font-size: 15.45px;">设计模式</a> <a href="/tags/资料库/" style="font-size: 10px;">资料库</a> <a href="/tags/配置中心/" style="font-size: 11.82px;">配置中心</a> <a href="/tags/锁/" style="font-size: 12.73px;">锁</a> <a href="/tags/队列/" style="font-size: 12.73px;">队列</a> <a href="/tags/集合/" style="font-size: 10.91px;">集合</a>
+            <a href="/tags/CentOS7/" style="font-size: 17.27px;">CentOS7</a> <a href="/tags/Docker/" style="font-size: 17.27px;">Docker</a> <a href="/tags/Gradle/" style="font-size: 10px;">Gradle</a> <a href="/tags/IDEA/" style="font-size: 10px;">IDEA</a> <a href="/tags/IO/" style="font-size: 15.45px;">IO</a> <a href="/tags/JMeter/" style="font-size: 10.91px;">JMeter</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Maven/" style="font-size: 10.91px;">Maven</a> <a href="/tags/Netty/" style="font-size: 10.91px;">Netty</a> <a href="/tags/OAuth2/" style="font-size: 10.91px;">OAuth2</a> <a href="/tags/Spring/" style="font-size: 19.09px;">Spring</a> <a href="/tags/SpringCloud/" style="font-size: 14.55px;">SpringCloud</a> <a href="/tags/SpringSecurity/" style="font-size: 11.82px;">SpringSecurity</a> <a href="/tags/VM/" style="font-size: 10px;">VM</a> <a href="/tags/k8s/" style="font-size: 12.73px;">k8s</a> <a href="/tags/lombok/" style="font-size: 10px;">lombok</a> <a href="/tags/代码生成/" style="font-size: 10px;">代码生成</a> <a href="/tags/分布式事务/" style="font-size: 10.91px;">分布式事务</a> <a href="/tags/加速器/" style="font-size: 10px;">加速器</a> <a href="/tags/升级回滚/" style="font-size: 10px;">升级回滚</a> <a href="/tags/反射/" style="font-size: 10px;">反射</a> <a href="/tags/图/" style="font-size: 10px;">图</a> <a href="/tags/多线程/" style="font-size: 18.18px;">多线程</a> <a href="/tags/安全/" style="font-size: 10px;">安全</a> <a href="/tags/工具/" style="font-size: 11.82px;">工具</a> <a href="/tags/序列化/" style="font-size: 11.82px;">序列化</a> <a href="/tags/异常处理/" style="font-size: 10px;">异常处理</a> <a href="/tags/异步/" style="font-size: 10.91px;">异步</a> <a href="/tags/微服务/" style="font-size: 16.36px;">微服务</a> <a href="/tags/性能优化/" style="font-size: 18.18px;">性能优化</a> <a href="/tags/性能测试/" style="font-size: 10.91px;">性能测试</a> <a href="/tags/搜索/" style="font-size: 12.73px;">搜索</a> <a href="/tags/数据结构/" style="font-size: 13.64px;">数据结构</a> <a href="/tags/日志/" style="font-size: 11.82px;">日志</a> <a href="/tags/架构/" style="font-size: 10.91px;">架构</a> <a href="/tags/池化技术/" style="font-size: 10px;">池化技术</a> <a href="/tags/注册中心/" style="font-size: 10.91px;">注册中心</a> <a href="/tags/算法/" style="font-size: 20px;">算法</a> <a href="/tags/线程池/" style="font-size: 10px;">线程池</a> <a href="/tags/缓存/" style="font-size: 13.64px;">缓存</a> <a href="/tags/规范/" style="font-size: 15.45px;">规范</a> <a href="/tags/设计模式/" style="font-size: 15.45px;">设计模式</a> <a href="/tags/资料库/" style="font-size: 10px;">资料库</a> <a href="/tags/配置中心/" style="font-size: 11.82px;">配置中心</a> <a href="/tags/锁/" style="font-size: 12.73px;">锁</a> <a href="/tags/队列/" style="font-size: 12.73px;">队列</a> <a href="/tags/集合/" style="font-size: 10.91px;">集合</a>
         
     </div>
   </div>
