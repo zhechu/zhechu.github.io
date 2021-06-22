@@ -1,0 +1,306 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!--Setting-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta name="apple-mobile-web-app-capable" content="哲锄">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no,email=no,adress=no">
+    <meta name="browsermode" content="application">
+    <meta name="screen-orientation" content="portrait">
+    <link rel="dns-prefetch" href="http://www.zhechu.top">
+    <!--SEO-->
+
+    <meta name="keywords" content="CentOS7,ClickHouse,">
+
+
+    <meta name="description" content="官方文档
+https://clickhouse.tech/docs/zh/interfaces/third-party/gui/
+1 安装ClickHouse 20.8.3.18官方安装文档
+https://clickhouse.tech/docs/zh/getting-started/ins...">
+
+
+<meta name="robots" content="all">
+<meta name="google" content="all">
+<meta name="googlebot" content="all">
+<meta name="verify" content="all">
+    <!--Title-->
+
+
+<title>CentOS7安装ClickHouse | 哲锄</title>
+
+
+    <link rel="alternate" href="/atom.xml" title="哲锄" type="application/atom+xml">
+
+
+    <link rel="icon" href="/favicon.ico">
+
+    
+
+
+
+<link rel="stylesheet" href="/css/bootstrap.min.css?rev=3.3.7">
+<link rel="stylesheet" href="/css/font-awesome.min.css?rev=4.5.0">
+<link rel="stylesheet" href="/css/style.css?rev=@@hash">
+
+
+
+
+    
+
+
+
+
+
+    
+
+</head>
+
+</html>
+<!--[if lte IE 8]>
+<style>
+    html{ font-size: 1em }
+</style>
+<![endif]-->
+<!--[if lte IE 9]>
+<div style="ie">你使用的浏览器版本过低，为了你更好的阅读体验，请更新浏览器的版本或者使用其他现代浏览器，比如Chrome、Firefox、Safari等。</div>
+<![endif]-->
+
+<body>
+    
+    <nav class="main-navigation">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="navbar-header"><span class="nav-toggle-button collapsed pull-right" data-toggle="collapse" data-target="#main-menu" id="mnav">
+                    <span class="sr-only"></span>
+                        <i class="fa fa-bars"></i>
+                    </span>
+                    <a class="navbar-brand" href="http://www.zhechu.top">哲锄</a>
+                </div>
+                <div class="collapse navbar-collapse" id="main-menu">
+                    <ul class="menu">
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/"><i class="fa fa-home"></i>哲锄</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/categories"><i class="fa fa-list"></i>分类</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/about"><i class="fa fa-user"></i>关于我</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/archives"><i class="fa fa-archive"></i>归档</a>
+                            </li>
+                        
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<a href="http://github.com/zhechu">
+    <img style="position: absolute; top: 0; right: 0; border: 0;"
+        src="/img/forkme.png"
+        alt="Fork me on GitHub">
+</a>
+
+    <section class="content-wrap">
+        <div class="container">
+            <div class="row">
+                <main class="col-md-8 main-content m-post">
+                    <p id="process"></p>
+<article class="post">
+    <div class="post-head">
+        <h1 id="CentOS7安装ClickHouse">
+            
+                CentOS7安装ClickHouse
+            
+        </h1>
+        <div class="post-meta">
+    
+    
+    <span class="categories-meta fa-wrap">
+        <i class="fa fa-folder-open-o"></i>
+        <a href="/categories/Linux">
+            Linux
+        </a>
+    </span>
+    
+
+    
+    <span class="fa-wrap">
+        <i class="fa fa-tags"></i>
+        <span class="tags-meta">
+            
+                
+                    <a href="/tags/CentOS7" title='CentOS7'>
+                        CentOS7
+                    </a>
+                
+                    <a href="/tags/ClickHouse" title='ClickHouse'>
+                        ClickHouse
+                    </a>
+                
+            
+        </span>
+    </span>
+    
+
+    
+        
+        <span class="fa-wrap">
+            <i class="fa fa-clock-o"></i>
+            <span class="date-meta">2021/06/22</span>
+        </span>
+        
+            <span class="fa-wrap">
+                <i class="fa fa-eye"></i>
+                <span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    
+</div>
+
+        
+        
+    </div>
+    
+    <div class="post-body post-content">
+        <p>官方文档</p>
+<p><a href="https://clickhouse.tech/docs/zh/interfaces/third-party/gui/" target="_blank" rel="noopener">https://clickhouse.tech/docs/zh/interfaces/third-party/gui/</a></p>
+<h2 id="1-安装ClickHouse-20-8-3-18"><a href="#1-安装ClickHouse-20-8-3-18" class="headerlink" title="1 安装ClickHouse 20.8.3.18"></a>1 安装ClickHouse 20.8.3.18</h2><p>官方安装文档</p>
+<p><a href="https://clickhouse.tech/docs/zh/getting-started/install/" target="_blank" rel="noopener">https://clickhouse.tech/docs/zh/getting-started/install/</a></p>
+<h2 id="2-初始化配置"><a href="#2-初始化配置" class="headerlink" title="2 初始化配置"></a>2 初始化配置</h2><p>配置远程可连接 8123 端口<br><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> vi /etc/clickhouse-server/config.xml</span><br><span class="line">&lt;listen_host&gt;::&lt;/listen_host&gt;</span><br></pre></td></tr></table></figure></p>
+<p>配置用户 test/admin123<br><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> cp /etc/clickhouse-server/users.xml /etc/clickhouse-server/users.xml.default</span><br><span class="line"><span class="meta">$</span> vi /etc/clickhouse-server/users.xml</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version="1.0"?&gt;</span><br><span class="line">&lt;yandex&gt;</span><br><span class="line">    &lt;profiles&gt;</span><br><span class="line">        &lt;default&gt;</span><br><span class="line">            &lt;max_memory_usage&gt;10000000000&lt;/max_memory_usage&gt;</span><br><span class="line">            &lt;use_uncompressed_cache&gt;0&lt;/use_uncompressed_cache&gt;</span><br><span class="line">            &lt;load_balancing&gt;random&lt;/load_balancing&gt;</span><br><span class="line">        &lt;/default&gt;</span><br><span class="line"></span><br><span class="line">        &lt;readonly&gt;</span><br><span class="line">            &lt;readonly&gt;1&lt;/readonly&gt;</span><br><span class="line">        &lt;/readonly&gt;</span><br><span class="line">    &lt;/profiles&gt;</span><br><span class="line"></span><br><span class="line">    &lt;users&gt;</span><br><span class="line">        &lt;test&gt;</span><br><span class="line">            &lt;password&gt;admin123&lt;/password&gt;</span><br><span class="line"></span><br><span class="line">            &lt;networks incl="networks" replace="replace"&gt;</span><br><span class="line">                &lt;ip&gt;::/0&lt;/ip&gt;</span><br><span class="line">            &lt;/networks&gt;</span><br><span class="line"></span><br><span class="line">            &lt;profile&gt;default&lt;/profile&gt;</span><br><span class="line">            &lt;quota&gt;default&lt;/quota&gt;</span><br><span class="line">        &lt;/test&gt;</span><br><span class="line">    &lt;/users&gt;</span><br><span class="line"></span><br><span class="line">    &lt;quotas&gt;</span><br><span class="line">        &lt;default&gt;</span><br><span class="line">            &lt;interval&gt;</span><br><span class="line">                &lt;duration&gt;3600&lt;/duration&gt;</span><br><span class="line">                &lt;queries&gt;0&lt;/queries&gt;</span><br><span class="line">                &lt;errors&gt;0&lt;/errors&gt;</span><br><span class="line">                &lt;result_rows&gt;0&lt;/result_rows&gt;</span><br><span class="line">                &lt;read_rows&gt;0&lt;/read_rows&gt;</span><br><span class="line">                &lt;execution_time&gt;0&lt;/execution_time&gt;</span><br><span class="line">            &lt;/interval&gt;</span><br><span class="line">        &lt;/default&gt;</span><br><span class="line">    &lt;/quotas&gt;</span><br><span class="line">&lt;/yandex&gt;</span><br></pre></td></tr></table></figure>
+<p>重启服务<br><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> /etc/init.d/clickhouse-server restart</span><br></pre></td></tr></table></figure></p>
+<p>检查 8123 端口是否可达<br><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> ssh -v -p 8123 root@192.168.1.225</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>TIPS：出现 <code>Connection established.</code> 即可达</p>
+</blockquote>
+<h2 id="3-客户端"><a href="#3-客户端" class="headerlink" title="3 客户端"></a>3 客户端</h2><h3 id="3-1-命令行客户端"><a href="#3-1-命令行客户端" class="headerlink" title="3.1 命令行客户端"></a>3.1 命令行客户端</h3><p>连接本机服务<br><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> /usr/bin/clickhouse-client -u test --password admin123</span><br></pre></td></tr></table></figure></p>
+<p>全量同步（表不存在ClickHouse）<br><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> /usr/bin/clickhouse-client --host 192.168.1.225 -u test --password admin123 --query="CREATE TABLE if not exists grid_university_test_tenant.gu_information_info ENGINE = ReplacingMergeTree  ORDER BY id  AS SELECT * FROM mysql('192.168.1.157:3306', 'grid_university_test_tenant', 'gu_information_info', 'university', 'gu@1234A')"</span><br></pre></td></tr></table></figure></p>
+<h3 id="3-2-IntelliJ-IDEA"><a href="#3-2-IntelliJ-IDEA" class="headerlink" title="3.2 IntelliJ IDEA"></a>3.2 IntelliJ IDEA</h3><p>略</p>
+
+    </div>
+    
+    <div class="post-footer">
+        <div class="col-sm-10">
+            <div>
+                <b>本文链接</b>：<a href="/2021/06/22/CentOS7安装ClickHouse/">CentOS7安装ClickHouse</a>
+            </div>
+            <div>
+                
+                    转载声明：本博客由<strong>哲锄</strong>创作，采用 <a href="https://creativecommons.org/licenses/by-nc-nd/3.0/" target="_blank"> CC BY 3.0 CN </a> 许可协议。可自由转载、引用，但需署名作者且注明文章出处。如转载至微信公众号，请在文末添加作者公众号二维码。
+                
+            </div>
+            <div>
+                
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <img src="" width=100%/>
+        </div>
+    </div>
+</article>
+
+<div class="article-nav prev-next-wrap clearfix">
+    
+    
+        <a href="/2021/06/07/Mysql日志/" class="next-post btn btn-default" title='Mysql日志'>
+            <span class="hidden-lg">下一篇</span>
+            <span class="hidden-xs">Mysql日志</span><i class="fa fa-angle-right fa-fw"></i>
+        </a>
+    
+</div>
+
+
+
+
+
+
+                </main>
+                
+                    <aside id="article-toc" role="navigation" class="col-md-4">
+    <div class="widget">
+        <h3 class="title">文章目录</h3>
+        
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-安装ClickHouse-20-8-3-18"><span class="toc-text">1 安装ClickHouse 20.8.3.18</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-初始化配置"><span class="toc-text">2 初始化配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-客户端"><span class="toc-text">3 客户端</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-命令行客户端"><span class="toc-text">3.1 命令行客户端</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-IntelliJ-IDEA"><span class="toc-text">3.2 IntelliJ IDEA</span></a></li></ol></li></ol>
+        
+    </div>
+</aside>
+
+                
+            </div>
+        </div>
+    </section>
+    <footer class="main-footer">
+    <div class="container">
+        <div class="row">
+        </div>
+    </div>
+</footer>
+
+<a id="back-to-top" class="icon-btn hide">
+	<i class="fa fa-chevron-up"></i>
+</a>
+
+
+
+
+    <div class="copyright">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="busuanzi">
+    
+        访问量:
+        <strong id="busuanzi_value_site_pv">
+            <i class="fa fa-spinner fa-spin"></i>
+        </strong>
+        &nbsp; | &nbsp;
+        访客数:
+        <strong id="busuanzi_value_site_uv">
+            <i class="fa fa-spinner fa-spin"></i>
+        </strong>
+    
+</div>
+
+            </div>
+            <div class="col-sm-12">
+                <span>Copyright &copy; 2016
+                </span> |
+                <span>
+                    Powered by <a href="//hexo.io" class="copyright-links" target="_blank" rel="nofollow">Hexo</a>
+                </span> |
+                <span>
+                    Theme by <a href="//github.com/itmuch/hexo-theme-itmuch.git" class="copyright-links" target="_blank" rel="nofollow">ITMuch</a>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script src="/js/app.js?rev=@@hash"></script>
+
+</body>
+</html>
