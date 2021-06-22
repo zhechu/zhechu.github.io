@@ -1,0 +1,327 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!--Setting-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta name="apple-mobile-web-app-capable" content="哲锄">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no,email=no,adress=no">
+    <meta name="browsermode" content="application">
+    <meta name="screen-orientation" content="portrait">
+    <link rel="dns-prefetch" href="http://www.zhechu.top">
+    <!--SEO-->
+
+    <meta name="keywords" content="CentOS7,ClickHouse,数据同步,">
+
+
+    <meta name="description" content="1 基于 synch redis 同步方案官方文档
+https://github.com/long2ice/synch/blob/dev/README-zh.md
+解压安装包 synch-0.7.1.zipscript1$ unzip synch-0.7.1.zip
+数据库必须进行 bin l...">
+
+
+<meta name="robots" content="all">
+<meta name="google" content="all">
+<meta name="googlebot" content="all">
+<meta name="verify" content="all">
+    <!--Title-->
+
+
+<title>Mysql到ClickHouse同步方案 | 哲锄</title>
+
+
+    <link rel="alternate" href="/atom.xml" title="哲锄" type="application/atom+xml">
+
+
+    <link rel="icon" href="/favicon.ico">
+
+    
+
+
+
+<link rel="stylesheet" href="/css/bootstrap.min.css?rev=3.3.7">
+<link rel="stylesheet" href="/css/font-awesome.min.css?rev=4.5.0">
+<link rel="stylesheet" href="/css/style.css?rev=@@hash">
+
+
+
+
+    
+
+
+
+
+
+    
+
+</head>
+
+</html>
+<!--[if lte IE 8]>
+<style>
+    html{ font-size: 1em }
+</style>
+<![endif]-->
+<!--[if lte IE 9]>
+<div style="ie">你使用的浏览器版本过低，为了你更好的阅读体验，请更新浏览器的版本或者使用其他现代浏览器，比如Chrome、Firefox、Safari等。</div>
+<![endif]-->
+
+<body>
+    
+    <nav class="main-navigation">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="navbar-header"><span class="nav-toggle-button collapsed pull-right" data-toggle="collapse" data-target="#main-menu" id="mnav">
+                    <span class="sr-only"></span>
+                        <i class="fa fa-bars"></i>
+                    </span>
+                    <a class="navbar-brand" href="http://www.zhechu.top">哲锄</a>
+                </div>
+                <div class="collapse navbar-collapse" id="main-menu">
+                    <ul class="menu">
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/"><i class="fa fa-home"></i>哲锄</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/categories"><i class="fa fa-list"></i>分类</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/about"><i class="fa fa-user"></i>关于我</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/archives"><i class="fa fa-archive"></i>归档</a>
+                            </li>
+                        
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<a href="http://github.com/zhechu">
+    <img style="position: absolute; top: 0; right: 0; border: 0;"
+        src="/img/forkme.png"
+        alt="Fork me on GitHub">
+</a>
+
+    <section class="content-wrap">
+        <div class="container">
+            <div class="row">
+                <main class="col-md-8 main-content m-post">
+                    <p id="process"></p>
+<article class="post">
+    <div class="post-head">
+        <h1 id="Mysql到ClickHouse同步方案">
+            
+                Mysql到ClickHouse同步方案
+            
+        </h1>
+        <div class="post-meta">
+    
+    
+    <span class="categories-meta fa-wrap">
+        <i class="fa fa-folder-open-o"></i>
+        <a href="/categories/Linux">
+            Linux
+        </a>
+    </span>
+    
+
+    
+    <span class="fa-wrap">
+        <i class="fa fa-tags"></i>
+        <span class="tags-meta">
+            
+                
+                    <a href="/tags/CentOS7" title='CentOS7'>
+                        CentOS7
+                    </a>
+                
+                    <a href="/tags/ClickHouse" title='ClickHouse'>
+                        ClickHouse
+                    </a>
+                
+                    <a href="/tags/数据同步" title='数据同步'>
+                        数据同步
+                    </a>
+                
+            
+        </span>
+    </span>
+    
+
+    
+        
+        <span class="fa-wrap">
+            <i class="fa fa-clock-o"></i>
+            <span class="date-meta">2021/06/22</span>
+        </span>
+        
+            <span class="fa-wrap">
+                <i class="fa fa-eye"></i>
+                <span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    
+</div>
+
+        
+        
+    </div>
+    
+    <div class="post-body post-content">
+        <h2 id="1-基于-synch-redis-同步方案"><a href="#1-基于-synch-redis-同步方案" class="headerlink" title="1 基于 synch redis 同步方案"></a>1 基于 synch redis 同步方案</h2><p>官方文档</p>
+<p><a href="https://github.com/long2ice/synch/blob/dev/README-zh.md" target="_blank" rel="noopener">https://github.com/long2ice/synch/blob/dev/README-zh.md</a></p>
+<p>解压安装包 synch-0.7.1.zip<br><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> unzip synch-0.7.1.zip</span><br></pre></td></tr></table></figure></p>
+<p>数据库必须进行 bin log 相关配置</p>
+<p>略</p>
+<p>部署 Redis 6.2.4<br><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker run --network=host --name redis -d redis:6.2.4</span><br></pre></td></tr></table></figure></p>
+<p>根据需求配置同步表数据<br><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> cd synch-0.7.1</span><br><span class="line"><span class="meta">$</span> cp synch.yaml synch.yaml.default</span><br><span class="line"><span class="meta">$</span> vi synch.yaml</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line">core:</span><br><span class="line">  debug: true # when set True, will display sql information.</span><br><span class="line">  insert_num: 1 # how many num to submit,recommend set 20000 when production</span><br><span class="line">  insert_interval: 1 # how many seconds to submit,recommend set 60 when production</span><br><span class="line"><span class="meta">  #</span> enable this will auto create database `synch` in ClickHouse and insert monitor data</span><br><span class="line">  monitoring: true</span><br><span class="line"></span><br><span class="line">sentry:</span><br><span class="line">  environment: development</span><br><span class="line">  dsn:</span><br><span class="line"></span><br><span class="line">redis:</span><br><span class="line">  host: 192.168.180.78</span><br><span class="line">  port: 6379</span><br><span class="line">  db: 0</span><br><span class="line">  password:</span><br><span class="line">  prefix: synch</span><br><span class="line">  sentinel: false # enable redis sentinel</span><br><span class="line">  sentinel_hosts: # redis sentinel hosts</span><br><span class="line">    - 127.0.0.1:5000</span><br><span class="line">    - 127.0.0.1:5001</span><br><span class="line">    - 127.0.0.1:5002</span><br><span class="line">  sentinel_master: master</span><br><span class="line">  queue_max_len: 200000 # stream max len, will delete redundant ones with FIFO</span><br><span class="line"></span><br><span class="line">source_dbs:</span><br><span class="line">  - db_type: mysql</span><br><span class="line">    alias: mysql_db # must be unique</span><br><span class="line">    broker_type: redis # current support redis and kafka</span><br><span class="line">    server_id: 1</span><br><span class="line">    host: 192.168.1.154</span><br><span class="line">    port: 3306</span><br><span class="line">    user: root</span><br><span class="line">    password: "123456"</span><br><span class="line">    # optional, auto get from `show master status` when empty</span><br><span class="line">    init_binlog_file:</span><br><span class="line">    # optional, auto get from `show master status` when empty</span><br><span class="line">    init_binlog_pos:</span><br><span class="line">    skip_dmls: # dmls to skip</span><br><span class="line">    skip_delete_tables: # tables skip delete, format with schema.table</span><br><span class="line">    skip_update_tables: # tables skip update, format with schema.table</span><br><span class="line">    databases:</span><br><span class="line">      - database: saas_test_tenant</span><br><span class="line">        auto_create: true</span><br><span class="line">        tables:</span><br><span class="line">          - table: information_info</span><br><span class="line">            skip_decimal: false</span><br><span class="line">            auto_full_etl: true</span><br><span class="line">            clickhouse_engine: ReplacingMergeTree</span><br><span class="line">            sign_column: sign</span><br><span class="line">          - table: information_type</span><br><span class="line">            skip_decimal: false</span><br><span class="line">            auto_full_etl: true</span><br><span class="line">            clickhouse_engine: ReplacingMergeTree</span><br><span class="line">            sign_column: sign</span><br><span class="line">          - table: information_history</span><br><span class="line">            skip_decimal: false</span><br><span class="line">            auto_full_etl: true</span><br><span class="line">            clickhouse_engine: ReplacingMergeTree</span><br><span class="line">            sign_column: sign</span><br><span class="line">      - database: integral_test_tenant</span><br><span class="line">        auto_create: true</span><br><span class="line">        tables:</span><br><span class="line">          - table: integral_total</span><br><span class="line">            skip_decimal: false</span><br><span class="line">            auto_full_etl: true</span><br><span class="line">            clickhouse_engine: ReplacingMergeTree</span><br><span class="line">            sign_column: sign</span><br><span class="line"></span><br><span class="line">clickhouse:</span><br><span class="line">  hosts:</span><br><span class="line">    - 192.168.1.225:9000</span><br><span class="line">  user: test</span><br><span class="line">  password: 'admin123'</span><br><span class="line">  cluster_name:</span><br><span class="line">  distributed_suffix: _all</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>TIPS：同步 saas_test_tenant 和 integral_test_tenant 的相关表到 192.168.1.225 的 ClickHouse 中</p>
+</blockquote>
+<p>配置订阅命令<br><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> cp docker-compose.yml docker-compose.yml.default</span><br><span class="line"><span class="meta">$</span> vi docker-compose.yml</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">version: '3'</span><br><span class="line">services:</span><br><span class="line">  producer:</span><br><span class="line">    image: long2ice/synch</span><br><span class="line">    command: synch --alias mysql_db produce</span><br><span class="line">    volumes:</span><br><span class="line">      - ./synch.yaml:/synch/synch.yaml</span><br><span class="line">  consumer.saas_test_tenant:</span><br><span class="line">    image: long2ice/synch</span><br><span class="line">    command: synch --alias mysql_db consume --schema saas_test_tenant</span><br><span class="line">    volumes:</span><br><span class="line">      - ./synch.yaml:/synch/synch.yaml</span><br><span class="line">  consumer.integral_test_tenant:</span><br><span class="line">    image: long2ice/synch</span><br><span class="line">    command: synch --alias mysql_db consume --schema integral_test_tenant</span><br><span class="line">    volumes:</span><br><span class="line">      - ./synch.yaml:/synch/synch.yaml</span><br></pre></td></tr></table></figure>
+<p>启动同步服务<br><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker-compose up -d</span><br></pre></td></tr></table></figure></p>
+<p>查询 ClickHouse 是否已有数据<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">SELECT</span><br><span class="line">    &apos;资讯总数&apos; AS type_name,</span><br><span class="line">	count( * ) AS information_count,</span><br><span class="line">	&apos;100%&apos; AS information_count_rate</span><br><span class="line">FROM</span><br><span class="line">    saas_test_tenant.information_info</span><br><span class="line">WHERE</span><br><span class="line">    tenant_id = &apos;97c281870bf74eedba196d998f49ff7f&apos;</span><br></pre></td></tr></table></figure></p>
+<p>查看监控日志<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from synch.log</span><br></pre></td></tr></table></figure></p>
+<h2 id="2-基于命令行客户端同步方案"><a href="#2-基于命令行客户端同步方案" class="headerlink" title="2 基于命令行客户端同步方案"></a>2 基于命令行客户端同步方案</h2><blockquote>
+<p>TIPS：基于此方案同步日表，并使用ClickHouse合并表机制作聚合查询</p>
+</blockquote>
+<p>官方合并表使用文档</p>
+<p><a href="https://clickhouse.tech/docs/zh/engines/table-engines/special/merge/" target="_blank" rel="noopener">https://clickhouse.tech/docs/zh/engines/table-engines/special/merge/</a></p>
+<p>同步日表脚本<br><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> mkdir -p /usr/local/job</span><br><span class="line"><span class="meta">$</span> vi /usr/local/job/job.sh</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line">export YESTERDAY=`date "+%Y%m%d" -d "-1day"`</span><br><span class="line">echo $(date "+%F %T")' start job' &gt;&gt; /usr/local/job/job.log</span><br><span class="line">/usr/bin/clickhouse-client --host 192.168.1.225 -u test --password admin123 --multiquery -q "create database if not exists saas_test_tenant;CREATE TABLE if not exists saas_test_tenant.active_user_log_$YESTERDAY ENGINE = ReplacingMergeTree  ORDER BY id  AS SELECT * FROM mysql('192.168.1.154:3306', 'saas_test_tenant', 'active_user_log_$YESTERDAY', 'root', '123456');" &gt;&gt; /usr/local/job/job.log</span><br><span class="line">echo $(date "+%F %T")' end job' &gt;&gt; /usr/local/job/job.log</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> chmod +x /usr/local/job/job.sh</span><br></pre></td></tr></table></figure>
+<p>设置定时每天 0 点 30 分执行<br><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> crontab -e</span><br><span class="line">30 0 * * * /bin/sh /usr/local/job/job.sh &gt;/dev/null 2&gt;&amp;1 &amp;</span><br></pre></td></tr></table></figure></p>
+<p>同步历史日表<br><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> vi /usr/local/job/sync_history_data.sh</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>! /bin/bash</span><br><span class="line">first=$1</span><br><span class="line">second=$2</span><br><span class="line">while [ "$first" != "$second" ]</span><br><span class="line">do</span><br><span class="line">echo $first</span><br><span class="line">/usr/bin/clickhouse-client --host 192.168.1.225 -u test --password admin123 --multiquery -q "create database if not exists saas_test_tenant;CREATE TABLE if not exists saas_test_tenant.active_user_log_$first ENGINE = ReplacingMergeTree  ORDER BY id  AS SELECT * FROM mysql('192.168.1.154:3306', 'saas_test_tenant', 'active_user_log_$first', 'root', '123456');"</span><br><span class="line">let first=`date -d "-1 days ago $&#123;first&#125;" +%Y%m%d`</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> chmod +x /usr/local/job/sync_history_data.sh</span><br><span class="line"><span class="meta">$</span> sh /usr/local/job/sync_history_data.sh 20201218 20210610</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>TIPS：不包含 20210610</p>
+</blockquote>
+<p>创建日表归并表<br><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> /usr/bin/clickhouse-client --host 192.168.1.225 -u test --password admin123 --multiquery -q "create database if not exists saas_test_tenant;CREATE TABLE saas_test_tenant.active_user_log as saas_test_tenant.active_user_log_20210610 ENGINE=Merge('saas_test_tenant', 'active_user_log_*');"</span><br></pre></td></tr></table></figure></p>
+
+    </div>
+    
+    <div class="post-footer">
+        <div class="col-sm-10">
+            <div>
+                <b>本文链接</b>：<a href="/2021/06/22/Mysql到ClickHouse同步方案/">Mysql到ClickHouse同步方案</a>
+            </div>
+            <div>
+                
+                    转载声明：本博客由<strong>哲锄</strong>创作，采用 <a href="https://creativecommons.org/licenses/by-nc-nd/3.0/" target="_blank"> CC BY 3.0 CN </a> 许可协议。可自由转载、引用，但需署名作者且注明文章出处。如转载至微信公众号，请在文末添加作者公众号二维码。
+                
+            </div>
+            <div>
+                
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <img src="" width=100%/>
+        </div>
+    </div>
+</article>
+
+<div class="article-nav prev-next-wrap clearfix">
+    
+    
+        <a href="/2021/06/22/CentOS7安装ClickHouse/" class="next-post btn btn-default" title='CentOS7安装ClickHouse'>
+            <span class="hidden-lg">下一篇</span>
+            <span class="hidden-xs">CentOS7安装ClickHouse</span><i class="fa fa-angle-right fa-fw"></i>
+        </a>
+    
+</div>
+
+
+
+
+
+
+                </main>
+                
+                    <aside id="article-toc" role="navigation" class="col-md-4">
+    <div class="widget">
+        <h3 class="title">文章目录</h3>
+        
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-基于-synch-redis-同步方案"><span class="toc-text">1 基于 synch redis 同步方案</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-基于命令行客户端同步方案"><span class="toc-text">2 基于命令行客户端同步方案</span></a></li></ol>
+        
+    </div>
+</aside>
+
+                
+            </div>
+        </div>
+    </section>
+    <footer class="main-footer">
+    <div class="container">
+        <div class="row">
+        </div>
+    </div>
+</footer>
+
+<a id="back-to-top" class="icon-btn hide">
+	<i class="fa fa-chevron-up"></i>
+</a>
+
+
+
+
+    <div class="copyright">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="busuanzi">
+    
+        访问量:
+        <strong id="busuanzi_value_site_pv">
+            <i class="fa fa-spinner fa-spin"></i>
+        </strong>
+        &nbsp; | &nbsp;
+        访客数:
+        <strong id="busuanzi_value_site_uv">
+            <i class="fa fa-spinner fa-spin"></i>
+        </strong>
+    
+</div>
+
+            </div>
+            <div class="col-sm-12">
+                <span>Copyright &copy; 2016
+                </span> |
+                <span>
+                    Powered by <a href="//hexo.io" class="copyright-links" target="_blank" rel="nofollow">Hexo</a>
+                </span> |
+                <span>
+                    Theme by <a href="//github.com/itmuch/hexo-theme-itmuch.git" class="copyright-links" target="_blank" rel="nofollow">ITMuch</a>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script src="/js/app.js?rev=@@hash"></script>
+
+</body>
+</html>
