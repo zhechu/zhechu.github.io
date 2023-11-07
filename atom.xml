@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://zhechu.github.io/"/>
-  <updated>2023-11-05T00:12:09.872Z</updated>
+  <updated>2023-11-07T11:49:30.304Z</updated>
   <id>https://zhechu.github.io/</id>
   
   <author>
@@ -21,9 +21,9 @@
     <link href="https://zhechu.github.io/2023/11/03/EMS%E7%B3%BB%E7%BB%9F%E8%AE%A2%E5%8D%95%E6%95%B0%E6%8D%AE%E5%90%8C%E6%AD%A5/"/>
     <id>https://zhechu.github.io/2023/11/03/EMS系统订单数据同步/</id>
     <published>2023-11-03T14:05:41.000Z</published>
-    <updated>2023-11-05T00:12:09.872Z</updated>
+    <updated>2023-11-07T11:49:30.304Z</updated>
     
-    <content type="html"><![CDATA[<h2 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h2><p>将EMS系统的订单表数据近实时地同步到供应链平台</p><h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>EMS系统比较成熟，可提供订单表的API查询接口；供应链平台目前还在迭代开发中</p><h2 id="方案"><a href="#方案" class="headerlink" title="方案"></a>方案</h2><p>使用定时任务，通过API接口调用的方式，定期从EMS系统获取新增和更新的订单数据同步到供应链平台</p><h3 id="API查询接口设计"><a href="#API查询接口设计" class="headerlink" title="API查询接口设计"></a>API查询接口设计</h3><p>请求参数：供应链平台最大的订单号、供应链平台提供订单表最后的更新时间<br>返回参数：订单数据列表（返回前已去重，尽量减少网络开销）<br>返回数据上限：1万条（假设1条订单数据100Byte，1万条就是1MB）</p><p>同步订单数据流程：</p><ol><li>获取新增和更新的订单：供应链平台提供最大的订单号（主键，一般设置为数值类型，并且递增）可以获取到EMS新增的订单；供应链平台提供订单表最后的更新时间（需包含，或者设置更小，以免丢失数据）可以获取到EMS更新的订单</li><li>将获取到的订单数据列表去重</li><li>在落库的时候需要保证幂等性（若已存在此订单，则更新，否则执行插入操作）</li></ol><h3 id="定时任务设计"><a href="#定时任务设计" class="headerlink" title="定时任务设计"></a>定时任务设计</h3><p>选型：使用XXL-JOB分布式定时任务系统</p><p>任务参数：通过XXL-JOB的后台管理系统编辑页面传入供应链平台最大的订单号和供应链平台提供订单表最后的更新时间两个参数，若不传则会从供应链平台的订单表拿到，若表数据为空，则使用默认值（订单号最小值为0，更新时间默认为100年前）</p><p>任务定时设计：通过XXL-JOB可以方便定制适合的频度</p><h3 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h3><ol><li>第一次同步的数据量较大，有条件的可以手工进行同步</li><li>收集监控日志</li></ol>]]></content>
+    <content type="html"><![CDATA[<h2 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h2><p>将EMS系统的订单表数据近实时地同步到供应链平台</p><h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>EMS系统比较成熟，可提供订单表的API查询接口；供应链平台目前还在迭代开发中</p><h2 id="方案"><a href="#方案" class="headerlink" title="方案"></a>方案</h2><p>使用定时任务，通过API接口调用的方式，定期从EMS系统获取新增和更新的订单数据同步到供应链平台</p><h3 id="API查询接口设计"><a href="#API查询接口设计" class="headerlink" title="API查询接口设计"></a>API查询接口设计</h3><p>请求参数：供应链平台最大的订单号、供应链平台提供订单表最后的更新时间<br>返回参数：订单数据列表（返回前已去重，尽量减少网络开销）<br>返回数据上限：1万条（假设1条订单数据100Byte，1万条就是1MB）</p><p>同步订单数据流程：</p><ol><li>获取新增和更新的订单：供应链平台提供最大的订单号（主键，一般设置为数值类型，并且递增）可以获取到EMS新增的订单；供应链平台提供订单表最后的更新时间（需包含，或者设置更小，以免丢失数据）可以获取到EMS更新的订单</li><li>将获取到的订单数据列表去重</li><li>在落库的时候需要保证幂等性（若已存在此订单，则更新，否则执行插入操作）</li></ol><h3 id="定时任务设计"><a href="#定时任务设计" class="headerlink" title="定时任务设计"></a>定时任务设计</h3><p>选型：使用XXL-JOB分布式定时任务系统</p><p>任务参数：通过XXL-JOB的后台管理系统编辑页面传入供应链平台最大的订单号和供应链平台提供订单表最后的更新时间两个参数，若不传则会从供应链平台的订单表拿到，若表数据为空，则使用默认值（订单号最小值为0，更新时间默认为100年前）</p><p>任务定时设计：通过XXL-JOB可以方便定制适合的频度</p><h3 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h3><ol><li>第一次同步的数据量较大，有条件的可以手工进行同步</li><li>收集监控日志</li><li>EMS系统和供应链平台建立长连接，减少网络开销。同时简化供应链平台的复杂度，不需要定时任务（如：使用WebSocket实现长连接通信）</li></ol>]]></content>
     
     <summary type="html">
     
