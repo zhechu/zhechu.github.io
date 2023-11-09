@@ -375,6 +375,12 @@ Confirm：确认执行业务
 
 <article class="post">
     
+        <div class="post-media">
+            <a href="/2019/06/01/Mysql函数/">
+                <img class="img-ajax" src="/img/loading.gif"  data-src="/2019/06/01/Mysql函数/ip_record.jpg"   alt="Mysql函数">
+            </a>
+        </div>
+    
     <div class="post-content">
         <div class="post-head home-post-head">
             <h1 class="post-title">
@@ -405,7 +411,13 @@ Mysql-5.7
 
 官方文档
 https://dev.mysql.com/doc/refman/5.7/en/functions.html
+存储 IP 地址可以将 IP 地址转换成整形数据存储，性能更好，占用空间也更小。
+MySQL 提供了两个方法来处理 ip 地址
 
+INET_ATON()：把 ip 转为无符号整型 (4-8 位)
+INET_NTOA()：把整型的 ip 转为地址
+
+插入数据前，先用 INET_A...
             
         </p>
     </div>
