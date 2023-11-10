@@ -192,14 +192,20 @@ cache 中读取不到的话，就从 db...">
 <li>再把数据放到 cache 中。</li>
 </ol>
 <h3 id="1-1-缺点"><a href="#1-1-缺点" class="headerlink" title="1.1 缺点"></a>1.1 缺点</h3><ul>
-<li>首次请求数据一定不在 cache</li>
-</ul>
-<p>预热：将热点数据提前放入 cache 中。</p>
+<li><p>首次请求数据一定不在 cache</p>
 <ul>
-<li>频繁写操作导致 cache 中的数据会被频繁被删除，存在数据不一致风险</li>
+<li>预热：将热点数据提前放入 cache 中。</li>
 </ul>
-<p>db 和 cache 强一致：写（1和2步骤）和读（2和3步骤）时加分布式读写锁（读写和写写互斥、读读不互斥）</p>
-<p>允许短暂不一致：更新 db 的同时更新 cache，但是给缓存加一个较短的过期时间</p>
+</li>
+<li><p>频繁写操作导致 cache 中的数据会被频繁被删除，存在数据不一致风险</p>
+<ul>
+<li><p>db 和 cache 强一致：写（1和2步骤）和读（2和3步骤）时加分布式读写锁（读写和写写互斥、读读不互斥）</p>
+</li>
+<li><p>允许短暂不一致：更新 db 的同时更新 cache，但是给缓存加一个较短的过期时间</p>
+</li>
+</ul>
+</li>
+</ul>
 <h2 id="2-Read-Write-Through-Pattern（读写穿透）"><a href="#2-Read-Write-Through-Pattern（读写穿透）" class="headerlink" title="2 Read/Write Through Pattern（读写穿透）"></a>2 Read/Write Through Pattern（读写穿透）</h2><p>服务端把 cache 视为主要数据存储，从中读取数据并将数据写入其中。cache 服务负责将此数据读取和写入 db，从而减轻了应用程序的职责。</p>
 <p>适用于高并发的数据，但又允许丢失的场景，如社交软件的评论功能。</p>
 <p>写：</p>
