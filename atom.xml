@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://zhechu.github.io/"/>
-  <updated>2023-12-02T02:02:08.094Z</updated>
+  <updated>2023-12-09T18:56:55.175Z</updated>
   <id>https://zhechu.github.io/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>CentOS7安装Jenkins</title>
+    <link href="https://zhechu.github.io/2023/12/10/CentOS7%E5%AE%89%E8%A3%85Jenkins/"/>
+    <id>https://zhechu.github.io/2023/12/10/CentOS7安装Jenkins/</id>
+    <published>2023-12-09T18:00:23.000Z</published>
+    <updated>2023-12-09T18:56:55.175Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="安装-JDK1-8"><a href="#安装-JDK1-8" class="headerlink" title="安装 JDK1.8"></a>安装 JDK1.8</h2><a href="/2019/04/05/CentOS7安装JDK/" title="CentOS7安装JDK">CentOS7安装JDK</a><h2 id="安装-Jenkins2-319"><a href="#安装-Jenkins2-319" class="headerlink" title="安装 Jenkins2.319"></a>安装 Jenkins2.319</h2><p>准备<br><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> yum  -y install epel-release</span><br><span class="line"><span class="meta">$</span> yum -y install daemonize</span><br><span class="line"></span><br><span class="line"><span class="meta">$</span> rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key</span><br></pre></td></tr></table></figure></p><p>安装<br><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> rpm -ih jenkins-2.319-1.1.noarch.rpm</span><br></pre></td></tr></table></figure></p><p>修改账号和端口<br><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> vi /etc/sysconfig/jenkins</span><br></pre></td></tr></table></figure></p><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">JENKINS_USER="root" </span><br><span class="line">JENKINS_PORT="18080"</span><br></pre></td></tr></table></figure><p>启动 Jenkins<br><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> systemctl status jenkins</span><br><span class="line"><span class="meta">$</span> systemctl start jenkins</span><br></pre></td></tr></table></figure></p><p>关闭防火墙<br><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> systemctl stop firewalld</span><br><span class="line"><span class="meta">$</span> systemctl disable firewalld</span><br></pre></td></tr></table></figure></p><p>浏览器访问</p><p><a href="http://192.168.1.103:18080" target="_blank" rel="noopener">http://192.168.1.103:18080</a></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;安装-JDK1-8&quot;&gt;&lt;a href=&quot;#安装-JDK1-8&quot; class=&quot;headerlink&quot; title=&quot;安装 JDK1.8&quot;&gt;&lt;/a&gt;安装 JDK1.8&lt;/h2&gt;&lt;a href=&quot;/2019/04/05/CentOS7安装JDK/&quot; title=&quot;Ce
+      
+    
+    </summary>
+    
+      <category term="Linux" scheme="https://zhechu.github.io/categories/Linux/"/>
+    
+    
+      <category term="CentOS7" scheme="https://zhechu.github.io/tags/CentOS7/"/>
+    
+  </entry>
   
   <entry>
     <title>VirtualBox安装CentOS7配置</title>
@@ -548,34 +573,6 @@
     </summary>
     
       <category term="Java" scheme="https://zhechu.github.io/categories/Java/"/>
-    
-    
-      <category term="规范" scheme="https://zhechu.github.io/tags/%E8%A7%84%E8%8C%83/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Git提交规范</title>
-    <link href="https://zhechu.github.io/2020/07/27/Git%E6%8F%90%E4%BA%A4%E8%A7%84%E8%8C%83/"/>
-    <id>https://zhechu.github.io/2020/07/27/Git提交规范/</id>
-    <published>2020-07-27T14:51:26.000Z</published>
-    <updated>2020-11-03T13:04:34.083Z</updated>
-    
-    <content type="html"><![CDATA[<ol><li>提交时间点：单个功能开发完，且单元测试成功之后，按照功能点提交</li><li>注释格式：前缀 + “:” + 功能点描述</li><li>提交步骤：<code>commit</code>（本地提交一个或多个） -&gt; <code>pull</code>（若有冲突需要谨慎解决） -&gt; <code>push</code></li></ol><blockquote><p>提交步骤反例：<code>pull</code>（此时本地代码还未<code>commit</code>，开发工具可能会自动合并代码，导致部分代码丢失） -&gt; <code>commit</code> -&gt; <code>push</code></p></blockquote><table><thead><tr><th>前缀</th><th>说明</th><th>提交示例</th></tr></thead><tbody><tr><td>feature</td><td>新功能</td><td>feature:用户登录接口</td></tr><tr><td>fix</td><td>修复 BUG</td><td>fix:单点登录接口入参校验BUG</td></tr><tr><td>test</td><td>添加测试用例</td><td>test:用户注册</td></tr><tr><td>refactor</td><td>重构</td><td>refactor:分页插件</td></tr><tr><td>revert</td><td>恢复到某个提交点</td><td>revert:fix:单点登录接口入参校验BUG</td></tr></tbody></table>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;ol&gt;
-&lt;li&gt;提交时间点：单个功能开发完，且单元测试成功之后，按照功能点提交&lt;/li&gt;
-&lt;li&gt;注释格式：前缀 + “:” + 功能点描述&lt;/li&gt;
-&lt;li&gt;提交步骤：&lt;code&gt;commit&lt;/code&gt;（本地提交一个或多个） -&amp;gt; &lt;code&gt;pull&lt;/code&gt;
-      
-    
-    </summary>
-    
-      <category term="Git" scheme="https://zhechu.github.io/categories/Git/"/>
     
     
       <category term="规范" scheme="https://zhechu.github.io/tags/%E8%A7%84%E8%8C%83/"/>
