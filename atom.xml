@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://zhechu.github.io/"/>
-  <updated>2023-12-09T18:56:55.175Z</updated>
+  <updated>2023-12-09T18:57:07.050Z</updated>
   <id>https://zhechu.github.io/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://zhechu.github.io/2023/12/10/CentOS7%E5%AE%89%E8%A3%85Jenkins/"/>
     <id>https://zhechu.github.io/2023/12/10/CentOS7安装Jenkins/</id>
     <published>2023-12-09T18:00:23.000Z</published>
-    <updated>2023-12-09T18:56:55.175Z</updated>
+    <updated>2023-12-09T18:57:07.050Z</updated>
     
     <content type="html"><![CDATA[<h2 id="安装-JDK1-8"><a href="#安装-JDK1-8" class="headerlink" title="安装 JDK1.8"></a>安装 JDK1.8</h2><a href="/2019/04/05/CentOS7安装JDK/" title="CentOS7安装JDK">CentOS7安装JDK</a><h2 id="安装-Jenkins2-319"><a href="#安装-Jenkins2-319" class="headerlink" title="安装 Jenkins2.319"></a>安装 Jenkins2.319</h2><p>准备<br><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> yum  -y install epel-release</span><br><span class="line"><span class="meta">$</span> yum -y install daemonize</span><br><span class="line"></span><br><span class="line"><span class="meta">$</span> rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key</span><br></pre></td></tr></table></figure></p><p>安装<br><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> rpm -ih jenkins-2.319-1.1.noarch.rpm</span><br></pre></td></tr></table></figure></p><p>修改账号和端口<br><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> vi /etc/sysconfig/jenkins</span><br></pre></td></tr></table></figure></p><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">JENKINS_USER="root" </span><br><span class="line">JENKINS_PORT="18080"</span><br></pre></td></tr></table></figure><p>启动 Jenkins<br><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> systemctl status jenkins</span><br><span class="line"><span class="meta">$</span> systemctl start jenkins</span><br></pre></td></tr></table></figure></p><p>关闭防火墙<br><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> systemctl stop firewalld</span><br><span class="line"><span class="meta">$</span> systemctl disable firewalld</span><br></pre></td></tr></table></figure></p><p>浏览器访问</p><p><a href="http://192.168.1.103:18080" target="_blank" rel="noopener">http://192.168.1.103:18080</a></p>]]></content>
     
