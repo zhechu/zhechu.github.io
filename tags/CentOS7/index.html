@@ -139,9 +139,12 @@
             <p class="brief">
                 
                     安装 JDK1.8CentOS7安装JDK
-安装 Jenkins2.319准备script1234$ yum  -y install epel-release$ yum -y install daemonize$ rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
-安装script1$ rpm -ih jenkins-2.319-1.1.noarch.rpm
-修改账号和端口scrip...
+卸载 Jenkins关闭 Jenkinsscript1$ systemctl stop jenkins
+rpm 卸载script1$ rpm -e jenkins
+检查是否卸载成功script1$ rpm -ql jenkins
+彻底删除残留文件script1$ find / -iname jenkins | xargs -n 1000 rm -rf
+安装 Jenkins2.319参考
+https://www.jenkins....
                 
             </p>
         </div>
