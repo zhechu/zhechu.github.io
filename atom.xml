@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://zhechu.github.io/"/>
-  <updated>2023-12-10T17:43:29.481Z</updated>
+  <updated>2023-12-14T16:57:38.810Z</updated>
   <id>https://zhechu.github.io/</id>
   
   <author>
@@ -17,11 +17,36 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Docker安装YApi</title>
+    <link href="https://zhechu.github.io/2023/12/14/Docker%E5%AE%89%E8%A3%85YApi/"/>
+    <id>https://zhechu.github.io/2023/12/14/Docker安装YApi/</id>
+    <published>2023-12-14T12:34:08.000Z</published>
+    <updated>2023-12-14T16:57:38.810Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="搭建-mongodb"><a href="#搭建-mongodb" class="headerlink" title="搭建 mongodb"></a>搭建 mongodb</h2><p>拉取 mongo:4.2 镜像<br><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker pull mongo:4.2</span><br></pre></td></tr></table></figure></p><p>启动 mongodb<br><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker run -d --name mongo --privileged=true -p 27017:27017 -v /home/mongodb/data:/data/db mongo:4.2 --auth</span><br></pre></td></tr></table></figure></p><p>进入容器<br><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker exec -it mongo /bin/bash</span><br></pre></td></tr></table></figure></p><p>创建 <strong>root</strong> 用户，密码：<strong>123456</strong><br><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.createUser(&#123; user:'root',pwd:'123456',roles:[ &#123; role:'userAdminAnyDatabase', db: 'admin'&#125;,"readWriteAnyDatabase"]&#125;);</span><br></pre></td></tr></table></figure></p><h2 id="搭建-yapi"><a href="#搭建-yapi" class="headerlink" title="搭建 yapi"></a>搭建 yapi</h2><p>拉取 jayfong/yapi:1.10.2 镜像<br><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker pull jayfong/yapi:1.10.2</span><br></pre></td></tr></table></figure></p><p>启动 yapi<br><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker run -d --name yapi --privileged=true -p 3030:3000 -e YAPI_ADMIN_ACCOUNT=ling-yu-wang@qq.com -e YAPI_ADMIN_PASSWORD=123456 -e YAPI_CLOSE_REGISTER=true -e YAPI_DB_SERVERNAME=192.168.2.101 -e YAPI_DB_PORT=27017 -e YAPI_DB_DATABASE=yapi -e YAPI_DB_USER=root -e YAPI_DB_PASS=123456 -e YAPI_DB_AUTH_SOURCE=admin -e YAPI_MAIL_ENABLE=false -e YAPI_PLUGINS=[] jayfong/yapi:1.10.2</span><br></pre></td></tr></table></figure></p><p>使用 Yapi</p><p>访问 <a href="http://192.168.2.101:3030" target="_blank" rel="noopener">http://192.168.2.101:3030</a> </p><p>登录账号<a href="mailto:**ling-yu-wang@qq.com" target="_blank" rel="noopener">**ling-yu-wang@qq.com</a><strong>，密码</strong>123456**</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;搭建-mongodb&quot;&gt;&lt;a href=&quot;#搭建-mongodb&quot; class=&quot;headerlink&quot; title=&quot;搭建 mongodb&quot;&gt;&lt;/a&gt;搭建 mongodb&lt;/h2&gt;&lt;p&gt;拉取 mongo:4.2 镜像&lt;br&gt;&lt;figure class=&quot;high
+      
+    
+    </summary>
+    
+      <category term="Linux" scheme="https://zhechu.github.io/categories/Linux/"/>
+    
+    
+      <category term="Docker" scheme="https://zhechu.github.io/tags/Docker/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Jenkins持续集成配置</title>
     <link href="https://zhechu.github.io/2023/12/10/Jenkins%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90%E9%85%8D%E7%BD%AE/"/>
     <id>https://zhechu.github.io/2023/12/10/Jenkins持续集成配置/</id>
     <published>2023-12-10T12:43:48.000Z</published>
-    <updated>2023-12-10T17:43:29.481Z</updated>
+    <updated>2023-12-10T17:43:50.005Z</updated>
     
     <content type="html"><![CDATA[<h2 id="安装-Maven"><a href="#安装-Maven" class="headerlink" title="安装 Maven"></a>安装 Maven</h2><p>手动下载</p><p><a href="https://archive.apache.org/dist/maven/maven-3/" target="_blank" rel="noopener">https://archive.apache.org/dist/maven/maven-3/</a></p><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">export MAVEN_HOME=/usr/local/apache-maven-3.6.3</span><br><span class="line">export PATH=$JAVA_HOME/bin:$MAVEN_HOME/bin:$PATH</span><br></pre></td></tr></table></figure><h2 id="系统配置"><a href="#系统配置" class="headerlink" title="系统配置"></a>系统配置</h2><p><img src="/2023/12/10/Jenkins持续集成配置/sysconfig_1.png" alt></p><p><img src="/2023/12/10/Jenkins持续集成配置/sysconfig_2.png" alt></p><h2 id="凭证配置"><a href="#凭证配置" class="headerlink" title="凭证配置"></a>凭证配置</h2>]]></content>
     
@@ -554,32 +579,6 @@
       <category term="SpringCloud" scheme="https://zhechu.github.io/tags/SpringCloud/"/>
     
       <category term="配置中心" scheme="https://zhechu.github.io/tags/%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Java代码规范</title>
-    <link href="https://zhechu.github.io/2020/08/01/Java%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/"/>
-    <id>https://zhechu.github.io/2020/08/01/Java代码规范/</id>
-    <published>2020-07-31T16:26:06.000Z</published>
-    <updated>2020-11-03T13:04:34.150Z</updated>
-    
-    <content type="html"><![CDATA[<p>代码示例</p><p><a href="https://github.com/zhechu/spring-boot-rest-demo" target="_blank" rel="noopener">https://github.com/zhechu/spring-boot-rest-demo</a></p><h2 id="1-分层职责"><a href="#1-分层职责" class="headerlink" title="1 分层职责"></a>1 分层职责</h2><table><thead><tr><th style="text-align:center">层</th><th>包路径</th><th>说明</th></tr></thead><tbody><tr><td style="text-align:center">Controller</td><td>com.xxx.controller</td><td>入参和出参处理，包括校验入参和聚合出参</td></tr><tr><td style="text-align:center">RPC</td><td>com.xxx.rpc</td><td>RPC 调用</td></tr><tr><td style="text-align:center">Service</td><td>com.xxx.service</td><td>具体业务处理，包括本地事务控制</td></tr><tr><td style="text-align:center">Dao</td><td>com.xxx.dao</td><td>持久化处理</td></tr><tr><td style="text-align:center">Mapper</td><td>com.xxx.dao.mapper</td><td>持久化处理，方便扩展，如：复杂查询，需手写 SQL 实现</td></tr></tbody></table><h2 id="2-领域模型"><a href="#2-领域模型" class="headerlink" title="2 领域模型"></a>2 领域模型</h2><table><thead><tr><th>领域模型</th><th>命名方式</th><th style="text-align:right">示例</th><th>说明</th></tr></thead><tbody><tr><td>DO（Data Object）</td><td>&lt;表名+DO&gt;</td><td style="text-align:right">UserDO</td><td>此对象与数据库表结构一一对应</td></tr><tr><td>BO（Business Object）</td><td>&lt;表名+BO&gt;</td><td style="text-align:right">UserBO</td><td>业务对象，处理对象内部业务逻辑</td></tr><tr><td>DVO（Data Validate Object）</td><td>&lt;方法名+DVO&gt;</td><td style="text-align:right">UserLoginDVO</td><td>数据校验对象</td></tr><tr><td>DTO（Data Transfer Object）</td><td>&lt;方法名+DTO&gt;</td><td style="text-align:right">UserUpdateDTO</td><td>新增/修改入参对象</td></tr><tr><td>QO（Query Object）</td><td>&lt;方法名+QO&gt;</td><td style="text-align:right">UserQO</td><td>查询入参对象（不与 DTO 共用，只服务查询接口）</td></tr><tr><td>VO（Response Object）</td><td>&lt;方法名+VO&gt;</td><td style="text-align:right">UserVO</td><td>返回对象</td></tr></tbody></table><blockquote><p>数据校验一般放在聚合层，所以DVO类切勿共享，其只服务于开放出去的接口层（一般为聚合层的Controller层）</p></blockquote><h2 id="3-注释规范"><a href="#3-注释规范" class="headerlink" title="3 注释规范"></a>3 注释规范</h2><h3 id="3-1-IDEA-注释模板设置"><a href="#3-1-IDEA-注释模板设置" class="headerlink" title="3.1 IDEA 注释模板设置"></a>3.1 IDEA 注释模板设置</h3><blockquote><p>新建类时的注释模板</p></blockquote><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">#if ($&#123;PACKAGE_NAME&#125; &amp;&amp; $&#123;PACKAGE_NAME&#125; != "")package $&#123;PACKAGE_NAME&#125;;#end</span><br><span class="line">#parse("File Header.java")</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* $&#123;description&#125;</span></span><br><span class="line"><span class="comment">* <span class="doctag">@author</span> lingyuwang</span></span><br><span class="line"><span class="comment">* <span class="doctag">@date</span> $&#123;YEAR&#125;-$&#123;MONTH&#125;-$&#123;DAY&#125; $&#123;TIME&#125;</span></span><br><span class="line"><span class="comment">* <span class="doctag">@since</span> 1.0.4</span></span><br><span class="line"><span class="comment">**/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> $</span>&#123;NAME&#125; &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p><img src="/2020/08/01/Java代码规范/idea_template_class.png" alt="image"></p><hr><blockquote><p>类的注释模板（快捷键为 ccmm）</p></blockquote><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> lingyuwang</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> $date$ $time$</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@since</span> 1.0.4</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure><p><img src="/2020/08/01/Java代码规范/idea_template_class_ccmm.png" alt="image"></p><p><img src="/2020/08/01/Java代码规范/idea_template_class_ccmm_use.png" alt="image"></p><hr><blockquote><p>方法的注释模板（快捷键为 /**）<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">*</span><br><span class="line"> *</span><br><span class="line"> *</span><br><span class="line">$params$</span><br><span class="line"> * <span class="meta">@return</span> $<span class="keyword">return</span>$</span><br><span class="line"> * <span class="meta">@author</span> lingyuwang</span><br><span class="line"> * <span class="meta">@date</span> $date$ $time$</span><br><span class="line"> * <span class="meta">@since</span> <span class="number">1.0</span><span class="number">.4</span></span><br><span class="line"> */</span><br></pre></td></tr></table></figure></p></blockquote><p><img src="/2020/08/01/Java代码规范/idea_template_method.png" alt="image"></p><p><img src="/2020/08/01/Java代码规范/idea_template_method_use.png" alt="image"></p><blockquote><p>注意：<code>@since</code> 是当前版本号。</p></blockquote>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;代码示例&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://github.com/zhechu/spring-boot-rest-demo&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://github.com/zhechu/spring-boo
-      
-    
-    </summary>
-    
-      <category term="Java" scheme="https://zhechu.github.io/categories/Java/"/>
-    
-    
-      <category term="规范" scheme="https://zhechu.github.io/tags/%E8%A7%84%E8%8C%83/"/>
     
   </entry>
   
