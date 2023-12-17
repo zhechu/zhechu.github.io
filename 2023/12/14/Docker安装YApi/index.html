@@ -177,10 +177,12 @@
 <p>登录 mongodb<br><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mongo admin</span><br></pre></td></tr></table></figure></p>
 <p>创建 <strong>root</strong> 用户，密码：<strong>123456</strong><br><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.createUser(&#123; user:'root',pwd:'123456',roles:[ &#123; role:'userAdminAnyDatabase', db: 'admin'&#125;,"readWriteAnyDatabase"]&#125;);</span><br></pre></td></tr></table></figure></p>
 <h2 id="搭建-yapi"><a href="#搭建-yapi" class="headerlink" title="搭建 yapi"></a>搭建 yapi</h2><p>拉取 jayfong/yapi:1.10.2 镜像<br><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker pull jayfong/yapi:1.10.2</span><br></pre></td></tr></table></figure></p>
+<p>镜像文档</p>
+<p><a href="https://github.com/fjc0k/docker-YApi#readme" target="_blank" rel="noopener">https://github.com/fjc0k/docker-YApi#readme</a></p>
 <p>启动 yapi<br><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> docker run -d --name yapi --privileged=true -p 3030:3000 -e YAPI_ADMIN_ACCOUNT=ling-yu-wang@qq.com -e YAPI_ADMIN_PASSWORD=123456 -e YAPI_CLOSE_REGISTER=true -e YAPI_DB_SERVERNAME=192.168.2.101 -e YAPI_DB_PORT=27017 -e YAPI_DB_DATABASE=yapi -e YAPI_DB_USER=root -e YAPI_DB_PASS=123456 -e YAPI_DB_AUTH_SOURCE=admin -e YAPI_MAIL_ENABLE=false -e YAPI_PLUGINS=[] jayfong/yapi:1.10.2</span><br></pre></td></tr></table></figure></p>
 <p>使用 Yapi</p>
 <p>访问 <a href="http://192.168.2.101:3030" target="_blank" rel="noopener">http://192.168.2.101:3030</a> </p>
-<p>登录账号<a href="mailto:**ling-yu-wang@qq.com" target="_blank" rel="noopener">**ling-yu-wang@qq.com</a><strong>，密码</strong>123456**</p>
+<p>登录账号<a href="mailto:ling-yu-wang@qq.com" target="_blank" rel="noopener">ling-yu-wang@qq.com</a>，密码<strong>123456</strong></p>
 
     </div>
     
@@ -205,6 +207,11 @@
 </article>
 
 <div class="article-nav prev-next-wrap clearfix">
+    
+        <a href="/2023/12/17/CentOS7安装OpenResty/" class="pre-post btn btn-default" title='CentOS7安装OpenResty'>
+            <i class="fa fa-angle-left fa-fw"></i><span class="hidden-lg">上一篇</span>
+            <span class="hidden-xs">CentOS7安装OpenResty</span>
+        </a>
     
     
         <a href="/2023/12/10/Jenkins持续集成配置/" class="next-post btn btn-default" title='Jenkins持续集成配置'>
