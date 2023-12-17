@@ -19,17 +19,10 @@
     <meta name="keywords" content="CentOS7,">
 
 
-    <meta name="description" content="1 文件传输安装 rz、sz1$ yum -y install lrzsz
+    <meta name="description" content="1 文件传输1.1 lrzsz 命令安装 rz、sz1$ yum -y install lrzsz
 将本地文件上传至服务器1$ rz
 将服务器文件传输到本地1$ sz filename.extensioname
-
-TIPS：只能操作文件，若是目录，可压缩为zip文件再进行传输。
-
-2 命令行编辑快捷键
-
-
-按键
-说明...">
+1.2 scp 命令远程复制 test.tar.gz 文件到当前目录script1...">
 
 
 <meta name="robots" content="all">
@@ -180,9 +173,10 @@ TIPS：只能操作文件，若是目录，可压缩为zip文件再进行传输�
     </div>
     
     <div class="post-body post-content">
-        <h2 id="1-文件传输"><a href="#1-文件传输" class="headerlink" title="1 文件传输"></a>1 文件传输</h2><p>安装 rz、sz<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> yum -y install lrzsz</span><br></pre></td></tr></table></figure></p>
+        <h2 id="1-文件传输"><a href="#1-文件传输" class="headerlink" title="1 文件传输"></a>1 文件传输</h2><h3 id="1-1-lrzsz-命令"><a href="#1-1-lrzsz-命令" class="headerlink" title="1.1 lrzsz 命令"></a>1.1 lrzsz 命令</h3><p>安装 rz、sz<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> yum -y install lrzsz</span><br></pre></td></tr></table></figure></p>
 <p>将本地文件上传至服务器<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> rz</span><br></pre></td></tr></table></figure></p>
 <p>将服务器文件传输到本地<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> sz filename.extensioname</span><br></pre></td></tr></table></figure></p>
+<h3 id="1-2-scp-命令"><a href="#1-2-scp-命令" class="headerlink" title="1.2 scp 命令"></a>1.2 scp 命令</h3><p>远程复制 test.tar.gz 文件到当前目录<br><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> scp -r root@124.221.135.84:/usr/local/test.tar.gz .</span><br></pre></td></tr></table></figure></p>
 <blockquote>
 <p>TIPS：只能操作文件，若是目录，可压缩为zip文件再进行传输。</p>
 </blockquote>
@@ -479,6 +473,7 @@ TIPS：只能操作文件，若是目录，可压缩为zip文件再进行传输�
 </table>
 <p>示例：强制杀死从 pts/1 虚拟终端登录的进程<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> pkill -t -9 pts/1</span><br></pre></td></tr></table></figure></p>
 <h3 id="4-7-查看暂停进程"><a href="#4-7-查看暂停进程" class="headerlink" title="4.7 查看暂停进程"></a>4.7 查看暂停进程</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> jobs</span><br></pre></td></tr></table></figure>
+<h3 id="4-8-端口管理"><a href="#4-8-端口管理" class="headerlink" title="4.8 端口管理"></a>4.8 端口管理</h3><p>查看端口是否被占用<br><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> lsof -i tcp:port</span><br></pre></td></tr></table></figure></p>
 <h2 id="5-压缩-amp-解压"><a href="#5-压缩-amp-解压" class="headerlink" title="5 压缩&amp;解压"></a>5 压缩&amp;解压</h2><p>gzip压缩<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> gzip [文件]</span><br></pre></td></tr></table></figure></p>
 <blockquote>
 <p>TIPS：压缩后文件格式是 .gz 且不保留原文件</p>
@@ -498,6 +493,10 @@ TIPS：只能操作文件，若是目录，可压缩为zip文件再进行传输�
 <td>打包</td>
 </tr>
 <tr>
+<td>-x</td>
+<td>解压</td>
+</tr>
+<tr>
 <td>-v</td>
 <td>显示详细信息</td>
 </tr>
@@ -511,6 +510,7 @@ TIPS：只能操作文件，若是目录，可压缩为zip文件再进行传输�
 </tr>
 </tbody>
 </table>
+<p>示例：压缩 filename 文件<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> tar -zcvf filename.tgz filename</span><br></pre></td></tr></table></figure></p>
 <p>示例：解压缩 filename.tgz 文件<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> tar -zxvf filename.tgz</span><br></pre></td></tr></table></figure></p>
 <p>zip压缩文件或目录<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> zip 选项 [-r] [压缩后文件名] [文件或目录]</span><br></pre></td></tr></table></figure></p>
 <blockquote>
@@ -527,9 +527,11 @@ TIPS：只能操作文件，若是目录，可压缩为zip文件再进行传输�
 <p>示例：查找取反<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> find /data -type d -name "3*"</span><br></pre></td></tr></table></figure></p>
 <p><img src="/2019/04/05/CentOS7常用命令/find_type_f_name.png" alt><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> find /data -type d ! -name "3*"</span><br></pre></td></tr></table></figure></p>
 <p><img src="/2019/04/05/CentOS7常用命令/find_type_f_exclude_name.png" alt></p>
+<h3 id="6-3-文件内容替换"><a href="#6-3-文件内容替换" class="headerlink" title="6.3 文件内容替换"></a>6.3 文件内容替换</h3><p>示例：将 .env.production 文件的 124.221.135.84 替换为 192.168.2.103<br><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> sed -i 's/124.221.135.84/192.168.2.103/g' .env.production</span><br></pre></td></tr></table></figure></p>
 <h2 id="7-查看系统信息"><a href="#7-查看系统信息" class="headerlink" title="7 查看系统信息"></a>7 查看系统信息</h2><p>查看操作系统位数<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> uname -m</span><br></pre></td></tr></table></figure></p>
 <p>查看操作系统<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> cat /etc/redhat-release</span><br></pre></td></tr></table></figure></p>
 <p>查看操作系统内核<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> uname -r</span><br></pre></td></tr></table></figure></p>
+<p>查看磁盘使用情况<br><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> df -h</span><br></pre></td></tr></table></figure></p>
 
     </div>
     
@@ -579,7 +581,7 @@ TIPS：只能操作文件，若是目录，可压缩为zip文件再进行传输�
     <div class="widget">
         <h3 class="title">文章目录</h3>
         
-            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-文件传输"><span class="toc-text">1 文件传输</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-命令行编辑快捷键"><span class="toc-text">2 命令行编辑快捷键</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-输入输出"><span class="toc-text">3 输入输出</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-进程管理"><span class="toc-text">4 进程管理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-查看进程"><span class="toc-text">4.1 查看进程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-查看系统健康状态"><span class="toc-text">4.2 查看系统健康状态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-查看进程树"><span class="toc-text">4.3 查看进程树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4-查看可用的进程信号"><span class="toc-text">4.4 查看可用的进程信号</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-5-kill-命令"><span class="toc-text">4.5 kill 命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-6-pkill-命令"><span class="toc-text">4.6 pkill 命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-7-查看暂停进程"><span class="toc-text">4.7 查看暂停进程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-压缩-amp-解压"><span class="toc-text">5 压缩&amp;解压</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-文件处理"><span class="toc-text">6 文件处理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-du-命令"><span class="toc-text">6.1 du 命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-find-命令"><span class="toc-text">6.2 find 命令</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-查看系统信息"><span class="toc-text">7 查看系统信息</span></a></li></ol>
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-文件传输"><span class="toc-text">1 文件传输</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-lrzsz-命令"><span class="toc-text">1.1 lrzsz 命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-scp-命令"><span class="toc-text">1.2 scp 命令</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-命令行编辑快捷键"><span class="toc-text">2 命令行编辑快捷键</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-输入输出"><span class="toc-text">3 输入输出</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-进程管理"><span class="toc-text">4 进程管理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-查看进程"><span class="toc-text">4.1 查看进程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-查看系统健康状态"><span class="toc-text">4.2 查看系统健康状态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-查看进程树"><span class="toc-text">4.3 查看进程树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4-查看可用的进程信号"><span class="toc-text">4.4 查看可用的进程信号</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-5-kill-命令"><span class="toc-text">4.5 kill 命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-6-pkill-命令"><span class="toc-text">4.6 pkill 命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-7-查看暂停进程"><span class="toc-text">4.7 查看暂停进程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-8-端口管理"><span class="toc-text">4.8 端口管理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-压缩-amp-解压"><span class="toc-text">5 压缩&amp;解压</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-文件处理"><span class="toc-text">6 文件处理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-du-命令"><span class="toc-text">6.1 du 命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-find-命令"><span class="toc-text">6.2 find 命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-3-文件内容替换"><span class="toc-text">6.3 文件内容替换</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-查看系统信息"><span class="toc-text">7 查看系统信息</span></a></li></ol>
         
     </div>
 </aside>
