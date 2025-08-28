@@ -1,0 +1,461 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!--Setting-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta name="apple-mobile-web-app-capable" content="哲锄">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no,email=no,adress=no">
+    <meta name="browsermode" content="application">
+    <meta name="screen-orientation" content="portrait">
+    <link rel="dns-prefetch" href="https://zhechu.github.io">
+    <!--SEO-->
+
+    <meta name="keywords" content="k8s,">
+
+
+    <meta name="description" content="Kubernetes集群部署K8S集群部署有几种方式：kubeadm、minikube和二进制包。前两者属于自动部署，简化部署操作，我们这里强烈推荐初学者使用二进制包部署，因为自动部署屏蔽了很多细节，使得对各个模块感知很少，非常不利用学习。所以，这篇文章也是使用二进制包部署Kubernetes...">
+
+
+<meta name="robots" content="all">
+<meta name="google" content="all">
+<meta name="googlebot" content="all">
+<meta name="verify" content="all">
+    <!--Title-->
+
+
+<title>Kubernetes集群部署 | 哲锄</title>
+
+
+    <link rel="alternate" href="/atom.xml" title="哲锄" type="application/atom+xml">
+
+
+    <link rel="icon" href="/favicon.ico">
+
+    
+
+
+
+<link rel="stylesheet" href="/css/bootstrap.min.css?rev=3.3.7">
+<link rel="stylesheet" href="/css/font-awesome.min.css?rev=4.5.0">
+<link rel="stylesheet" href="/css/style.css?rev=@@hash">
+
+
+
+
+    
+
+
+
+
+
+    
+
+</head>
+
+</html>
+<!--[if lte IE 8]>
+<style>
+    html{ font-size: 1em }
+</style>
+<![endif]-->
+<!--[if lte IE 9]>
+<div style="ie">你使用的浏览器版本过低，为了你更好的阅读体验，请更新浏览器的版本或者使用其他现代浏览器，比如Chrome、Firefox、Safari等。</div>
+<![endif]-->
+
+<body>
+    
+    <nav class="main-navigation">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="navbar-header"><span class="nav-toggle-button collapsed pull-right" data-toggle="collapse" data-target="#main-menu" id="mnav">
+                    <span class="sr-only"></span>
+                        <i class="fa fa-bars"></i>
+                    </span>
+                    <a class="navbar-brand" href="https://zhechu.github.io">哲锄</a>
+                </div>
+                <div class="collapse navbar-collapse" id="main-menu">
+                    <ul class="menu">
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/"><i class="fa fa-home"></i>哲锄</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/categories"><i class="fa fa-list"></i>分类</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/about"><i class="fa fa-user"></i>关于我</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/archives"><i class="fa fa-archive"></i>归档</a>
+                            </li>
+                        
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<a href="http://github.com/zhechu">
+    <img style="position: absolute; top: 0; right: 0; border: 0;"
+        src="/img/forkme.png"
+        alt="Fork me on GitHub">
+</a>
+
+    <section class="content-wrap">
+        <div class="container">
+            <div class="row">
+                <main class="col-md-8 main-content m-post">
+                    <p id="process"></p>
+<article class="post">
+    <div class="post-head">
+        <h1 id="Kubernetes集群部署">
+            
+                Kubernetes集群部署
+            
+        </h1>
+        <div class="post-meta">
+    
+    
+    <span class="categories-meta fa-wrap">
+        <i class="fa fa-folder-open-o"></i>
+        <a href="/categories/Linux">
+            Linux
+        </a>
+    </span>
+    
+
+    
+    <span class="fa-wrap">
+        <i class="fa fa-tags"></i>
+        <span class="tags-meta">
+            
+                
+                    <a href="/tags/k8s" title='k8s'>
+                        k8s
+                    </a>
+                
+            
+        </span>
+    </span>
+    
+
+    
+        
+        <span class="fa-wrap">
+            <i class="fa fa-clock-o"></i>
+            <span class="date-meta">2025/08/28</span>
+        </span>
+        
+            <span class="fa-wrap">
+                <i class="fa fa-eye"></i>
+                <span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    
+</div>
+
+        
+        
+    </div>
+    
+    <div class="post-body post-content">
+        <h1 id="Kubernetes集群部署"><a href="#Kubernetes集群部署" class="headerlink" title="Kubernetes集群部署"></a>Kubernetes集群部署</h1><p>K8S集群部署有几种方式：kubeadm、minikube和二进制包。前两者属于自动部署，简化部署操作，我们这里强烈推荐初学者使用二进制包部署，因为自动部署屏蔽了很多细节，使得对各个模块感知很少，非常不利用学习。所以，这篇文章也是使用二进制包部署Kubernetes集群。</p>
+<h2 id="一、架构拓扑图"><a href="#一、架构拓扑图" class="headerlink" title="一、架构拓扑图"></a>一、架构拓扑图</h2><p><img src="/2025/08/28/Kubernetes集群部署/k8s_1.png" alt></p>
+<h2 id="二、环境规划"><a href="#二、环境规划" class="headerlink" title="二、环境规划"></a>二、环境规划</h2><table>
+<thead>
+<tr>
+<th>角色</th>
+<th>IP</th>
+<th>主机名</th>
+<th>组件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>master1</td>
+<td>192.168.161.161</td>
+<td>master1</td>
+<td>etcd1，master1</td>
+</tr>
+<tr>
+<td>master2</td>
+<td>192.168.161.162</td>
+<td>master2</td>
+<td>etcd2，master2</td>
+</tr>
+<tr>
+<td>Master1</td>
+<td>192.168.161.163</td>
+<td>node1</td>
+<td>kubelet，kube-proxy，docker，flannel</td>
+</tr>
+<tr>
+<td>Master1</td>
+<td>192.168.161.164</td>
+<td>node2</td>
+<td>kubelet，kube-proxy，docker，flannel</td>
+</tr>
+</tbody>
+</table>
+<ol>
+<li>kube-apiserver：位于master节点，接受用户请求。</li>
+<li>kube-scheduler：位于master节点，负责资源调度，即pod建在哪个node节点。</li>
+<li>kube-controller-manager：位于master节点，包含ReplicationManager，Endpointscontroller，Namespacecontroller，Nodecontroller等。</li>
+<li>etcd：分布式键值存储系统，共享整个集群的资源对象信息。</li>
+<li>kubelet：位于node节点，负责维护在特定主机上运行的pod。</li>
+<li>kube-proxy：位于node节点，它起的作用是一个服务代理的角色。</li>
+</ol>
+<p>再来普及一下：</p>
+<p><img src="/2025/08/28/Kubernetes集群部署/k8s_2.png" alt></p>
+<p>① kubectl 发送部署请求到 API Server。</p>
+<p>② API Server 通知 Controller Manager 创建一个 deployment 资源。</p>
+<p>③ Scheduler 执行调度任务，将两个副本 Pod 分发到 k8s-node1 和 k8s-node2。</p>
+<p>④ k8s-node1 和 k8s-node2 上的 kubectl 在各自的节点上创建并运行 Pod。</p>
+<h2 id="三、集群部署"><a href="#三、集群部署" class="headerlink" title="三、集群部署"></a>三、集群部署</h2><p>系统采用 Centos 7.3<br>关闭防火墙<br><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl disable firewalld  </span><br><span class="line">systemctl stop firewalld</span><br></pre></td></tr></table></figure></p>
+<p>关闭 selinux<br>安装NTP并启动<br><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">yum -y install ntp  </span><br><span class="line">systemctl start ntpd  </span><br><span class="line">systemctl enable ntpd</span><br></pre></td></tr></table></figure></p>
+<p>4台机器均设置好 hosts<br><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/hosts</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">192.168.161.161 master1</span><br><span class="line">192.168.161.162 master2</span><br><span class="line">192.168.161.163 node1</span><br><span class="line">192.168.161.164 node2</span><br><span class="line"></span><br><span class="line">192.168.161.161 etcd</span><br><span class="line">192.168.161.162 etcd</span><br></pre></td></tr></table></figure>
+<p>3.1 部署master<br>安装etcd<br><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@master1 ~]# yum -y install etcd</span><br></pre></td></tr></table></figure></p>
+<p>配置etcd<br>yum安装的etcd默认配置文件在/etc/etcd/etcd.conf，以下将2个节点上的配置贴出来，请注意不同点。<br>2379是默认的使用端口，为了防止端口占用问题的出现，增加4001端口备用。</p>
+<p>master1：<br><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@master1 ~]# vim /etc/etcd/etcd.conf</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> [member]  </span><br><span class="line">ETCD_NAME=etcd1  </span><br><span class="line">ETCD_DATA_DIR="/var/lib/etcd/test.etcd"  </span><br><span class="line"><span class="meta">#</span>ETCD_WAL_DIR=""  </span><br><span class="line"><span class="meta">#</span>ETCD_SNAPSHOT_COUNT="10000"  </span><br><span class="line"><span class="meta">#</span>ETCD_HEARTBEAT_INTERVAL="100"  </span><br><span class="line"><span class="meta">#</span>ETCD_ELECTION_TIMEOUT="1000"  </span><br><span class="line">ETCD_LISTEN_PEER_URLS="http://0.0.0.0:2380"  </span><br><span class="line">ETCD_LISTEN_CLIENT_URLS="http://0.0.0.0:2379,http://0.0.0.0:4001"  </span><br><span class="line"><span class="meta">#</span>ETCD_MAX_SNAPSHOTS="5"  </span><br><span class="line"><span class="meta">#</span>ETCD_MAX_WALS="5"  </span><br><span class="line"><span class="meta">#</span>ETCD_CORS=""  </span><br><span class="line"><span class="meta">#</span>  </span><br><span class="line"><span class="meta">#</span>[cluster]  </span><br><span class="line">ETCD_INITIAL_ADVERTISE_PEER_URLS="http://master1:2380"  </span><br><span class="line"><span class="meta">#</span> if you use different ETCD_NAME (e.g. test), set ETCD_INITIAL_CLUSTER value for this name, i.e. "test=http://..."  </span><br><span class="line">ETCD_INITIAL_CLUSTER="etcd1=http://master1:2380,etcd2=http://master2:2380"  </span><br><span class="line">ETCD_INITIAL_CLUSTER_STATE="new"  </span><br><span class="line">ETCD_INITIAL_CLUSTER_TOKEN="etcd-cluster-baby"  </span><br><span class="line">ETCD_ADVERTISE_CLIENT_URLS="http://master1:2379,http://master1:4001"</span><br></pre></td></tr></table></figure>
+<p>master2：<br><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@master2 ~]# vim /etc/etcd/etcd.conf</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> [member]  </span><br><span class="line">ETCD_NAME=etcd2  </span><br><span class="line">ETCD_DATA_DIR="/var/lib/etcd/test.etcd"  </span><br><span class="line"><span class="meta">#</span>ETCD_WAL_DIR=""  </span><br><span class="line"><span class="meta">#</span>ETCD_SNAPSHOT_COUNT="10000"  </span><br><span class="line"><span class="meta">#</span>ETCD_HEARTBEAT_INTERVAL="100"  </span><br><span class="line"><span class="meta">#</span>ETCD_ELECTION_TIMEOUT="1000"  </span><br><span class="line">ETCD_LISTEN_PEER_URLS="http://0.0.0.0:2380"  </span><br><span class="line">ETCD_LISTEN_CLIENT_URLS="http://0.0.0.0:2379,http://0.0.0.0:4001"  </span><br><span class="line"><span class="meta">#</span>ETCD_MAX_SNAPSHOTS="5"  </span><br><span class="line"><span class="meta">#</span>ETCD_MAX_WALS="5"  </span><br><span class="line"><span class="meta">#</span>ETCD_CORS=""  </span><br><span class="line"><span class="meta">#</span>  </span><br><span class="line"><span class="meta">#</span>[cluster]  </span><br><span class="line">ETCD_INITIAL_ADVERTISE_PEER_URLS="http://master2:2380"  </span><br><span class="line"><span class="meta">#</span> if you use different ETCD_NAME (e.g. test), set ETCD_INITIAL_CLUSTER value for this name, i.e. "test=http://..."  </span><br><span class="line">ETCD_INITIAL_CLUSTER="etcd1=http://master1:2380,etcd2=http://master2:2380"  </span><br><span class="line">ETCD_INITIAL_CLUSTER_STATE="new"  </span><br><span class="line">ETCD_INITIAL_CLUSTER_TOKEN="etcd-cluster-baby"  </span><br><span class="line">ETCD_ADVERTISE_CLIENT_URLS="http://master2:2379,http://master2:4001"</span><br></pre></td></tr></table></figure>
+<p>参数说明：</p>
+<table>
+<thead>
+<tr>
+<th>name</th>
+<th>节点名称</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>data-dir</td>
+<td>指定节点的数据存储目录</td>
+</tr>
+<tr>
+<td>listen-peer-urls</td>
+<td>监听URL，用于与其他节点通讯</td>
+</tr>
+<tr>
+<td>listen-client-urls</td>
+<td>对外提供服务的地址：比如 <a href="http://ip:2379,http://127.0.0.1:2379" target="_blank" rel="noopener">http://ip:2379,http://127.0.0.1:2379</a> ，客户端会连接到这里和 etcd 交互</td>
+</tr>
+<tr>
+<td>initial-advertise-peer-urls</td>
+<td>该节点同伴监听地址，这个值会告诉集群中其他节点</td>
+</tr>
+<tr>
+<td>initial-cluster</td>
+<td>集群中所有节点的信息，格式为 node1=<a href="http://ip1:2380,node2=http://ip2:2380,…" target="_blank" rel="noopener">http://ip1:2380,node2=http://ip2:2380,…</a> 。注意：这里的 node1 是节点的 –name 指定的名字；后面的 ip1:2380 是 –initial-advertise-peer-urls 指定的值</td>
+</tr>
+<tr>
+<td>initial-cluster-state</td>
+<td>新建集群的时候，这个值为 new ；假如已经存在的集群，这个值为 existing</td>
+</tr>
+<tr>
+<td>initial-cluster-token</td>
+<td>创建集群的 token，这个值每个集群保持唯一。这样的话，如果你要重新创建集群，即使配置和之前一样，也会再次生成新的集群和节点 uuid；否则会导致多个集群之间的冲突，造成未知的错误</td>
+</tr>
+<tr>
+<td>advertise-client-urls</td>
+<td>对外公告的该节点客户端监听地址，这个值会告诉集群中其他节点</td>
+</tr>
+</tbody>
+</table>
+<p>修改好以上配置后，在各个节点上启动etcd服务，并验证集群状态：<br>Master1<br>[root@master1 etcd]# systemctl start etcd</p>
+<p>[root@master1 etcd]# etcdctl -C <a href="http://etcd:2379" target="_blank" rel="noopener">http://etcd:2379</a> cluster-health<br>member 22a9f7f65563bff5 is healthy: got healthy result from <a href="http://master2:2379" target="_blank" rel="noopener">http://master2:2379</a><br>member d03b92adc5af7320 is healthy: got healthy result from <a href="http://master1:2379" target="_blank" rel="noopener">http://master1:2379</a><br>cluster is healthy</p>
+<p>[root@master1 etcd]# etcdctl -C <a href="http://etcd:4001" target="_blank" rel="noopener">http://etcd:4001</a> cluster-health<br>member 22a9f7f65563bff5 is healthy: got healthy result from <a href="http://master2:2379" target="_blank" rel="noopener">http://master2:2379</a><br>member d03b92adc5af7320 is healthy: got healthy result from <a href="http://master1:2379" target="_blank" rel="noopener">http://master1:2379</a><br>cluster is healthy</p>
+<p>[root@master1 etcd]# systemctl enable etcd<br>Created symlink from /etc/systemd/system/multi-user.target.wants/etcd.service to /usr/lib/systemd/system/etcd.service.</p>
+<p>Master2<br>[root@master2 etcd]# systemctl start etcd</p>
+<p>[root@master2 etcd]# etcdctl -C <a href="http://etcd:2379" target="_blank" rel="noopener">http://etcd:2379</a> cluster-health<br>member 22a9f7f65563bff5 is healthy: got healthy result from <a href="http://master2:2379" target="_blank" rel="noopener">http://master2:2379</a><br>member d03b92adc5af7320 is healthy: got healthy result from <a href="http://master1:2379" target="_blank" rel="noopener">http://master1:2379</a><br>cluster is healthy</p>
+<p>[root@master2 etcd]# etcdctl -C <a href="http://etcd:4001" target="_blank" rel="noopener">http://etcd:4001</a> cluster-health<br>member 22a9f7f65563bff5 is healthy: got healthy result from <a href="http://master2:2379" target="_blank" rel="noopener">http://master2:2379</a><br>member d03b92adc5af7320 is healthy: got healthy result from <a href="http://master1:2379" target="_blank" rel="noopener">http://master1:2379</a><br>cluster is healthy</p>
+<p>[root@master2 etcd]# systemctl enable etcd<br>Created symlink from /etc/systemd/system/multi-user.target.wants/etcd.service to /usr/lib/systemd/system/etcd.service.</p>
+<p>部署 master<br>安装 docker ，设置开机自启动并开启服务<br>分别在 master1和master2上面安装docker服务<br>[root@master1 etcd]# yum install docker -y<br>[root@master1 etcd]# chkconfig docker on<br>[root@master1 etcd]# systemctl start docker.service  </p>
+<p>安装kubernets<br>yum install kubernetes -y</p>
+<p>在 master 的虚机上，需要运行三个组件：Kubernets API Server、Kubernets Controller Manager、Kubernets Scheduler。<br>首先修改 /etc/kubernetes/apiserver 文件：<br>[root@master1 kubernetes]# vim apiserver</p>
+<h3 id><a href="#" class="headerlink" title=" "></a> </h3><h1 id="kubernetes-system-config"><a href="#kubernetes-system-config" class="headerlink" title="kubernetes system config"></a>kubernetes system config</h1><h1 id="-1"><a href="#-1" class="headerlink" title=" "></a> </h1><h1 id="The-following-values-are-used-to-configure-the-kube-apiserver"><a href="#The-following-values-are-used-to-configure-the-kube-apiserver" class="headerlink" title="The following values are used to configure the kube-apiserver"></a>The following values are used to configure the kube-apiserver</h1><h1 id="-2"><a href="#-2" class="headerlink" title=" "></a> </h1><h1 id="The-address-on-the-local-server-to-listen-to"><a href="#The-address-on-the-local-server-to-listen-to" class="headerlink" title="The address on the local server to listen to."></a>The address on the local server to listen to.</h1><p>KUBE_API_ADDRESS=”–insecure-bind-address=0.0.0.0”</p>
+<h1 id="The-port-on-the-local-server-to-listen-on"><a href="#The-port-on-the-local-server-to-listen-on" class="headerlink" title="The port on the local server to listen on."></a>The port on the local server to listen on.</h1><p>KUBE_API_PORT=”–port=8080”</p>
+<h1 id="Port-minions-listen-on"><a href="#Port-minions-listen-on" class="headerlink" title="Port minions listen on"></a>Port minions listen on</h1><h1 id="KUBELET-PORT-”–kubelet-port-10250”"><a href="#KUBELET-PORT-”–kubelet-port-10250”" class="headerlink" title="KUBELET_PORT=”–kubelet-port=10250”"></a>KUBELET_PORT=”–kubelet-port=10250”</h1><h1 id="Comma-separated-list-of-nodes-in-the-etcd-cluster"><a href="#Comma-separated-list-of-nodes-in-the-etcd-cluster" class="headerlink" title="Comma separated list of nodes in the etcd cluster"></a>Comma separated list of nodes in the etcd cluster</h1><p>KUBE_ETCD_SERVERS=”–etcd-servers=<a href="http://etcd:2379&quot;" target="_blank" rel="noopener">http://etcd:2379&quot;</a></p>
+<h1 id="Address-range-to-use-for-services"><a href="#Address-range-to-use-for-services" class="headerlink" title="Address range to use for services"></a>Address range to use for services</h1><p>KUBE_SERVICE_ADDRESSES=”–service-cluster-ip-range=10.254.0.0/16”</p>
+<h1 id="default-admission-control-policies"><a href="#default-admission-control-policies" class="headerlink" title="default admission control policies"></a>default admission control policies</h1><h1 id="KUBE-ADMISSION-CONTROL-”–admission-control-NamespaceLifecycle-NamespaceExists-LimitRanger-SecurityContextDeny-ServiceAccount-ResourceQuota”"><a href="#KUBE-ADMISSION-CONTROL-”–admission-control-NamespaceLifecycle-NamespaceExists-LimitRanger-SecurityContextDeny-ServiceAccount-ResourceQuota”" class="headerlink" title="KUBE_ADMISSION_CONTROL=”–admission-control=NamespaceLifecycle,NamespaceExists,LimitRanger,SecurityContextDeny,ServiceAccount,ResourceQuota”"></a>KUBE_ADMISSION_CONTROL=”–admission-control=NamespaceLifecycle,NamespaceExists,LimitRanger,SecurityContextDeny,ServiceAccount,ResourceQuota”</h1><p>KUBE_ADMISSION_CONTROL=”–admission-control=NamespaceLifecycle,NamespaceExists,LimitRanger,SecurityContextDeny,ResourceQuota”</p>
+<h1 id="Add-your-own"><a href="#Add-your-own" class="headerlink" title="Add your own!"></a>Add your own!</h1><p>KUBE_API_ARGS=””</p>
+<p>接着修改 /etc/kubernetes/config 文件：（最后一句 masterX:8080 ，对应master1/2机器就好）<br>[root@master1 ~]# vim /etc/kubernetes/config</p>
+<p>###</p>
+<h1 id="kubernetes-system-config-1"><a href="#kubernetes-system-config-1" class="headerlink" title="kubernetes system config"></a>kubernetes system config</h1><h1 id="-3"><a href="#-3" class="headerlink" title=" "></a> </h1><h1 id="The-following-values-are-used-to-configure-various-aspects-of-all"><a href="#The-following-values-are-used-to-configure-various-aspects-of-all" class="headerlink" title="The following values are used to configure various aspects of all"></a>The following values are used to configure various aspects of all</h1><h1 id="kubernetes-services-including"><a href="#kubernetes-services-including" class="headerlink" title="kubernetes services, including"></a>kubernetes services, including</h1><h1 id="-4"><a href="#-4" class="headerlink" title=" "></a> </h1><h1 id="kube-apiserver-service"><a href="#kube-apiserver-service" class="headerlink" title="kube-apiserver.service"></a>kube-apiserver.service</h1><h1 id="kube-controller-manager-service"><a href="#kube-controller-manager-service" class="headerlink" title="kube-controller-manager.service"></a>kube-controller-manager.service</h1><h1 id="kube-scheduler-service"><a href="#kube-scheduler-service" class="headerlink" title="kube-scheduler.service"></a>kube-scheduler.service</h1><h1 id="kubelet-service"><a href="#kubelet-service" class="headerlink" title="kubelet.service"></a>kubelet.service</h1><h1 id="kube-proxy-service"><a href="#kube-proxy-service" class="headerlink" title="kube-proxy.service"></a>kube-proxy.service</h1><h1 id="logging-to-stderr-means-we-get-it-in-the-systemd-journal"><a href="#logging-to-stderr-means-we-get-it-in-the-systemd-journal" class="headerlink" title="logging to stderr means we get it in the systemd journal"></a>logging to stderr means we get it in the systemd journal</h1><p>KUBE_LOGTOSTDERR=”–logtostderr=true”  </p>
+<h1 id="journal-message-level-0-is-debug"><a href="#journal-message-level-0-is-debug" class="headerlink" title="journal message level, 0 is debug"></a>journal message level, 0 is debug</h1><p>KUBE_LOG_LEVEL=”–v=0”  </p>
+<h1 id="Should-this-cluster-be-allowed-to-run-privileged-docker-containers"><a href="#Should-this-cluster-be-allowed-to-run-privileged-docker-containers" class="headerlink" title="Should this cluster be allowed to run privileged docker containers"></a>Should this cluster be allowed to run privileged docker containers</h1><p>KUBE_ALLOW_PRIV=”–allow-privileged=false”  </p>
+<h1 id="How-the-controller-manager-scheduler-and-proxy-find-the-apiserver"><a href="#How-the-controller-manager-scheduler-and-proxy-find-the-apiserver" class="headerlink" title="How the controller-manager, scheduler, and proxy find the apiserver"></a>How the controller-manager, scheduler, and proxy find the apiserver</h1><p>KUBE_MASTER=”–master=<a href="http://master1:8080&quot;" target="_blank" rel="noopener">http://master1:8080&quot;</a> </p>
+<p>修改完成后，启动服务并设置开机自启动即可：<br>systemctl enable kube-apiserver<br>systemctl start kube-apiserver<br>systemctl enable kube-controller-manager<br>systemctl start kube-controller-manager<br>systemctl enable kube-scheduler<br>systemctl start kube-scheduler  </p>
+<p>部署 node<br>安装 docker ，设置开机自启动并开启服务<br>yum install docker -y<br>chkconfig docker on<br>systemctl start docker.service</p>
+<p>安装 kubernetes<br>yum install kubernetes -y</p>
+<p>在 node 的虚机上，需要运行三个组件：Kubelet、Kubernets Proxy。<br>首先修改 /etc/kubernetes/config 文件：（注意：这里配置的是etcd的地址，也就是master1/2的地址其中之一）<br>[root@node1 ~]# vim /etc/kubernetes/config</p>
+<p>###</p>
+<h1 id="kubernetes-system-config-2"><a href="#kubernetes-system-config-2" class="headerlink" title="kubernetes system config"></a>kubernetes system config</h1><h1 id="-5"><a href="#-5" class="headerlink" title=" "></a> </h1><h1 id="The-following-values-are-used-to-configure-various-aspects-of-all-1"><a href="#The-following-values-are-used-to-configure-various-aspects-of-all-1" class="headerlink" title="The following values are used to configure various aspects of all"></a>The following values are used to configure various aspects of all</h1><h1 id="kubernetes-services-including-1"><a href="#kubernetes-services-including-1" class="headerlink" title="kubernetes services, including"></a>kubernetes services, including</h1><h1 id="-6"><a href="#-6" class="headerlink" title=" "></a> </h1><h1 id="kube-apiserver-service-1"><a href="#kube-apiserver-service-1" class="headerlink" title="kube-apiserver.service"></a>kube-apiserver.service</h1><h1 id="kube-controller-manager-service-1"><a href="#kube-controller-manager-service-1" class="headerlink" title="kube-controller-manager.service"></a>kube-controller-manager.service</h1><h1 id="kube-scheduler-service-1"><a href="#kube-scheduler-service-1" class="headerlink" title="kube-scheduler.service"></a>kube-scheduler.service</h1><h1 id="kubelet-service-1"><a href="#kubelet-service-1" class="headerlink" title="kubelet.service"></a>kubelet.service</h1><h1 id="kube-proxy-service-1"><a href="#kube-proxy-service-1" class="headerlink" title="kube-proxy.service"></a>kube-proxy.service</h1><h1 id="logging-to-stderr-means-we-get-it-in-the-systemd-journal-1"><a href="#logging-to-stderr-means-we-get-it-in-the-systemd-journal-1" class="headerlink" title="logging to stderr means we get it in the systemd journal"></a>logging to stderr means we get it in the systemd journal</h1><p>KUBE_LOGTOSTDERR=”–logtostderr=true”  </p>
+<h1 id="journal-message-level-0-is-debug-1"><a href="#journal-message-level-0-is-debug-1" class="headerlink" title="journal message level, 0 is debug"></a>journal message level, 0 is debug</h1><p>KUBE_LOG_LEVEL=”–v=0”  </p>
+<h1 id="Should-this-cluster-be-allowed-to-run-privileged-docker-containers-1"><a href="#Should-this-cluster-be-allowed-to-run-privileged-docker-containers-1" class="headerlink" title="Should this cluster be allowed to run privileged docker containers"></a>Should this cluster be allowed to run privileged docker containers</h1><p>KUBE_ALLOW_PRIV=”–allow-privileged=false”  </p>
+<h1 id="How-the-controller-manager-scheduler-and-proxy-find-the-apiserver-1"><a href="#How-the-controller-manager-scheduler-and-proxy-find-the-apiserver-1" class="headerlink" title="How the controller-manager, scheduler, and proxy find the apiserver"></a>How the controller-manager, scheduler, and proxy find the apiserver</h1><p>KUBE_MASTER=”–master=<a href="http://etcd:8080&quot;" target="_blank" rel="noopener">http://etcd:8080&quot;</a></p>
+<p>接着修改 /etc/kubernetes/kubelet 文件：（注：–hostname-override= 对应的node机器）<br>[root@node1 ~]# vim /etc/kubernetes/kubelet</p>
+<h3 id="-7"><a href="#-7" class="headerlink" title=" "></a> </h3><h1 id="kubernetes-kubelet-minion-config"><a href="#kubernetes-kubelet-minion-config" class="headerlink" title="kubernetes kubelet (minion) config"></a>kubernetes kubelet (minion) config</h1><h1 id="The-address-for-the-info-server-to-serve-on-set-to-0-0-0-0-or-“”-for-all-interfaces"><a href="#The-address-for-the-info-server-to-serve-on-set-to-0-0-0-0-or-“”-for-all-interfaces" class="headerlink" title="The address for the info server to serve on (set to 0.0.0.0 or “” for all interfaces)"></a>The address for the info server to serve on (set to 0.0.0.0 or “” for all interfaces)</h1><p>KUBELET_ADDRESS=”–address=0.0.0.0”  </p>
+<h1 id="The-port-for-the-info-server-to-serve-on"><a href="#The-port-for-the-info-server-to-serve-on" class="headerlink" title="The port for the info server to serve on"></a>The port for the info server to serve on</h1><h1 id="KUBELET-PORT-”–port-10250”"><a href="#KUBELET-PORT-”–port-10250”" class="headerlink" title="KUBELET_PORT=”–port=10250”"></a>KUBELET_PORT=”–port=10250”</h1><h1 id="You-may-leave-this-blank-to-use-the-actual-hostname"><a href="#You-may-leave-this-blank-to-use-the-actual-hostname" class="headerlink" title="You may leave this blank to use the actual hostname"></a>You may leave this blank to use the actual hostname</h1><p>KUBELET_HOSTNAME=”–hostname-override=node1”  </p>
+<h1 id="location-of-the-api-server"><a href="#location-of-the-api-server" class="headerlink" title="location of the api-server"></a>location of the api-server</h1><p>KUBELET_API_SERVER=”–api-servers=<a href="http://etcd:8080&quot;" target="_blank" rel="noopener">http://etcd:8080&quot;</a>  </p>
+<h1 id="pod-infrastructure-container"><a href="#pod-infrastructure-container" class="headerlink" title="pod infrastructure container"></a>pod infrastructure container</h1><p>KUBELET_POD_INFRA_CONTAINER=”–pod-infra-container-image=registry.access.redhat.com/rhel7/pod-infrastructure:latest”  </p>
+<h1 id="Add-your-own-1"><a href="#Add-your-own-1" class="headerlink" title="Add your own!"></a>Add your own!</h1><p>KUBELET_ARGS=””  </p>
+<p>修改完成后，启动服务并设置开机自启动即可：<br>systemctl enable kubelet<br>systemctl start kubelet<br>systemctl enable kube-proxy<br>systemctl start kube-proxy </p>
+<p>查看集群状态<br>在任意一台master上查看集群中节点及节点状态：<br>[root@master1 kubernetes]# kubectl get node<br>NAME      STATUS    AGE<br>node1     Ready     1m<br>node2     Ready     1m</p>
+<p>至此，已经搭建了一个kubernetes集群了，但目前该集群还不能很好的工作，因为需要对集群中pod的网络进行统一管理。<br>创建覆盖网络 flannel<br>在master、node上均执行如下命令，安装 flannel<br>yum install flannel -y  </p>
+<p>在master、node上均编辑 /etc/sysconfig/flanneld 文件<br>[root@master1 kubernetes]# vim /etc/sysconfig/flanneld</p>
+<h1 id="Flanneld-configuration-options"><a href="#Flanneld-configuration-options" class="headerlink" title="Flanneld configuration options"></a>Flanneld configuration options</h1><h1 id="etcd-url-location-Point-this-to-the-server-where-etcd-runs"><a href="#etcd-url-location-Point-this-to-the-server-where-etcd-runs" class="headerlink" title="etcd url location.  Point this to the server where etcd runs"></a>etcd url location.  Point this to the server where etcd runs</h1><p>FLANNEL_ETCD_ENDPOINTS=”<a href="http://etcd:2379&quot;" target="_blank" rel="noopener">http://etcd:2379&quot;</a>  </p>
+<h1 id="etcd-config-key-This-is-the-configuration-key-that-flannel-queries"><a href="#etcd-config-key-This-is-the-configuration-key-that-flannel-queries" class="headerlink" title="etcd config key.  This is the configuration key that flannel queries"></a>etcd config key.  This is the configuration key that flannel queries</h1><h1 id="For-address-range-assignment"><a href="#For-address-range-assignment" class="headerlink" title="For address range assignment"></a>For address range assignment</h1><p>FLANNEL_ETCD_PREFIX=”/atomic.io/network”  </p>
+<h1 id="Any-additional-options-that-you-want-to-pass"><a href="#Any-additional-options-that-you-want-to-pass" class="headerlink" title="Any additional options that you want to pass"></a>Any additional options that you want to pass</h1><p>#FLANNEL_OPTIONS=””  </p>
+<p>flannel使用etcd进行配置，来保证多个flannel实例之间的配置一致性，所以需要在etcd上进行如下配置：<br>etcdctl mk /atomic.io/network/config ‘{ “Network”: “10.0.0.0/16” }’</p>
+<p>（‘/atomic.io/network/config’这个key与上文/etc/sysconfig/flannel中的配置项FLANNEL_ETCD_PREFIX是相对应的，错误的话启动就会出错）<br>启动修改后的 flannel ，并依次重启docker、kubernete<br>在 master 虚机上执行：<br>systemctl enable flanneld<br>systemctl start flanneld<br>service docker restart<br>systemctl restart kube-apiserver<br>systemctl restart kube-controller-manager<br>systemctl restart kube-scheduler </p>
+<p>在 node 虚机上执行：<br>systemctl enable flanneld<br>systemctl start flanneld<br>service docker restart<br>systemctl restart kubelet<br>systemctl restart kube-proxy </p>
+<p>这样etcd集群 + flannel + kubernetes集群 在centOS7上就搭建起来了。<br>注：<br>flannel架构介绍</p>
+<p>flannel默认使用8285端口作为UDP封装报文的端口，VxLan使用8472端口。<br>那么一条网络报文是怎么从一个容器发送到另外一个容器的呢？</p>
+<ol>
+<li><p>容器直接使用目标容器的ip访问，默认通过容器内部的eth0发送出去。</p>
+</li>
+<li><p>报文通过veth pair被发送到vethXXX。</p>
+</li>
+<li><p>vethXXX是直接连接到虚拟交换机docker0的，报文通过虚拟bridge docker0发送出去。</p>
+</li>
+<li><p>查找路由表，外部容器ip的报文都会转发到flannel0虚拟网卡，这是一个P2P的虚拟网卡，然后报文就被转发到监听在另一端的flanneld。</p>
+</li>
+<li><p>flanneld通过etcd维护了各个节点之间的路由表，把原来的报文UDP封装一层，通过配置的iface发送出去。</p>
+</li>
+<li><p>报文通过主机之间的网络找到目标主机。</p>
+</li>
+<li><p>报文继续往上，到传输层，交给监听在8285端口的flanneld程序处理。</p>
+</li>
+<li><p>数据被解包，然后发送给flannel0虚拟网卡。</p>
+</li>
+<li><p>查找路由表，发现对应容器的报文要交给docker0。</p>
+</li>
+<li><p>docker0找到连到自己的容器，把报文发送过去。</p>
+</li>
+</ol>
+
+    </div>
+    
+    <div class="post-footer">
+        <div class="col-sm-10">
+            <div>
+                <b>本文链接</b>：<a href="/2025/08/28/Kubernetes集群部署/">Kubernetes集群部署</a>
+            </div>
+            <div>
+                
+                    转载声明：本博客由<strong>哲锄</strong>创作，采用 <a href="https://creativecommons.org/licenses/by-nc-nd/3.0/" target="_blank"> CC BY 3.0 CN </a> 许可协议。可自由转载、引用，但需署名作者且注明文章出处。如转载至微信公众号，请在文末添加作者公众号二维码。
+                
+            </div>
+            <div>
+                
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <img src="" width=100%/>
+        </div>
+    </div>
+</article>
+
+<div class="article-nav prev-next-wrap clearfix">
+    
+    
+        <a href="/2023/12/17/CentOS7安装OpenResty/" class="next-post btn btn-default" title='CentOS7安装OpenResty'>
+            <span class="hidden-lg">下一篇</span>
+            <span class="hidden-xs">CentOS7安装OpenResty</span><i class="fa fa-angle-right fa-fw"></i>
+        </a>
+    
+</div>
+
+
+
+
+
+
+                </main>
+                
+                    <aside id="article-toc" role="navigation" class="col-md-4">
+    <div class="widget">
+        <h3 class="title">文章目录</h3>
+        
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Kubernetes集群部署"><span class="toc-text">Kubernetes集群部署</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#一、架构拓扑图"><span class="toc-text">一、架构拓扑图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二、环境规划"><span class="toc-text">二、环境规划</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#三、集群部署"><span class="toc-text">三、集群部署</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#null"><span class="toc-text"> </span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#kubernetes-system-config"><span class="toc-text">kubernetes system config</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-1"><span class="toc-text"> </span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#The-following-values-are-used-to-configure-the-kube-apiserver"><span class="toc-text">The following values are used to configure the kube-apiserver</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-2"><span class="toc-text"> </span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#The-address-on-the-local-server-to-listen-to"><span class="toc-text">The address on the local server to listen to.</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#The-port-on-the-local-server-to-listen-on"><span class="toc-text">The port on the local server to listen on.</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Port-minions-listen-on"><span class="toc-text">Port minions listen on</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#KUBELET-PORT-”–kubelet-port-10250”"><span class="toc-text">KUBELET_PORT=”–kubelet-port=10250”</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Comma-separated-list-of-nodes-in-the-etcd-cluster"><span class="toc-text">Comma separated list of nodes in the etcd cluster</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Address-range-to-use-for-services"><span class="toc-text">Address range to use for services</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#default-admission-control-policies"><span class="toc-text">default admission control policies</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#KUBE-ADMISSION-CONTROL-”–admission-control-NamespaceLifecycle-NamespaceExists-LimitRanger-SecurityContextDeny-ServiceAccount-ResourceQuota”"><span class="toc-text">KUBE_ADMISSION_CONTROL=”–admission-control=NamespaceLifecycle,NamespaceExists,LimitRanger,SecurityContextDeny,ServiceAccount,ResourceQuota”</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Add-your-own"><span class="toc-text">Add your own!</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#kubernetes-system-config-1"><span class="toc-text">kubernetes system config</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-3"><span class="toc-text"> </span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#The-following-values-are-used-to-configure-various-aspects-of-all"><span class="toc-text">The following values are used to configure various aspects of all</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#kubernetes-services-including"><span class="toc-text">kubernetes services, including</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-4"><span class="toc-text"> </span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#kube-apiserver-service"><span class="toc-text">kube-apiserver.service</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#kube-controller-manager-service"><span class="toc-text">kube-controller-manager.service</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#kube-scheduler-service"><span class="toc-text">kube-scheduler.service</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#kubelet-service"><span class="toc-text">kubelet.service</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#kube-proxy-service"><span class="toc-text">kube-proxy.service</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#logging-to-stderr-means-we-get-it-in-the-systemd-journal"><span class="toc-text">logging to stderr means we get it in the systemd journal</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#journal-message-level-0-is-debug"><span class="toc-text">journal message level, 0 is debug</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Should-this-cluster-be-allowed-to-run-privileged-docker-containers"><span class="toc-text">Should this cluster be allowed to run privileged docker containers</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#How-the-controller-manager-scheduler-and-proxy-find-the-apiserver"><span class="toc-text">How the controller-manager, scheduler, and proxy find the apiserver</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#kubernetes-system-config-2"><span class="toc-text">kubernetes system config</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-5"><span class="toc-text"> </span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#The-following-values-are-used-to-configure-various-aspects-of-all-1"><span class="toc-text">The following values are used to configure various aspects of all</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#kubernetes-services-including-1"><span class="toc-text">kubernetes services, including</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-6"><span class="toc-text"> </span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#kube-apiserver-service-1"><span class="toc-text">kube-apiserver.service</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#kube-controller-manager-service-1"><span class="toc-text">kube-controller-manager.service</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#kube-scheduler-service-1"><span class="toc-text">kube-scheduler.service</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#kubelet-service-1"><span class="toc-text">kubelet.service</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#kube-proxy-service-1"><span class="toc-text">kube-proxy.service</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#logging-to-stderr-means-we-get-it-in-the-systemd-journal-1"><span class="toc-text">logging to stderr means we get it in the systemd journal</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#journal-message-level-0-is-debug-1"><span class="toc-text">journal message level, 0 is debug</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Should-this-cluster-be-allowed-to-run-privileged-docker-containers-1"><span class="toc-text">Should this cluster be allowed to run privileged docker containers</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#How-the-controller-manager-scheduler-and-proxy-find-the-apiserver-1"><span class="toc-text">How the controller-manager, scheduler, and proxy find the apiserver</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#-7"><span class="toc-text"> </span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#kubernetes-kubelet-minion-config"><span class="toc-text">kubernetes kubelet (minion) config</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#The-address-for-the-info-server-to-serve-on-set-to-0-0-0-0-or-“”-for-all-interfaces"><span class="toc-text">The address for the info server to serve on (set to 0.0.0.0 or “” for all interfaces)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#The-port-for-the-info-server-to-serve-on"><span class="toc-text">The port for the info server to serve on</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#KUBELET-PORT-”–port-10250”"><span class="toc-text">KUBELET_PORT=”–port=10250”</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#You-may-leave-this-blank-to-use-the-actual-hostname"><span class="toc-text">You may leave this blank to use the actual hostname</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#location-of-the-api-server"><span class="toc-text">location of the api-server</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#pod-infrastructure-container"><span class="toc-text">pod infrastructure container</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Add-your-own-1"><span class="toc-text">Add your own!</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Flanneld-configuration-options"><span class="toc-text">Flanneld configuration options</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#etcd-url-location-Point-this-to-the-server-where-etcd-runs"><span class="toc-text">etcd url location.  Point this to the server where etcd runs</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#etcd-config-key-This-is-the-configuration-key-that-flannel-queries"><span class="toc-text">etcd config key.  This is the configuration key that flannel queries</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#For-address-range-assignment"><span class="toc-text">For address range assignment</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Any-additional-options-that-you-want-to-pass"><span class="toc-text">Any additional options that you want to pass</span></a></li></ol>
+        
+    </div>
+</aside>
+
+                
+            </div>
+        </div>
+    </section>
+    <footer class="main-footer">
+    <div class="container">
+        <div class="row">
+        </div>
+    </div>
+</footer>
+
+<a id="back-to-top" class="icon-btn hide">
+	<i class="fa fa-chevron-up"></i>
+</a>
+
+
+
+
+    <div class="copyright">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="busuanzi">
+    
+        访问量:
+        <strong id="busuanzi_value_site_pv">
+            <i class="fa fa-spinner fa-spin"></i>
+        </strong>
+        &nbsp; | &nbsp;
+        访客数:
+        <strong id="busuanzi_value_site_uv">
+            <i class="fa fa-spinner fa-spin"></i>
+        </strong>
+    
+</div>
+
+            </div>
+            <div class="col-sm-12">
+                <span>Copyright &copy; 2016
+                </span> |
+                <span>
+                    Powered by <a href="//hexo.io" class="copyright-links" target="_blank" rel="nofollow">Hexo</a>
+                </span> |
+                <span>
+                    Theme by <a href="//github.com/itmuch/hexo-theme-itmuch.git" class="copyright-links" target="_blank" rel="nofollow">ITMuch</a>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script src="/js/app.js?rev=@@hash"></script>
+
+</body>
+</html>
