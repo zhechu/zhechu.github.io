@@ -256,6 +256,7 @@ Node.js...">
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> vim D:\mywork\blog\hexo\source\_posts\test.md # 设置 test文章为 java 分类</span><br></pre></td></tr></table></figure>
 <p><img src="/2017/12/11/Hexo-Github-搭建博客/config_categories_article_1.png" alt></p>
 <h3 id="2-6-发布文章"><a href="#2-6-发布文章" class="headerlink" title="2.6 发布文章"></a>2.6 发布文章</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> hexo new post "&lt;article title&gt;"</span><br><span class="line"><span class="meta">$</span> hexo g # 生成静态文件</span><br><span class="line"><span class="meta">$</span> hexo d # 发布到 Github</span><br></pre></td></tr></table></figure>
+<p>如果出现 node 版本过高问题，可通过安装 node 低版本解决<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">nvm install 12.22.12  # 选择长期支持版本</span><br><span class="line">nvm use 12.22.12</span><br><span class="line">node -v  # 验证版本是否为 v12.22.12</span><br></pre></td></tr></table></figure></p>
 <blockquote>
 <p>TIPS：在 D:\mywork\blog\hexo\source_posts 将会生成 article title.md 文件，使用MarkDown编辑器打开就可以编辑文章；浏览器访问&lt;https://&lt;github account&gt;.github.io&gt;即可看到最新发布内容。</p>
 </blockquote>
