@@ -22,7 +22,10 @@
     <meta name="description" content="1 文件传输1.1 lrzsz 命令安装 rz、sz1$ yum -y install lrzsz
 将本地文件上传至服务器1$ rz
 将服务器文件传输到本地1$ sz filename.extensioname
-1.2 scp 命令远程复制 test.tar.gz 文件到当前目录script1...">
+
+TIPS：只能操作文件，若是目录，可压缩为zip文件再进行传输。
+
+1.2 sc...">
 
 
 <meta name="robots" content="all">
@@ -176,10 +179,10 @@
         <h2 id="1-文件传输"><a href="#1-文件传输" class="headerlink" title="1 文件传输"></a>1 文件传输</h2><h3 id="1-1-lrzsz-命令"><a href="#1-1-lrzsz-命令" class="headerlink" title="1.1 lrzsz 命令"></a>1.1 lrzsz 命令</h3><p>安装 rz、sz<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> yum -y install lrzsz</span><br></pre></td></tr></table></figure></p>
 <p>将本地文件上传至服务器<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> rz</span><br></pre></td></tr></table></figure></p>
 <p>将服务器文件传输到本地<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> sz filename.extensioname</span><br></pre></td></tr></table></figure></p>
-<h3 id="1-2-scp-命令"><a href="#1-2-scp-命令" class="headerlink" title="1.2 scp 命令"></a>1.2 scp 命令</h3><p>远程复制 test.tar.gz 文件到当前目录<br><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> scp -r root@124.221.135.84:/usr/local/test.tar.gz .</span><br></pre></td></tr></table></figure></p>
 <blockquote>
 <p>TIPS：只能操作文件，若是目录，可压缩为zip文件再进行传输。</p>
 </blockquote>
+<h3 id="1-2-scp-命令"><a href="#1-2-scp-命令" class="headerlink" title="1.2 scp 命令"></a>1.2 scp 命令</h3><p>远程复制 test.tar.gz 文件到当前目录<br><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> scp -r root@124.221.135.84:/usr/local/test.tar.gz .</span><br></pre></td></tr></table></figure></p>
 <h2 id="2-命令行编辑快捷键"><a href="#2-命令行编辑快捷键" class="headerlink" title="2 命令行编辑快捷键"></a>2 命令行编辑快捷键</h2><table>
 <thead>
 <tr>
